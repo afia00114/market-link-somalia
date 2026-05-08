@@ -58,7 +58,7 @@ function PropertyDetail() {
         </div>
         {p.images.length > 1 && (
           <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
-            {p.images.map((_, i) => (
+            {p.images.map((_x, i: number) => (
               <button key={i} onClick={() => setIdx(i)} className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-white" : "w-1.5 bg-white/60"}`} />
             ))}
           </div>
