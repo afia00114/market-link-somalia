@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TravelRouteImport } from './routes/travel'
 import { Route as RealEstateRouteImport } from './routes/real-estate'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
@@ -19,6 +20,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
 
+const TravelRoute = TravelRouteImport.update({
+  id: '/travel',
+  path: '/travel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RealEstateRoute = RealEstateRouteImport.update({
   id: '/real-estate',
   path: '/real-estate',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/travel': typeof TravelRoute
   '/category/$key': typeof CategoryKeyRoute
   '/property/$id': typeof PropertyIdRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/travel': typeof TravelRoute
   '/category/$key': typeof CategoryKeyRoute
   '/property/$id': typeof PropertyIdRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/travel': typeof TravelRoute
   '/category/$key': typeof CategoryKeyRoute
   '/property/$id': typeof PropertyIdRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/travel'
     | '/category/$key'
     | '/property/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/travel'
     | '/category/$key'
     | '/property/$id'
   id:
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/travel'
     | '/category/$key'
     | '/property/$id'
   fileRoutesById: FileRoutesById
@@ -143,12 +155,20 @@ export interface RootRouteChildren {
   PostRoute: typeof PostRoute
   ProfileRoute: typeof ProfileRoute
   RealEstateRoute: typeof RealEstateRoute
+  TravelRoute: typeof TravelRoute
   CategoryKeyRoute: typeof CategoryKeyRoute
   PropertyIdRoute: typeof PropertyIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/travel': {
+      id: '/travel'
+      path: '/travel'
+      fullPath: '/travel'
+      preLoaderRoute: typeof TravelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/real-estate': {
       id: '/real-estate'
       path: '/real-estate'
@@ -223,9 +243,20 @@ const rootRouteChildren: RootRouteChildren = {
   PostRoute: PostRoute,
   ProfileRoute: ProfileRoute,
   RealEstateRoute: RealEstateRoute,
+  TravelRoute: TravelRoute,
   CategoryKeyRoute: CategoryKeyRoute,
   PropertyIdRoute: PropertyIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
