@@ -1,35 +1,51 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { format } from "date-fns";
 import { AppShell } from "@/components/AppShell";
 import { PageHeader } from "@/components/travel/PageHeader";
 import { Stepper } from "@/components/travel/Stepper";
-import { CountrySelect } from "@/components/travel/CountrySelect";
+import { CountryPickerSheet } from "@/components/travel/CountryPickerSheet";
+import { AirportCombobox } from "@/components/travel/AirportCombobox";
+import { DatePickerField } from "@/components/travel/DatePickerField";
+import { NumberStepper } from "@/components/travel/NumberStepper";
+import { FlightFiltersSheet, type FlightFilters } from "@/components/travel/FlightFiltersSheet";
+import { FlightResultCard } from "@/components/travel/FlightResultCard";
 import { Field, TextInput, Select, TextArea, PrimaryBtn, Chip } from "@/components/travel/FormUI";
-import { ProviderRow, MiniBadge } from "@/components/travel/ProviderRow";
 import { SummaryShare } from "@/components/travel/SummaryShare";
 import { FLIGHT_OFFERS, AIRPORTS, INTL_DESTINATIONS, COUNTRIES, type FlightOffer } from "@/data/travel";
-import { Plane, BadgeCheck } from "lucide-react";
+import { Plane, BadgeCheck, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/travel/flights")({
   head: () => ({ meta: [{ title: "Airline Tickets — MaalsoorHub" }] }),
   component: FlightsPage,
 });
 
-type Sort = "price" | "rating" | "high";
+const DEFAULT_FILTERS: FlightFilters = {
+  sort: "price",
+  priceRange: [0, 0],
+  airlines: [],
+  directOnly: false,
+  verifiedOnly: false,
+};
 
 function FlightsPage() {
   const [step, setStep] = useState(0);
   const [country, setCountry] = useState<string>("SO");
   const [from, setFrom] = useState("MGQ");
   const [to, setTo] = useState("NBO");
-  const [date, setDate] = useState("");
-  const [returnDate, setReturnDate] = useState("");
+  const [departDate, setDepartDate] = useState<Date>();
+  const [returnDate, setReturnDate] = useState<Date>();
   const [tripType, setTripType] = useState<"oneway" | "round">("oneway");
-  const [sort, setSort] = useState<Sort>("price");
-  const [directOnly, setDirectOnly] = useState(false);
-  const [verifiedOnly, setVerifiedOnly] = useState(false);
+  const [filters, setFilters] = useState<FlightFilters>(DEFAULT_FILTERS);
   const [picked, setPicked] = useState<FlightOffer>();
-  const [form, setForm] = useState({ name: "", phone: "", adults: 1, children: 0, cls: "Economy", notes: "" });
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    adults: 1,
+    children: 0,
+    cls: "Economy",
+    notes: "",
+  });
 
   const departureAirports = AIRPORTS[country] ?? [];
   const destinationAirports = useMemo(
@@ -41,19 +57,61 @@ function FlightsPage() {
   const fromAirport = departureAirports.find((a) => a.code === from);
   const toAirport = [...departureAirports, ...INTL_DESTINATIONS].find((a) => a.code === to);
 
-  const results = useMemo(() => {
-    let r = FLIGHT_OFFERS.filter((f) => f.from === from && f.to === to);
-    if (directOnly) r = r.filter((f) => f.direct);
-    if (verifiedOnly) r = r.filter((f) => f.verified);
-    if (sort === "price") r = [...r].sort((a, b) => a.price - b.price);
-    if (sort === "high") r = [...r].sort((a, b) => b.price - a.price);
-    if (sort === "rating") r = [...r].sort((a, b) => b.rating - a.rating);
-    return r;
-  }, [from, to, sort, directOnly, verifiedOnly]);
+  // All offers matching the route (pre-filter), used for filter bounds
+  const routeOffers = useMemo(
+    () => FLIGHT_OFFERS.filter((f) => f.from === from && f.to === to),
+    [from, to],
+  );
 
-  const pax = `${form.adults} adult${form.adults > 1 ? "s" : ""}${form.children ? `, ${form.children} child${form.children > 1 ? "ren" : ""}` : ""}`;
+  const priceMin = useMemo(
+    () => (routeOffers.length ? Math.floor(Math.min(...routeOffers.map((o) => o.price))) : 0),
+    [routeOffers],
+  );
+  const priceMax = useMemo(
+    () => (routeOffers.length ? Math.ceil(Math.max(...routeOffers.map((o) => o.price))) : 0),
+    [routeOffers],
+  );
+  const airlineOptions = useMemo(
+    () => Array.from(new Set(routeOffers.map((o) => o.name))).sort(),
+    [routeOffers],
+  );
+
+  // Reset price range when route changes
+  useEffect(() => {
+    setFilters((f) => ({
+      ...f,
+      priceRange: [priceMin, priceMax],
+      airlines: f.airlines.filter((n) => airlineOptions.includes(n)),
+    }));
+  }, [priceMin, priceMax, airlineOptions]);
+
+  const filtered = useMemo(() => {
+    let r = routeOffers;
+    if (filters.directOnly) r = r.filter((f) => f.direct);
+    if (filters.verifiedOnly) r = r.filter((f) => f.verified);
+    if (filters.airlines.length) r = r.filter((f) => filters.airlines.includes(f.name));
+    r = r.filter((f) => f.price >= filters.priceRange[0] && f.price <= filters.priceRange[1]);
+    if (filters.sort === "price") r = [...r].sort((a, b) => a.price - b.price);
+    else if (filters.sort === "high") r = [...r].sort((a, b) => b.price - a.price);
+    else if (filters.sort === "rating") r = [...r].sort((a, b) => b.rating - a.rating);
+    else if (filters.sort === "duration") r = [...r].sort((a, b) => a.durationHrs - b.durationHrs);
+    return r;
+  }, [routeOffers, filters]);
+
+  const activeCount =
+    (filters.sort !== "price" ? 1 : 0) +
+    (filters.directOnly ? 1 : 0) +
+    (filters.verifiedOnly ? 1 : 0) +
+    (filters.airlines.length ? 1 : 0) +
+    (filters.priceRange[0] > priceMin || filters.priceRange[1] < priceMax ? 1 : 0);
+
+  const dateStr = departDate ? format(departDate, "EEE, d MMM yyyy") : "Flexible";
+  const returnStr = returnDate ? format(returnDate, "EEE, d MMM yyyy") : "Flexible";
+  const pax = `${form.adults} adult${form.adults > 1 ? "s" : ""}${
+    form.children ? `, ${form.children} child${form.children > 1 ? "ren" : ""}` : ""
+  }`;
   const summary = picked
-    ? `✈️ Flight Request from MaalsoorHub\n\nAgency: ${picked.name}\nCustomer: ${form.name}\nPhone: ${form.phone}\n\nRoute: ${fromAirport?.city ?? from} (${from}) → ${toAirport?.city ?? to} (${to})\nTrip: ${tripType === "round" ? "Round trip" : "One way"}\nDeparture: ${date || "Flexible"}${tripType === "round" ? `\nReturn: ${returnDate || "Flexible"}` : ""}\nPassengers: ${pax}\nClass: ${form.cls}\n${form.notes ? `Special requests: ${form.notes}\n` : ""}\nPlease contact the customer with availability and total price.`
+    ? `✈️ Flight Request from MaalsoorHub\n\nAgency: ${picked.name}\nCustomer: ${form.name}\nPhone: ${form.phone}\n\nRoute: ${fromAirport?.city ?? from} (${from}) → ${toAirport?.city ?? to} (${to})\nTrip: ${tripType === "round" ? "Round trip" : "One way"}\nDeparture: ${dateStr}${tripType === "round" ? `\nReturn: ${returnStr}` : ""}\nPassengers: ${pax}\nClass: ${form.cls}\n${form.notes ? `Special requests: ${form.notes}\n` : ""}\nPlease contact the customer with availability and total price.`
     : "";
 
   const steps = ["Country", "Route", "Agencies", "Details", "Send"];
@@ -64,49 +122,65 @@ function FlightsPage() {
       <Stepper steps={steps} current={step} />
 
       <section className="px-4 pb-8">
+        {/* Step 1 — Country */}
         {step === 0 && (
-          <CountrySelect
-            label="Where are you flying from?"
-            selected={country}
-            onSelect={(c) => {
-              setCountry(c.code);
-              const first = AIRPORTS[c.code]?.[0];
-              if (first) setFrom(first.code);
-              setTimeout(() => setStep(1), 150);
-            }}
-          />
+          <div className="space-y-4">
+            <p className="text-xs text-muted-foreground">
+              Pick the country you're flying <b>from</b>. We'll show airports available there.
+            </p>
+            <CountryPickerSheet
+              label="Departure country"
+              selected={country}
+              onSelect={(c) => {
+                setCountry(c.code);
+                const first = AIRPORTS[c.code]?.[0];
+                if (first) setFrom(first.code);
+              }}
+            />
+            <PrimaryBtn onClick={() => setStep(1)} disabled={!country}>
+              Continue
+            </PrimaryBtn>
+          </div>
         )}
 
+        {/* Step 2 — Route */}
         {step === 1 && (
           <div className="space-y-3">
+            <button
+              onClick={() => setStep(0)}
+              className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground"
+            >
+              <ArrowLeft className="h-3 w-3" /> Change country
+            </button>
             <div className="rounded-xl bg-secondary p-2 text-center text-[11px] text-muted-foreground">
               Showing airports for <b>{countryName}</b>
             </div>
             <Field label="From (departure)">
-              <Select value={from} onChange={(e) => setFrom(e.target.value)}>
-                {departureAirports.map((a) => (
-                  <option key={a.code} value={a.code}>{a.city} ({a.code})</option>
-                ))}
-              </Select>
+              <AirportCombobox value={from} onChange={setFrom} options={departureAirports} />
             </Field>
             <Field label="To (destination)">
-              <Select value={to} onChange={(e) => setTo(e.target.value)}>
-                {destinationAirports.map((a) => (
-                  <option key={a.code} value={a.code}>{a.city} ({a.code}){a.international ? " 🌍" : ""}</option>
-                ))}
-              </Select>
+              <AirportCombobox value={to} onChange={setTo} options={destinationAirports} />
             </Field>
             <div className="flex gap-2">
-              <Chip active={tripType === "oneway"} onClick={() => setTripType("oneway")}>One way</Chip>
-              <Chip active={tripType === "round"} onClick={() => setTripType("round")}>Round trip</Chip>
+              <Chip active={tripType === "oneway"} onClick={() => setTripType("oneway")}>
+                One way
+              </Chip>
+              <Chip active={tripType === "round"} onClick={() => setTripType("round")}>
+                Round trip
+              </Chip>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Departure date">
-                <TextInput type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                <DatePickerField value={departDate} onChange={setDepartDate} placeholder="Select date" />
               </Field>
               {tripType === "round" && (
                 <Field label="Return date">
-                  <TextInput type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} />
+                  <DatePickerField
+                    value={returnDate}
+                    onChange={setReturnDate}
+                    placeholder="Select date"
+                    minDate={departDate}
+                  />
                 </Field>
               )}
             </div>
@@ -116,47 +190,45 @@ function FlightsPage() {
           </div>
         )}
 
+        {/* Step 3 — Agencies */}
         {step === 2 && (
           <div className="space-y-3">
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-              <Chip active={sort === "price"} onClick={() => setSort("price")}>💰 Lowest Price</Chip>
-              <Chip active={sort === "rating"} onClick={() => setSort("rating")}>⭐ Highest Rating</Chip>
-              <Chip active={sort === "high"} onClick={() => setSort("high")}>🔝 Highest Price</Chip>
-              <Chip active={directOnly} onClick={() => setDirectOnly((v) => !v)}>✈️ Direct only</Chip>
-              <Chip active={verifiedOnly} onClick={() => setVerifiedOnly((v) => !v)}>✅ Verified only</Chip>
-            </div>
-            <div className="text-xs text-muted-foreground">
-              {results.length} agencies · {fromAirport?.city ?? from} ({from}) → {toAirport?.city ?? to} ({to})
-              {date && ` · ${date}`}
+            <button
+              onClick={() => setStep(1)}
+              className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground"
+            >
+              <ArrowLeft className="h-3 w-3" /> Edit route
+            </button>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-xs text-muted-foreground">
+                {filtered.length} agencies · {fromAirport?.city ?? from} ({from}) →{" "}
+                {toAirport?.city ?? to} ({to})
+                {departDate && ` · ${format(departDate, "d MMM")}`}
+              </div>
+              <FlightFiltersSheet
+                filters={filters}
+                onChange={setFilters}
+                priceMin={priceMin}
+                priceMax={priceMax}
+                airlineOptions={airlineOptions}
+                resultsCount={filtered.length}
+                activeCount={activeCount}
+              />
             </div>
             <div className="space-y-2">
-              {results.map((f) => (
-                <ProviderRow
+              {filtered.map((f) => (
+                <FlightResultCard
                   key={f.id}
-                  logo={f.logo}
-                  name={f.name}
-                  verified={f.verified}
-                  rating={f.rating}
-                  reviews={f.reviews}
-                  city={f.city}
-                  badges={
-                    <>
-                      <MiniBadge tone="primary">{f.direct ? "Direct" : `Via ${f.via ?? "1 stop"}`}</MiniBadge>
-                      <MiniBadge>{f.durationHrs}h</MiniBadge>
-                      {f.departTime && <MiniBadge>{f.departTime}{f.arriveTime ? `→${f.arriveTime}` : ""}</MiniBadge>}
-                      {f.yearsInBusiness && <MiniBadge>{f.yearsInBusiness}+ yrs</MiniBadge>}
-                    </>
-                  }
-                  right={
-                    <div className="text-right">
-                      <div className="text-base font-extrabold text-primary">${f.price}</div>
-                      <div className="text-[10px] text-muted-foreground">est. price</div>
-                    </div>
-                  }
-                  onClick={() => { setPicked(f); setStep(3); }}
+                  offer={f}
+                  fromCity={fromAirport?.city}
+                  toCity={toAirport?.city}
+                  onSelect={() => {
+                    setPicked(f);
+                    setStep(3);
+                  }}
                 />
               ))}
-              {results.length === 0 && (
+              {filtered.length === 0 && (
                 <div className="rounded-xl border border-dashed border-border p-6 text-center text-xs text-muted-foreground">
                   No agencies match your filters for this route.
                 </div>
@@ -165,36 +237,88 @@ function FlightsPage() {
           </div>
         )}
 
+        {/* Step 4 — Passenger form */}
         {step === 3 && picked && (
           <div className="space-y-3">
+            <button
+              onClick={() => setStep(2)}
+              className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground"
+            >
+              <ArrowLeft className="h-3 w-3" /> Back to results
+            </button>
             <div className="rounded-2xl border border-border bg-card p-3 text-xs">
               <div className="flex items-center gap-1 font-bold">
                 {picked.name}
                 {picked.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary" />}
               </div>
               <div className="text-muted-foreground">
-                {fromAirport?.city ?? from} ({from}) → {toAirport?.city ?? to} ({to}) · ${picked.price} · {picked.direct ? "Direct" : `Via ${picked.via}`}
+                {fromAirport?.city ?? from} ({from}) → {toAirport?.city ?? to} ({to}) · ${picked.price} ·{" "}
+                {picked.direct ? "Direct" : `Via ${picked.via}`}
                 {picked.departTime && ` · ${picked.departTime}`}
               </div>
             </div>
-            <Field label="Full name"><TextInput value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ahmed Hassan" /></Field>
-            <Field label="Phone (WhatsApp)"><TextInput value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+252 61 ..." /></Field>
-            <div className="grid grid-cols-3 gap-3">
-              <Field label="Adults"><TextInput type="number" min={1} value={form.adults} onChange={(e) => setForm({ ...form, adults: Math.max(1, Number(e.target.value)) })} /></Field>
-              <Field label="Children"><TextInput type="number" min={0} value={form.children} onChange={(e) => setForm({ ...form, children: Math.max(0, Number(e.target.value)) })} /></Field>
-              <Field label="Class">
-                <Select value={form.cls} onChange={(e) => setForm({ ...form, cls: e.target.value })}>
-                  <option>Economy</option><option>Business</option><option>First</option>
-                </Select>
-              </Field>
-            </div>
-            <Field label="Special requests (optional)">
-              <TextArea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Wheelchair assistance, halal meal…" />
+
+            <Field label="Full name">
+              <TextInput
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="Ahmed Hassan"
+              />
             </Field>
-            <PrimaryBtn onClick={() => setStep(4)} disabled={!form.name || !form.phone}>Review &amp; share</PrimaryBtn>
+            <Field label="Phone (WhatsApp)">
+              <TextInput
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                placeholder="+252 61 ..."
+              />
+            </Field>
+
+            <div className="grid grid-cols-1 gap-2">
+              <NumberStepper
+                label="Adults"
+                hint="12+ years"
+                min={1}
+                max={9}
+                value={form.adults}
+                onChange={(n) => setForm({ ...form, adults: n })}
+              />
+              <NumberStepper
+                label="Children"
+                hint="2–11 years"
+                min={0}
+                max={9}
+                value={form.children}
+                onChange={(n) => setForm({ ...form, children: n })}
+              />
+            </div>
+
+            <Field label="Class">
+              <Select value={form.cls} onChange={(e) => setForm({ ...form, cls: e.target.value })}>
+                <option>Economy</option>
+                <option>Business</option>
+                <option>First</option>
+              </Select>
+            </Field>
+
+            <Field label="Departure date">
+              <DatePickerField value={departDate} onChange={setDepartDate} placeholder="Select date" />
+            </Field>
+
+            <Field label="Special requests (optional)">
+              <TextArea
+                value={form.notes}
+                onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                placeholder="Wheelchair assistance, halal meal…"
+              />
+            </Field>
+
+            <PrimaryBtn onClick={() => setStep(4)} disabled={!form.name || !form.phone}>
+              Review &amp; share
+            </PrimaryBtn>
           </div>
         )}
 
+        {/* Step 5 — Summary & share */}
         {step === 4 && picked && (
           <SummaryShare
             providerName={picked.name}
