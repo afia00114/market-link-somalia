@@ -27,12 +27,24 @@ function VisaPage() {
   const [form, setForm] = useState({ name: "", phone: "", passport: "", travelDate: "", applicants: 1, photoLink: "" });
   const [shared, setShared] = useState(false);
 
+  const processingScore = (s: string): number => {
+    const t = s.toLowerCase();
+    if (t.includes("on arrival")) return 0;
+    if (t.includes("urgent")) {
+      const h = t.match(/(\d+)\s*h/);
+      if (h) return Number(h[1]) / 24;
+    }
+    const nums = s.match(/\d+/g);
+    if (!nums) return 999;
+    return Number(nums[0]); // use minimum days
+  };
+
   const results = useMemo(() => {
     let r = VISA_SERVICES.filter((v) => !destination || v.destination === destination);
     if (visaType !== "All") r = r.filter((v) => v.visaType === visaType);
     if (sort === "price") r = [...r].sort((a, b) => a.fee - b.fee);
     if (sort === "rating") r = [...r].sort((a, b) => b.rating - a.rating);
-    if (sort === "fast") r = [...r].sort((a, b) => a.processingDays.localeCompare(b.processingDays));
+    if (sort === "fast") r = [...r].sort((a, b) => processingScore(a.processingDays) - processingScore(b.processingDays));
     return r;
   }, [destination, visaType, sort]);
 
