@@ -19,7 +19,6 @@ import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
 import { Route as TravelToursRouteImport } from './routes/travel.tours'
-import { Route as TravelHotelsRouteImport } from './routes/travel.hotels'
 import { Route as TravelHajjUmrahRouteImport } from './routes/travel.hajj-umrah'
 import { Route as TravelFlightsRouteImport } from './routes/travel.flights'
 import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
@@ -77,11 +76,6 @@ const TravelToursRoute = TravelToursRouteImport.update({
   path: '/tours',
   getParentRoute: () => TravelRoute,
 } as any)
-const TravelHotelsRoute = TravelHotelsRouteImport.update({
-  id: '/hotels',
-  path: '/hotels',
-  getParentRoute: () => TravelRoute,
-} as any)
 const TravelHajjUmrahRoute = TravelHajjUmrahRouteImport.update({
   id: '/hajj-umrah',
   path: '/hajj-umrah',
@@ -128,7 +122,6 @@ export interface FileRoutesByFullPath {
   '/travel/car-rental': typeof TravelCarRentalRoute
   '/travel/flights': typeof TravelFlightsRoute
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
-  '/travel/hotels': typeof TravelHotelsRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
 }
@@ -147,7 +140,6 @@ export interface FileRoutesByTo {
   '/travel/car-rental': typeof TravelCarRentalRoute
   '/travel/flights': typeof TravelFlightsRoute
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
-  '/travel/hotels': typeof TravelHotelsRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
 }
@@ -167,7 +159,6 @@ export interface FileRoutesById {
   '/travel/car-rental': typeof TravelCarRentalRoute
   '/travel/flights': typeof TravelFlightsRoute
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
-  '/travel/hotels': typeof TravelHotelsRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
 }
@@ -188,7 +179,6 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
-    | '/travel/hotels'
     | '/travel/tours'
     | '/travel/visa'
   fileRoutesByTo: FileRoutesByTo
@@ -207,7 +197,6 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
-    | '/travel/hotels'
     | '/travel/tours'
     | '/travel/visa'
   id:
@@ -226,7 +215,6 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
-    | '/travel/hotels'
     | '/travel/tours'
     | '/travel/visa'
   fileRoutesById: FileRoutesById
@@ -316,13 +304,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TravelToursRouteImport
       parentRoute: typeof TravelRoute
     }
-    '/travel/hotels': {
-      id: '/travel/hotels'
-      path: '/hotels'
-      fullPath: '/travel/hotels'
-      preLoaderRoute: typeof TravelHotelsRouteImport
-      parentRoute: typeof TravelRoute
-    }
     '/travel/hajj-umrah': {
       id: '/travel/hajj-umrah'
       path: '/hajj-umrah'
@@ -373,7 +354,6 @@ interface TravelRouteChildren {
   TravelCarRentalRoute: typeof TravelCarRentalRoute
   TravelFlightsRoute: typeof TravelFlightsRoute
   TravelHajjUmrahRoute: typeof TravelHajjUmrahRoute
-  TravelHotelsRoute: typeof TravelHotelsRoute
   TravelToursRoute: typeof TravelToursRoute
   TravelVisaRoute: typeof TravelVisaRoute
 }
@@ -383,7 +363,6 @@ const TravelRouteChildren: TravelRouteChildren = {
   TravelCarRentalRoute: TravelCarRentalRoute,
   TravelFlightsRoute: TravelFlightsRoute,
   TravelHajjUmrahRoute: TravelHajjUmrahRoute,
-  TravelHotelsRoute: TravelHotelsRoute,
   TravelToursRoute: TravelToursRoute,
   TravelVisaRoute: TravelVisaRoute,
 }
