@@ -33,7 +33,6 @@ export interface TravelSub {
 export const TRAVEL_SUBS: TravelSub[] = [
   { key: "flights", label: "Airline Tickets", emoji: "✈️", short: "Find & book flights", icon: Plane, href: "/travel/flights" },
   { key: "agencies", label: "Travel Agencies", emoji: "🏢", short: "Browse all agencies", icon: Building2, href: "/travel/agencies" },
-  { key: "hotels", label: "Hotels", emoji: "🏨", short: "Stay anywhere", icon: BedDouble, href: "/travel/hotels" },
   { key: "visa", label: "Visa Services", emoji: "🛂", short: "Tourist & business visas", icon: FileCheck, href: "/travel/visa" },
   { key: "hajj-umrah", label: "Hajj & Umrah", emoji: "🕋", short: "Pilgrimage packages", icon: Star, href: "/travel/hajj-umrah" },
   { key: "tours", label: "Tour Packages", emoji: "🗺️", short: "Safari, beach, culture", icon: Map, href: "/travel/tours" },

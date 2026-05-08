@@ -7,7 +7,7 @@ export const Route = createFileRoute("/travel")({
   head: () => ({
     meta: [
       { title: "Travel & Tourism — MaalsoorHub" },
-      { name: "description", content: "Flights, hotels, visas, Hajj & Umrah, tours and car rental from verified East Africa providers." },
+      { name: "description", content: "Flights, visas, Hajj & Umrah, tours and car rental from verified East Africa providers." },
       { property: "og:title", content: "Travel & Tourism — MaalsoorHub" },
       { property: "og:description", content: "Search trusted travel providers and contact via WhatsApp." },
     ],
@@ -25,7 +25,7 @@ function TravelHub() {
           </Link>
           <div>
             <h1 className="text-lg font-bold">Travel & Tourism</h1>
-            <p className="text-xs text-white/85">Flights · Hotels · Visa · Tours · Cars</p>
+            <p className="text-xs text-white/85">Flights · Visa · Tours · Cars</p>
           </div>
         </div>
         <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium backdrop-blur">
