@@ -1,5 +1,5 @@
 import {
-  Plane, Building2, BedDouble, FileCheck, Star, Map, Car,
+  Plane, Building2, FileCheck, Star, Map, Car,
   type LucideIcon,
 } from "lucide-react";
 
@@ -19,7 +19,7 @@ export const COUNTRIES: Country[] = [
 ];
 
 export type TravelSubKey =
-  | "flights" | "agencies" | "hotels" | "visa" | "hajj-umrah" | "tours" | "car-rental";
+  | "flights" | "agencies" | "visa" | "hajj-umrah" | "tours" | "car-rental";
 
 export interface TravelSub {
   key: TravelSubKey;
@@ -120,27 +120,6 @@ export const AGENCIES: Agency[] = [
   { id: "ag10", name: "Istanbul Gate Travel", logo: u("1519817914152-22d216bb9170"), rating: 4.6, reviews: 410, city: "Istanbul", countryCode: "TR", whatsapp: "905321234567", phone: "+90 532 123 4567", email: "hello@istanbulgate.tr", verified: true, services: ["Hotels", "Tours", "Visa"], description: "Türkiye packages with Somali-speaking guides.", hours: "Daily, 9am–9pm" },
 ];
 
-// HOTELS
-export interface Hotel extends Provider {
-  pricePerNight: number; amenities: string[]; distanceKm: number; roomTypes: { name: string; price: number }[];
-}
-export const HOTELS: Hotel[] = [
-  { id: "ho1", name: "Lido Beach Hotel", logo: u("1566073771259-6a8506099945"), rating: 4.5, reviews: 410, city: "Mogadishu", countryCode: "SO", whatsapp: "252616667788", phone: "+252 61 666 7788", verified: true, pricePerNight: 80, amenities: ["WiFi", "Breakfast", "Beach"], distanceKm: 0.2, roomTypes: [{ name: "Single", price: 80 }, { name: "Double", price: 120 }, { name: "Suite", price: 220 }] },
-  { id: "ho2", name: "Sahafi Hotel", logo: u("1551882547-ff40c63fe5fa"), rating: 4.7, reviews: 612, city: "Mogadishu", countryCode: "SO", whatsapp: "252612350001", phone: "+252 61 235 0001", verified: true, pricePerNight: 110, amenities: ["WiFi", "Pool", "Gym", "Restaurant"], distanceKm: 1.4, roomTypes: [{ name: "Single", price: 110 }, { name: "Double", price: 160 }, { name: "Suite", price: 280 }] },
-  { id: "ho3", name: "Sarova Stanley", logo: u("1564501049412-61c2a3083791"), rating: 4.8, reviews: 1820, city: "Nairobi", countryCode: "KE", whatsapp: "254712350002", phone: "+254 712 350 002", verified: true, pricePerNight: 145, amenities: ["WiFi", "Breakfast", "Pool", "Spa"], distanceKm: 0.5, roomTypes: [{ name: "Single", price: 145 }, { name: "Double", price: 195 }, { name: "Suite", price: 360 }] },
-  { id: "ho4", name: "Voyager Beach Resort", logo: u("1571896349842-33c89424de2d"), rating: 4.6, reviews: 940, city: "Mombasa", countryCode: "KE", whatsapp: "254712350003", phone: "+254 712 350 003", verified: true, pricePerNight: 130, amenities: ["WiFi", "Beach", "Pool", "Breakfast"], distanceKm: 0.1, roomTypes: [{ name: "Single", price: 130 }, { name: "Double", price: 180 }, { name: "Suite", price: 320 }] },
-  { id: "ho5", name: "Jazeera Palace Hotel", logo: u("1582719478250-c89cae4dc85b"), rating: 4.6, reviews: 540, city: "Mogadishu", countryCode: "SO", whatsapp: "252612350004", phone: "+252 61 235 0004", verified: true, pricePerNight: 95, amenities: ["WiFi", "Restaurant", "Conference"], distanceKm: 2.1, roomTypes: [{ name: "Single", price: 95 }, { name: "Double", price: 140 }, { name: "Suite", price: 240 }] },
-  { id: "ho6", name: "Maansoor Hotel", logo: u("1611892440504-42a792e24d32"), rating: 4.4, reviews: 320, city: "Mogadishu", countryCode: "SO", whatsapp: "252612350005", phone: "+252 61 235 0005", verified: true, pricePerNight: 70, amenities: ["WiFi", "Breakfast", "Parking"], distanceKm: 3.0, roomTypes: [{ name: "Single", price: 70 }, { name: "Double", price: 100 }, { name: "Family", price: 160 }] },
-  { id: "ho7", name: "Mansoor Hargeisa", logo: u("1566073771259-6a8506099945"), rating: 4.5, reviews: 280, city: "Hargeisa", countryCode: "SO", whatsapp: "252634556678", phone: "+252 63 455 6678", verified: true, pricePerNight: 85, amenities: ["WiFi", "Breakfast", "Gym"], distanceKm: 1.2, roomTypes: [{ name: "Single", price: 85 }, { name: "Double", price: 125 }, { name: "Suite", price: 220 }] },
-  { id: "ho8", name: "Skylight Hotel Addis", logo: u("1551882547-ff40c63fe5fa"), rating: 4.7, reviews: 1450, city: "Addis Ababa", countryCode: "ET", whatsapp: "251911350006", phone: "+251 911 350 006", verified: true, pricePerNight: 165, amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Airport shuttle"], distanceKm: 0.3, roomTypes: [{ name: "Single", price: 165 }, { name: "Double", price: 220 }, { name: "Suite", price: 410 }] },
-  { id: "ho9", name: "Atlantis The Palm", logo: u("1564501049412-61c2a3083791"), rating: 4.9, reviews: 5400, city: "Dubai", countryCode: "AE", whatsapp: "971501234568", phone: "+971 50 123 4568", verified: true, pricePerNight: 480, amenities: ["WiFi", "Beach", "Pool", "Spa", "Aquarium"], distanceKm: 0.0, roomTypes: [{ name: "Deluxe", price: 480 }, { name: "Suite", price: 850 }, { name: "Underwater Suite", price: 3500 }] },
-  { id: "ho10", name: "Hilton Garden Inn Dubai", logo: u("1571896349842-33c89424de2d"), rating: 4.5, reviews: 1280, city: "Dubai", countryCode: "AE", whatsapp: "971501234569", phone: "+971 50 123 4569", verified: true, pricePerNight: 140, amenities: ["WiFi", "Pool", "Gym", "Breakfast"], distanceKm: 1.5, roomTypes: [{ name: "Single", price: 140 }, { name: "Double", price: 180 }, { name: "Suite", price: 290 }] },
-  { id: "ho11", name: "Movenpick Hotel Jeddah", logo: u("1551882547-ff40c63fe5fa"), rating: 4.6, reviews: 920, city: "Jeddah", countryCode: "SA", whatsapp: "966551234567", phone: "+966 55 123 4567", verified: true, pricePerNight: 175, amenities: ["WiFi", "Pool", "Restaurant", "Prayer room"], distanceKm: 0.8, roomTypes: [{ name: "Single", price: 175 }, { name: "Double", price: 240 }, { name: "Family", price: 380 }] },
-  { id: "ho12", name: "Swissotel Makkah", logo: u("1591604129939-f1efa4d9f7fa"), rating: 4.7, reviews: 2100, city: "Makkah", countryCode: "SA", whatsapp: "966551234568", phone: "+966 55 123 4568", verified: true, pricePerNight: 320, amenities: ["WiFi", "Restaurant", "Haram view", "Prayer room"], distanceKm: 0.05, roomTypes: [{ name: "Single", price: 320 }, { name: "Double", price: 420 }, { name: "Haram-view Suite", price: 780 }] },
-  { id: "ho13", name: "Hilton Istanbul Bosphorus", logo: u("1564501049412-61c2a3083791"), rating: 4.6, reviews: 1820, city: "Istanbul", countryCode: "TR", whatsapp: "905321234568", phone: "+90 532 123 4568", verified: true, pricePerNight: 195, amenities: ["WiFi", "Pool", "Spa", "Bosphorus view"], distanceKm: 0.5, roomTypes: [{ name: "Single", price: 195 }, { name: "Double", price: 260 }, { name: "Suite", price: 450 }] },
-  { id: "ho14", name: "Sheraton Djibouti", logo: u("1582719478250-c89cae4dc85b"), rating: 4.4, reviews: 380, city: "Djibouti", countryCode: "DJ", whatsapp: "253771122335", phone: "+253 77 112 2335", verified: true, pricePerNight: 150, amenities: ["WiFi", "Pool", "Beach", "Restaurant"], distanceKm: 0.4, roomTypes: [{ name: "Single", price: 150 }, { name: "Double", price: 210 }, { name: "Suite", price: 360 }] },
-  { id: "ho15", name: "Serena Hotel Kampala", logo: u("1611892440504-42a792e24d32"), rating: 4.7, reviews: 980, city: "Kampala", countryCode: "UG", whatsapp: "256712350007", phone: "+256 71 235 0007", verified: true, pricePerNight: 175, amenities: ["WiFi", "Pool", "Spa", "Garden"], distanceKm: 0.2, roomTypes: [{ name: "Single", price: 175 }, { name: "Double", price: 230 }, { name: "Suite", price: 410 }] },
-];
 
 // VISA
 export interface VisaService extends Provider {
