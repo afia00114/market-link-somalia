@@ -61,7 +61,7 @@ function AgenciesPage() {
                 <ProviderRow
                   key={a.id} logo={a.logo} name={a.name} verified={a.verified} rating={a.rating} reviews={a.reviews} city={a.city}
                   badges={<>{a.services.slice(0, 3).map((s) => <MiniBadge key={s} tone="primary">{s}</MiniBadge>)}</>}
-                  onClick={() => setPicked(a) || setStep(3)}
+                  onClick={() => { setPicked(a); setStep(3); }}
                 />
               ))}
             </div>

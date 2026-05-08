@@ -7,7 +7,7 @@ import { CountrySelect } from "@/components/travel/CountrySelect";
 import { Field, TextInput, Select, TextArea, PrimaryBtn, Chip } from "@/components/travel/FormUI";
 import { ProviderRow, MiniBadge } from "@/components/travel/ProviderRow";
 import { SummaryShare } from "@/components/travel/SummaryShare";
-import { FLIGHT_OFFERS, COUNTRIES, type FlightOffer } from "@/data/travel";
+import { FLIGHT_OFFERS, type FlightOffer } from "@/data/travel";
 import { Plane } from "lucide-react";
 
 export const Route = createFileRoute("/travel/flights")({
@@ -120,7 +120,6 @@ function FlightsPage() {
         )}
       </section>
 
-      {COUNTRIES.length === 0 && null}
     </AppShell>
   );
 }
