@@ -1,0 +1,30 @@
+import {
+  Home, Wrench, Plane, HeartPulse, UtensilsCrossed, Car, Wheat, Briefcase, Landmark,
+  type LucideIcon,
+} from "lucide-react";
+
+export type CategoryKey =
+  | "real-estate" | "services" | "travel" | "health" | "food"
+  | "vehicles" | "livestock" | "jobs" | "banking";
+
+export interface Category {
+  key: CategoryKey;
+  label: string;
+  short: string;
+  count: number;
+  icon: LucideIcon;
+  gradient: string;
+  href: string;
+}
+
+export const CATEGORIES: Category[] = [
+  { key: "real-estate", label: "Real Estate", short: "Houses, land & more", count: 1240, icon: Home, gradient: "grad-realestate", href: "/real-estate" },
+  { key: "services", label: "Services", short: "Trusted local pros", count: 860, icon: Wrench, gradient: "grad-services", href: "/category/services" },
+  { key: "travel", label: "Travel & Tourism", short: "Tickets, hotels, tours", count: 312, icon: Plane, gradient: "grad-travel", href: "/category/travel" },
+  { key: "health", label: "Health & Medical", short: "Hospitals & clinics", count: 198, icon: HeartPulse, gradient: "grad-health", href: "/category/health" },
+  { key: "food", label: "Food & Restaurants", short: "Eat, dine, deliver", count: 540, icon: UtensilsCrossed, gradient: "grad-food", href: "/category/food" },
+  { key: "vehicles", label: "Vehicles & Transport", short: "Cars, trucks, parts", count: 420, icon: Car, gradient: "grad-vehicles", href: "/category/vehicles" },
+  { key: "livestock", label: "Livestock & Agriculture", short: "Camels, cattle, farms", count: 276, icon: Wheat, gradient: "grad-livestock", href: "/category/livestock" },
+  { key: "jobs", label: "Jobs & Opportunities", short: "Hiring near you", count: 388, icon: Briefcase, gradient: "grad-jobs", href: "/category/jobs" },
+  { key: "banking", label: "Banking & Finance", short: "Banks, forex, insurance", count: 92, icon: Landmark, gradient: "grad-banking", href: "/category/banking" },
+];
