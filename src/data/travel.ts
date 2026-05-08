@@ -56,18 +56,54 @@ export interface Provider {
 
 const u = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=400&q=80`;
 
+// AIRPORTS — by country
+export interface Airport { code: string; city: string; country: string; international?: boolean }
+export const AIRPORTS: Record<string, Airport[]> = {
+  SO: [
+    { code: "MGQ", city: "Mogadishu", country: "SO" },
+    { code: "HGA", city: "Hargeisa", country: "SO" },
+    { code: "BSA", city: "Bosaso", country: "SO" },
+    { code: "GLK", city: "Galkayo", country: "SO" },
+  ],
+  KE: [{ code: "NBO", city: "Nairobi", country: "KE" }, { code: "MBA", city: "Mombasa", country: "KE" }],
+  ET: [{ code: "ADD", city: "Addis Ababa", country: "ET" }],
+  DJ: [{ code: "JIB", city: "Djibouti", country: "DJ" }],
+  UG: [{ code: "EBB", city: "Entebbe", country: "UG" }],
+  TZ: [{ code: "DAR", city: "Dar es Salaam", country: "TZ" }, { code: "ZNZ", city: "Zanzibar", country: "TZ" }],
+  AE: [{ code: "DXB", city: "Dubai", country: "AE", international: true }, { code: "AUH", city: "Abu Dhabi", country: "AE", international: true }],
+  TR: [{ code: "IST", city: "Istanbul", country: "TR", international: true }],
+  SA: [{ code: "JED", city: "Jeddah", country: "SA", international: true }, { code: "RUH", city: "Riyadh", country: "SA", international: true }],
+  EG: [{ code: "CAI", city: "Cairo", country: "EG", international: true }],
+};
+
+export const INTL_DESTINATIONS: Airport[] = [
+  { code: "NBO", city: "Nairobi", country: "KE" },
+  { code: "ADD", city: "Addis Ababa", country: "ET" },
+  { code: "DXB", city: "Dubai", country: "AE", international: true },
+  { code: "AUH", city: "Abu Dhabi", country: "AE", international: true },
+  { code: "IST", city: "Istanbul", country: "TR", international: true },
+  { code: "JED", city: "Jeddah", country: "SA", international: true },
+  { code: "RUH", city: "Riyadh", country: "SA", international: true },
+  { code: "CAI", city: "Cairo", country: "EG", international: true },
+  { code: "JIB", city: "Djibouti", country: "DJ" },
+  { code: "EBB", city: "Entebbe", country: "UG" },
+];
+
 // FLIGHTS — agency offerings per route
 export interface FlightOffer extends Provider {
   from: string; to: string; price: number; durationHrs: number; direct: boolean;
+  departTime?: string; arriveTime?: string; via?: string; yearsInBusiness?: number;
 }
 export const FLIGHT_OFFERS: FlightOffer[] = [
-  { id: "fl1", name: "Salaam Travel", logo: u("1436491865332-7a61a109cc05"), rating: 4.7, reviews: 320, city: "Mogadishu", countryCode: "SO", whatsapp: "252615556677", phone: "+252 61 555 6677", verified: true, from: "MGQ", to: "NBO", price: 180, durationHrs: 2.5, direct: true },
-  { id: "fl2", name: "Horn Aviation", logo: u("1556388158-158ea5ccacbd"), rating: 4.5, reviews: 210, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340101", phone: "+252 61 234 0101", verified: true, from: "MGQ", to: "NBO", price: 195, durationHrs: 3.2, direct: false },
-  { id: "fl3", name: "Banadir Flights", logo: u("1569154941061-e231b4725ef1"), rating: 4.8, reviews: 540, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340102", phone: "+252 61 234 0102", verified: true, from: "MGQ", to: "NBO", price: 210, durationHrs: 2.5, direct: true },
-  { id: "fl4", name: "EastAfrica Tickets", logo: u("1542296332-2e4473faf563"), rating: 4.4, reviews: 145, city: "Nairobi", countryCode: "KE", whatsapp: "254712340103", phone: "+254 712 340 103", verified: true, from: "MGQ", to: "DXB", price: 320, durationHrs: 5.0, direct: true },
-  { id: "fl5", name: "Salaam Travel", logo: u("1436491865332-7a61a109cc05"), rating: 4.7, reviews: 320, city: "Mogadishu", countryCode: "SO", whatsapp: "252615556677", phone: "+252 61 555 6677", verified: true, from: "MGQ", to: "DXB", price: 350, durationHrs: 4.5, direct: true },
-  { id: "fl6", name: "Horn Aviation", logo: u("1556388158-158ea5ccacbd"), rating: 4.5, reviews: 210, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340101", phone: "+252 61 234 0101", verified: true, from: "MGQ", to: "IST", price: 480, durationHrs: 7.0, direct: false },
-  { id: "fl7", name: "Sky Wings", logo: u("1530521954074-e64f6810b32d"), rating: 4.6, reviews: 88, city: "Nairobi", countryCode: "KE", whatsapp: "254712340104", phone: "+254 712 340 104", verified: true, from: "NBO", to: "DXB", price: 290, durationHrs: 4.8, direct: true },
+  { id: "fl1", name: "Salaam Travel", logo: u("1436491865332-7a61a109cc05"), rating: 4.7, reviews: 320, city: "Mogadishu", countryCode: "SO", whatsapp: "252615556677", phone: "+252 61 555 6677", verified: true, from: "MGQ", to: "NBO", price: 180, durationHrs: 2.5, direct: true, departTime: "08:00", arriveTime: "10:30", yearsInBusiness: 14 },
+  { id: "fl2", name: "Horn Aviation", logo: u("1556388158-158ea5ccacbd"), rating: 4.5, reviews: 210, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340101", phone: "+252 61 234 0101", verified: true, from: "MGQ", to: "NBO", price: 195, durationHrs: 3.2, direct: false, departTime: "06:45", arriveTime: "09:55", via: "ADD", yearsInBusiness: 9 },
+  { id: "fl3", name: "Banadir Flights", logo: u("1569154941061-e231b4725ef1"), rating: 4.8, reviews: 540, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340102", phone: "+252 61 234 0102", verified: true, from: "MGQ", to: "NBO", price: 210, durationHrs: 2.5, direct: true, departTime: "14:30", arriveTime: "17:00", yearsInBusiness: 18 },
+  { id: "fl3b", name: "Horizon Travel", logo: u("1542296332-2e4473faf563"), rating: 4.9, reviews: 412, city: "Hargeisa", countryCode: "SO", whatsapp: "252634556677", phone: "+252 63 455 6677", verified: true, from: "HGA", to: "NBO", price: 230, durationHrs: 3.5, direct: false, departTime: "07:15", arriveTime: "10:45", via: "ADD", yearsInBusiness: 12 },
+  { id: "fl4", name: "EastAfrica Tickets", logo: u("1542296332-2e4473faf563"), rating: 4.4, reviews: 145, city: "Nairobi", countryCode: "KE", whatsapp: "254712340103", phone: "+254 712 340 103", verified: true, from: "MGQ", to: "DXB", price: 320, durationHrs: 5.0, direct: true, departTime: "23:55", arriveTime: "04:55", yearsInBusiness: 7 },
+  { id: "fl5", name: "Salaam Travel", logo: u("1436491865332-7a61a109cc05"), rating: 4.7, reviews: 320, city: "Mogadishu", countryCode: "SO", whatsapp: "252615556677", phone: "+252 61 555 6677", verified: true, from: "MGQ", to: "DXB", price: 350, durationHrs: 4.5, direct: true, departTime: "10:20", arriveTime: "14:50", yearsInBusiness: 14 },
+  { id: "fl6", name: "Horn Aviation", logo: u("1556388158-158ea5ccacbd"), rating: 4.5, reviews: 210, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340101", phone: "+252 61 234 0101", verified: true, from: "MGQ", to: "IST", price: 480, durationHrs: 7.0, direct: false, departTime: "02:15", arriveTime: "09:15", via: "DXB", yearsInBusiness: 9 },
+  { id: "fl6b", name: "Banadir Flights", logo: u("1569154941061-e231b4725ef1"), rating: 4.8, reviews: 540, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340102", phone: "+252 61 234 0102", verified: true, from: "MGQ", to: "JED", price: 420, durationHrs: 4.0, direct: true, departTime: "23:30", arriveTime: "03:30", yearsInBusiness: 18 },
+  { id: "fl7", name: "Sky Wings", logo: u("1530521954074-e64f6810b32d"), rating: 4.6, reviews: 88, city: "Nairobi", countryCode: "KE", whatsapp: "254712340104", phone: "+254 712 340 104", verified: true, from: "NBO", to: "DXB", price: 290, durationHrs: 4.8, direct: true, departTime: "16:00", arriveTime: "20:48", yearsInBusiness: 6 },
 ];
 
 // AGENCIES (general directory)
