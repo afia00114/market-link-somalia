@@ -14,7 +14,7 @@ export const Route = createFileRoute("/travel/car-rental")({
   component: CarRentalPage,
 });
 
-type Sort = "price" | "rating" | "auto";
+type Sort = "price" | "rating";
 
 function CarRentalPage() {
   const [step, setStep] = useState(0);
@@ -25,6 +25,7 @@ function CarRentalPage() {
   const [pickUpLoc, setPickUpLoc] = useState("Airport");
   const [carType, setCarType] = useState<CarType | "All">("All");
   const [sort, setSort] = useState<Sort>("price");
+  const [autoOnly, setAutoOnly] = useState(false);
   const [picked, setPicked] = useState<CarOffer>();
   const [form, setForm] = useState({ name: "", phone: "", license: "", deliveryAddr: "", notes: "" });
   const [shared, setShared] = useState(false);
@@ -33,11 +34,11 @@ function CarRentalPage() {
     let r = CAR_OFFERS.filter((c) => !country || c.countryCode === country);
     if (city) r = r.filter((c) => c.city.toLowerCase().includes(city.toLowerCase()));
     if (carType !== "All") r = r.filter((c) => c.carType === carType);
+    if (autoOnly) r = r.filter((c) => c.transmission === "Automatic");
     if (sort === "price") r = [...r].sort((a, b) => a.dailyRate - b.dailyRate);
     if (sort === "rating") r = [...r].sort((a, b) => b.rating - a.rating);
-    if (sort === "auto") r = r.filter((c) => c.transmission === "Automatic");
     return r;
-  }, [country, city, carType, sort]);
+  }, [country, city, carType, sort, autoOnly]);
 
   const summary = picked
     ? `Hello ${picked.name},\n\nCar rental request via MaalsoorHub:\n\n🚗 Car: ${picked.model} (${picked.carType})\n⚙️ Transmission: ${picked.transmission}\n💵 Listed: $${picked.dailyRate}/day · Deposit $${picked.deposit}\n📍 Pick-up: ${pickUpLoc} (${city})\n📅 ${pickUp || "TBD"} → ${dropOff || "TBD"}\n\n👤 Name: ${form.name}\n📞 Phone: ${form.phone}\n${form.license ? `🪪 License: ${form.license}\n` : ""}${form.deliveryAddr ? `🏠 Delivery: ${form.deliveryAddr}\n` : ""}${form.notes ? `📝 Notes: ${form.notes}\n` : ""}\nPlease confirm availability and rental terms.`
@@ -76,7 +77,7 @@ function CarRentalPage() {
             <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
               <Chip active={sort === "price"} onClick={() => setSort("price")}>💰 Lowest</Chip>
               <Chip active={sort === "rating"} onClick={() => setSort("rating")}>⭐ Top Rated</Chip>
-              <Chip active={sort === "auto"} onClick={() => setSort("auto")}>⚙️ Automatic only</Chip>
+              <Chip active={autoOnly} onClick={() => setAutoOnly((v) => !v)}>⚙️ Automatic only</Chip>
             </div>
             <div className="text-xs text-muted-foreground">{results.length} cars available</div>
             <div className="space-y-2">

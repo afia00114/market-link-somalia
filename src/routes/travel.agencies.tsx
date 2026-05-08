@@ -15,23 +15,25 @@ export const Route = createFileRoute("/travel/agencies")({
   component: AgenciesPage,
 });
 
-type Sort = "rating" | "services" | "verified";
+type Sort = "rating" | "services" | "reviews";
 
 function AgenciesPage() {
   const [step, setStep] = useState(0);
   const [country, setCountry] = useState<string>();
   const [city, setCity] = useState("");
   const [sort, setSort] = useState<Sort>("rating");
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [picked, setPicked] = useState<Agency>();
 
   const results = useMemo(() => {
     let r = AGENCIES.filter((a) => !country || a.countryCode === country);
     if (city) r = r.filter((a) => a.city.toLowerCase().includes(city.toLowerCase()));
+    if (verifiedOnly) r = r.filter((a) => a.verified);
     if (sort === "rating") r = [...r].sort((a, b) => b.rating - a.rating);
     if (sort === "services") r = [...r].sort((a, b) => b.services.length - a.services.length);
-    if (sort === "verified") r = r.filter((a) => a.verified);
+    if (sort === "reviews") r = [...r].sort((a, b) => b.reviews - a.reviews);
     return r;
-  }, [country, city, sort]);
+  }, [country, city, sort, verifiedOnly]);
 
   return (
     <AppShell>
@@ -52,8 +54,9 @@ function AgenciesPage() {
           <div className="space-y-3">
             <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
               <Chip active={sort === "rating"} onClick={() => setSort("rating")}>⭐ Top Rated</Chip>
+              <Chip active={sort === "reviews"} onClick={() => setSort("reviews")}>💬 Most Reviewed</Chip>
               <Chip active={sort === "services"} onClick={() => setSort("services")}>Most Services</Chip>
-              <Chip active={sort === "verified"} onClick={() => setSort("verified")}>✅ Verified only</Chip>
+              <Chip active={verifiedOnly} onClick={() => setVerifiedOnly((v) => !v)}>✅ Verified only</Chip>
             </div>
             <div className="text-xs text-muted-foreground">{results.length} agencies</div>
             <div className="space-y-2">
