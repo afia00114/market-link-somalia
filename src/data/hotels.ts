@@ -12,7 +12,7 @@ export interface Hotel {
   name: string;
   city: string;
   region: string;
-  district: string;
+  district?: string;
   rating: number;
   reviews: number;
   pricePerNight: number;
@@ -25,7 +25,7 @@ export interface Hotel {
   rooms: Room[];
   phone: string;
   whatsapp: string;
-  tags?: ("near-me" | "top-rated" | "featured")[];
+  tags?: string[];
 }
 
 const img = (seed: string) =>
@@ -61,7 +61,6 @@ export const HOTELS: Hotel[] = [
     whatsapp: "252611234567",
     tags: ["featured", "top-rated"],
   },
-  [
   {
     id: "syl-hotel",
     name: "SYL Hotel & Resort",
@@ -355,8 +354,7 @@ export const HOTELS: Hotel[] = [
     phone: "+252612345691",
     whatsapp: "252612345691",
     tags: [],
-  }
-]
+  },
   {
     id: "maansoor-hotel",
     name: "Maansoor Hotel",
