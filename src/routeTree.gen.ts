@@ -16,6 +16,7 @@ import { Route as PostRouteImport } from './routes/post'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as HealthRouteImport } from './routes/health'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
@@ -27,6 +28,7 @@ import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
+import { Route as HealthIdRouteImport } from './routes/health.$id'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
 import { Route as TravelVisaIdRouteImport } from './routes/travel.visa.$id'
 import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
@@ -69,6 +71,11 @@ const HotelsRoute = HotelsRouteImport.update({
 const HomeRoute = HomeRouteImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -126,6 +133,11 @@ const HotelsIdRoute = HotelsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => HotelsRoute,
 } as any)
+const HealthIdRoute = HealthIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => HealthRoute,
+} as any)
 const CategoryKeyRoute = CategoryKeyRouteImport.update({
   id: '/category/$key',
   path: '/category/$key',
@@ -170,6 +182,7 @@ const HotelsIdBookRoute = HotelsIdBookRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
+  '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRoute
@@ -178,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/real-estate': typeof RealEstateRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
+  '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
@@ -198,6 +212,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
+  '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/messages': typeof MessagesRoute
   '/post': typeof PostRoute
@@ -205,6 +220,7 @@ export interface FileRoutesByTo {
   '/real-estate': typeof RealEstateRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
+  '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
@@ -226,6 +242,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
+  '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRoute
@@ -234,6 +251,7 @@ export interface FileRoutesById {
   '/real-estate': typeof RealEstateRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
+  '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
@@ -256,6 +274,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/explore'
+    | '/health'
     | '/home'
     | '/hotels'
     | '/messages'
@@ -264,6 +283,7 @@ export interface FileRouteTypes {
     | '/real-estate'
     | '/travel'
     | '/category/$key'
+    | '/health/$id'
     | '/hotels/$id'
     | '/property/$id'
     | '/travel/agencies'
@@ -284,6 +304,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/explore'
+    | '/health'
     | '/home'
     | '/messages'
     | '/post'
@@ -291,6 +312,7 @@ export interface FileRouteTypes {
     | '/real-estate'
     | '/travel'
     | '/category/$key'
+    | '/health/$id'
     | '/hotels/$id'
     | '/property/$id'
     | '/travel/agencies'
@@ -311,6 +333,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/explore'
+    | '/health'
     | '/home'
     | '/hotels'
     | '/messages'
@@ -319,6 +342,7 @@ export interface FileRouteTypes {
     | '/real-estate'
     | '/travel'
     | '/category/$key'
+    | '/health/$id'
     | '/hotels/$id'
     | '/property/$id'
     | '/travel/agencies'
@@ -340,6 +364,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExploreRoute: typeof ExploreRoute
+  HealthRoute: typeof HealthRouteWithChildren
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
   MessagesRoute: typeof MessagesRoute
@@ -400,6 +425,13 @@ declare module '@tanstack/react-router' {
       path: '/home'
       fullPath: '/home'
       preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -479,6 +511,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotelsIdRouteImport
       parentRoute: typeof HotelsRoute
     }
+    '/health/$id': {
+      id: '/health/$id'
+      path: '/$id'
+      fullPath: '/health/$id'
+      preLoaderRoute: typeof HealthIdRouteImport
+      parentRoute: typeof HealthRoute
+    }
     '/category/$key': {
       id: '/category/$key'
       path: '/category/$key'
@@ -537,6 +576,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface HealthRouteChildren {
+  HealthIdRoute: typeof HealthIdRoute
+}
+
+const HealthRouteChildren: HealthRouteChildren = {
+  HealthIdRoute: HealthIdRoute,
+}
+
+const HealthRouteWithChildren =
+  HealthRoute._addFileChildren(HealthRouteChildren)
 
 interface HotelsIdRouteChildren {
   HotelsIdBookRoute: typeof HotelsIdBookRoute
@@ -659,6 +709,7 @@ const TravelRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExploreRoute: ExploreRoute,
+  HealthRoute: HealthRouteWithChildren,
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
   MessagesRoute: MessagesRoute,
