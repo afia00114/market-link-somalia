@@ -200,8 +200,26 @@ function FlightDetail() {
             ${classes.find((c) => c.cls === selectedCls)?.price}
           </span>
         </div>
-        <ContactBar whatsapp={offer.whatsapp} phone={offer.phone} label="Book Now" />
+        <BookCTA offerId={offer.id} cls={selectedCls} whatsapp={offer.whatsapp} phone={offer.phone} />
       </section>
     </AppShell>
+  );
+}
+
+function BookCTA({ offerId, cls, whatsapp, phone }: { offerId: string; cls: string; whatsapp: string; phone: string }) {
+  const navigate = useNavigate();
+  return (
+    <div className="space-y-2">
+      <button
+        onClick={() => {
+          try { sessionStorage.setItem("flightBook", JSON.stringify({ id: offerId, cls })); } catch { /* ignore */ }
+          navigate({ to: "/travel/flights", search: { book: offerId } as never });
+        }}
+        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary font-semibold text-primary-foreground shadow-soft active:scale-[0.98]"
+      >
+        Continue to Booking Form
+      </button>
+      <ContactBar whatsapp={whatsapp} phone={phone} label="Quick WhatsApp" />
+    </div>
   );
 }
