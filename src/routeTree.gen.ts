@@ -14,6 +14,7 @@ import { Route as RealEstateRouteImport } from './routes/real-estate'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
@@ -24,7 +25,9 @@ import { Route as TravelFlightsRouteImport } from './routes/travel.flights'
 import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
+import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
+import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 
 const TravelRoute = TravelRouteImport.update({
   id: '/travel',
@@ -49,6 +52,11 @@ const PostRoute = PostRouteImport.update({
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HotelsRoute = HotelsRouteImport.update({
+  id: '/hotels',
+  path: '/hotels',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeRoute = HomeRouteImport.update({
@@ -101,22 +109,34 @@ const PropertyIdRoute = PropertyIdRouteImport.update({
   path: '/property/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HotelsIdRoute = HotelsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => HotelsRoute,
+} as any)
 const CategoryKeyRoute = CategoryKeyRouteImport.update({
   id: '/category/$key',
   path: '/category/$key',
   getParentRoute: () => rootRouteImport,
+} as any)
+const HotelsIdBookRoute = HotelsIdBookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => HotelsIdRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
+  '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRoute
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
+  '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRoute
   '/travel/car-rental': typeof TravelCarRentalRoute
@@ -124,17 +144,20 @@ export interface FileRoutesByFullPath {
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
+  '/hotels/$id/book': typeof HotelsIdBookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
+  '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRoute
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
+  '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRoute
   '/travel/car-rental': typeof TravelCarRentalRoute
@@ -142,18 +165,21 @@ export interface FileRoutesByTo {
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
+  '/hotels/$id/book': typeof HotelsIdBookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
+  '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRoute
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
+  '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRoute
   '/travel/car-rental': typeof TravelCarRentalRoute
@@ -161,6 +187,7 @@ export interface FileRoutesById {
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
+  '/hotels/$id/book': typeof HotelsIdBookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -168,12 +195,14 @@ export interface FileRouteTypes {
     | '/'
     | '/explore'
     | '/home'
+    | '/hotels'
     | '/messages'
     | '/post'
     | '/profile'
     | '/real-estate'
     | '/travel'
     | '/category/$key'
+    | '/hotels/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/car-rental'
@@ -181,17 +210,20 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah'
     | '/travel/tours'
     | '/travel/visa'
+    | '/hotels/$id/book'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/explore'
     | '/home'
+    | '/hotels'
     | '/messages'
     | '/post'
     | '/profile'
     | '/real-estate'
     | '/travel'
     | '/category/$key'
+    | '/hotels/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/car-rental'
@@ -199,17 +231,20 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah'
     | '/travel/tours'
     | '/travel/visa'
+    | '/hotels/$id/book'
   id:
     | '__root__'
     | '/'
     | '/explore'
     | '/home'
+    | '/hotels'
     | '/messages'
     | '/post'
     | '/profile'
     | '/real-estate'
     | '/travel'
     | '/category/$key'
+    | '/hotels/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/car-rental'
@@ -217,12 +252,14 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah'
     | '/travel/tours'
     | '/travel/visa'
+    | '/hotels/$id/book'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExploreRoute: typeof ExploreRoute
   HomeRoute: typeof HomeRoute
+  HotelsRoute: typeof HotelsRouteWithChildren
   MessagesRoute: typeof MessagesRoute
   PostRoute: typeof PostRoute
   ProfileRoute: typeof ProfileRoute
@@ -267,6 +304,13 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hotels': {
+      id: '/hotels'
+      path: '/hotels'
+      fullPath: '/hotels'
+      preLoaderRoute: typeof HotelsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home': {
@@ -339,6 +383,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertyIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hotels/$id': {
+      id: '/hotels/$id'
+      path: '/$id'
+      fullPath: '/hotels/$id'
+      preLoaderRoute: typeof HotelsIdRouteImport
+      parentRoute: typeof HotelsRoute
+    }
     '/category/$key': {
       id: '/category/$key'
       path: '/category/$key'
@@ -346,8 +397,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoryKeyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hotels/$id/book': {
+      id: '/hotels/$id/book'
+      path: '/book'
+      fullPath: '/hotels/$id/book'
+      preLoaderRoute: typeof HotelsIdBookRouteImport
+      parentRoute: typeof HotelsIdRoute
+    }
   }
 }
+
+interface HotelsIdRouteChildren {
+  HotelsIdBookRoute: typeof HotelsIdBookRoute
+}
+
+const HotelsIdRouteChildren: HotelsIdRouteChildren = {
+  HotelsIdBookRoute: HotelsIdBookRoute,
+}
+
+const HotelsIdRouteWithChildren = HotelsIdRoute._addFileChildren(
+  HotelsIdRouteChildren,
+)
+
+interface HotelsRouteChildren {
+  HotelsIdRoute: typeof HotelsIdRouteWithChildren
+}
+
+const HotelsRouteChildren: HotelsRouteChildren = {
+  HotelsIdRoute: HotelsIdRouteWithChildren,
+}
+
+const HotelsRouteWithChildren =
+  HotelsRoute._addFileChildren(HotelsRouteChildren)
 
 interface TravelRouteChildren {
   TravelAgenciesRoute: typeof TravelAgenciesRoute
@@ -374,6 +455,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExploreRoute: ExploreRoute,
   HomeRoute: HomeRoute,
+  HotelsRoute: HotelsRouteWithChildren,
   MessagesRoute: MessagesRoute,
   PostRoute: PostRoute,
   ProfileRoute: ProfileRoute,
@@ -385,3 +467,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
