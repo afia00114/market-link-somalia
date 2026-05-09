@@ -20,7 +20,7 @@ export interface Category {
 export const CATEGORIES: Category[] = [
   { key: "real-estate", label: "Real Estate", short: "Houses, land & more", count: 1240, icon: Home, gradient: "grad-realestate", href: "/real-estate" },
   { key: "services", label: "Services", short: "Trusted local pros", count: 860, icon: Wrench, gradient: "grad-services", href: "/category/services" },
-  { key: "travel", label: "Travel & Tourism", short: "Tickets, visas, tours", count: 312, icon: Plane, gradient: "grad-travel", href: "/travel" },
+  { key: "travel", label: "Flights", short: "Find & book flights", count: 312, icon: Plane, gradient: "grad-travel", href: "/travel/flights" },
   { key: "hotels", label: "Hotels", short: "Book rooms via WhatsApp", count: 156, icon: BedDouble, gradient: "grad-hotels", href: "/hotels" },
   { key: "health", label: "Health & Medical", short: "Hospitals & clinics", count: 198, icon: HeartPulse, gradient: "grad-health", href: "/category/health" },
   { key: "food", label: "Food & Restaurants", short: "Eat, dine, deliver", count: 540, icon: UtensilsCrossed, gradient: "grad-food", href: "/category/food" },
