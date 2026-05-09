@@ -7,7 +7,7 @@ import { HOTELS, type Hotel } from "@/data/hotels";
 type Tab = "All" | "Near me" | "Top Rated" | "Featured";
 const TABS: Tab[] = ["All", "Near me", "Top Rated", "Featured"];
 
-export const Route = createFileRoute("/hotels")({
+export const Route = createFileRoute("/hotels/")({
   head: () => ({
     meta: [
       { title: "Hotels — MaalsoorHub" },
