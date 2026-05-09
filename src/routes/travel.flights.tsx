@@ -131,25 +131,21 @@ function FlightsPage() {
 
   return (
     <AppShell>
-      {/* Green header */}
-      <header className="bg-flights rounded-b-3xl px-4 pb-5 pt-5 shadow-card">
+      {/* Blue hero header */}
+      <header className="bg-flights-hero relative overflow-hidden rounded-b-3xl px-4 pb-20 pt-5 text-white shadow-card">
         <Link to="/travel" className="inline-flex items-center gap-1 text-xs font-medium text-white/85">
           <ArrowLeft className="h-4 w-4" /> Home
         </Link>
-        <div className="mt-2 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/15">
-            <Plane className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold leading-tight">Airline Tickets</h1>
-            <p className="text-xs text-white/85">Book flights across Africa &amp; beyond</p>
-          </div>
+        <div className="relative z-10 mt-3 max-w-[70%]">
+          <h1 className="text-xl font-extrabold leading-tight">Find Flights.<br/>Get Best Deals.</h1>
+          <p className="mt-1 text-xs text-white/85">Contact agencies directly</p>
         </div>
+        <Plane className="absolute right-2 top-6 h-24 w-24 -rotate-12 text-white/20" />
       </header>
 
       <section className="space-y-5 px-4 pb-8">
         {/* Search form */}
-        <div className="-mt-3 space-y-3 rounded-2xl border border-border bg-card p-3 shadow-card">
+        <div className="-mt-16 space-y-3 rounded-2xl border border-border bg-card p-3 shadow-card">
           <div className="flex rounded-xl bg-secondary p-1">
             {(["oneway", "round"] as const).map((t) => (
               <button
@@ -164,13 +160,21 @@ function FlightsPage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="relative grid grid-cols-2 gap-2">
             <Field label="From">
               <AirportCombobox value={from} onChange={setFrom} options={fromOptions} />
             </Field>
             <Field label="To">
               <AirportCombobox value={to} onChange={setTo} options={toOptions} />
             </Field>
+            <button
+              type="button"
+              onClick={() => { const f = from; setFrom(to); setTo(f); }}
+              aria-label="Swap"
+              className="absolute left-1/2 top-[30px] z-10 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-flights shadow-soft active:scale-95"
+            >
+              <ArrowLeftRight className="h-3.5 w-3.5" />
+            </button>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -209,7 +213,7 @@ function FlightsPage() {
             onClick={() => setStep(2)}
             className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-flights font-bold text-white shadow-soft active:scale-[0.99]"
           >
-            <Search className="h-4 w-4" /> Search Flights
+            <Search className="h-4 w-4" /> Find Agencies
           </button>
         </div>
 
