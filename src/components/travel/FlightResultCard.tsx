@@ -1,4 +1,5 @@
-import { BadgeCheck, Star, Phone, MessageCircle, Plane, Clock } from "lucide-react";
+import { BadgeCheck, Star, Phone, MessageCircle, Plane, Clock, Info } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import type { FlightOffer } from "@/data/travel";
 import { whatsappLink, telLink } from "@/lib/contact";
 
@@ -66,6 +67,15 @@ export function FlightResultCard({
 
       {/* Actions */}
       <div className="flex items-center gap-2 border-t border-border p-2">
+        <Link
+          to="/travel/flights/$id"
+          params={{ id: offer.id }}
+          aria-label="View flight details"
+          onClick={(e) => e.stopPropagation()}
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border border-border bg-card text-foreground active:scale-95"
+        >
+          <Info className="h-4 w-4" />
+        </Link>
         <a
           href={telLink(offer.phone)}
           aria-label={`Call ${offer.name}`}
