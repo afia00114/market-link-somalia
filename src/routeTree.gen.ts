@@ -28,6 +28,12 @@ import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
+import { Route as TravelVisaIdRouteImport } from './routes/travel.visa.$id'
+import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
+import { Route as TravelHajjUmrahIdRouteImport } from './routes/travel.hajj-umrah.$id'
+import { Route as TravelFlightsIdRouteImport } from './routes/travel.flights.$id'
+import { Route as TravelCarRentalIdRouteImport } from './routes/travel.car-rental.$id'
+import { Route as TravelAgenciesIdRouteImport } from './routes/travel.agencies.$id'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 
 const TravelRoute = TravelRouteImport.update({
@@ -125,6 +131,36 @@ const CategoryKeyRoute = CategoryKeyRouteImport.update({
   path: '/category/$key',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TravelVisaIdRoute = TravelVisaIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TravelVisaRoute,
+} as any)
+const TravelToursIdRoute = TravelToursIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TravelToursRoute,
+} as any)
+const TravelHajjUmrahIdRoute = TravelHajjUmrahIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TravelHajjUmrahRoute,
+} as any)
+const TravelFlightsIdRoute = TravelFlightsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TravelFlightsRoute,
+} as any)
+const TravelCarRentalIdRoute = TravelCarRentalIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TravelCarRentalRoute,
+} as any)
+const TravelAgenciesIdRoute = TravelAgenciesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TravelAgenciesRoute,
+} as any)
 const HotelsIdBookRoute = HotelsIdBookRouteImport.update({
   id: '/book',
   path: '/book',
@@ -144,14 +180,20 @@ export interface FileRoutesByFullPath {
   '/category/$key': typeof CategoryKeyRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
-  '/travel/agencies': typeof TravelAgenciesRoute
-  '/travel/car-rental': typeof TravelCarRentalRoute
-  '/travel/flights': typeof TravelFlightsRoute
-  '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
-  '/travel/tours': typeof TravelToursRoute
-  '/travel/visa': typeof TravelVisaRoute
+  '/travel/agencies': typeof TravelAgenciesRouteWithChildren
+  '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
+  '/travel/flights': typeof TravelFlightsRouteWithChildren
+  '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/tours': typeof TravelToursRouteWithChildren
+  '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
+  '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
+  '/travel/flights/$id': typeof TravelFlightsIdRoute
+  '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
+  '/travel/tours/$id': typeof TravelToursIdRoute
+  '/travel/visa/$id': typeof TravelVisaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -165,14 +207,20 @@ export interface FileRoutesByTo {
   '/category/$key': typeof CategoryKeyRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
-  '/travel/agencies': typeof TravelAgenciesRoute
-  '/travel/car-rental': typeof TravelCarRentalRoute
-  '/travel/flights': typeof TravelFlightsRoute
-  '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
-  '/travel/tours': typeof TravelToursRoute
-  '/travel/visa': typeof TravelVisaRoute
+  '/travel/agencies': typeof TravelAgenciesRouteWithChildren
+  '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
+  '/travel/flights': typeof TravelFlightsRouteWithChildren
+  '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/tours': typeof TravelToursRouteWithChildren
+  '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
+  '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
+  '/travel/flights/$id': typeof TravelFlightsIdRoute
+  '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
+  '/travel/tours/$id': typeof TravelToursIdRoute
+  '/travel/visa/$id': typeof TravelVisaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -188,14 +236,20 @@ export interface FileRoutesById {
   '/category/$key': typeof CategoryKeyRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
-  '/travel/agencies': typeof TravelAgenciesRoute
-  '/travel/car-rental': typeof TravelCarRentalRoute
-  '/travel/flights': typeof TravelFlightsRoute
-  '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
-  '/travel/tours': typeof TravelToursRoute
-  '/travel/visa': typeof TravelVisaRoute
+  '/travel/agencies': typeof TravelAgenciesRouteWithChildren
+  '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
+  '/travel/flights': typeof TravelFlightsRouteWithChildren
+  '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/tours': typeof TravelToursRouteWithChildren
+  '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
+  '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
+  '/travel/flights/$id': typeof TravelFlightsIdRoute
+  '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
+  '/travel/tours/$id': typeof TravelToursIdRoute
+  '/travel/visa/$id': typeof TravelVisaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -220,6 +274,12 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/hotels/'
     | '/hotels/$id/book'
+    | '/travel/agencies/$id'
+    | '/travel/car-rental/$id'
+    | '/travel/flights/$id'
+    | '/travel/hajj-umrah/$id'
+    | '/travel/tours/$id'
+    | '/travel/visa/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -241,6 +301,12 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/hotels'
     | '/hotels/$id/book'
+    | '/travel/agencies/$id'
+    | '/travel/car-rental/$id'
+    | '/travel/flights/$id'
+    | '/travel/hajj-umrah/$id'
+    | '/travel/tours/$id'
+    | '/travel/visa/$id'
   id:
     | '__root__'
     | '/'
@@ -263,6 +329,12 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/hotels/'
     | '/hotels/$id/book'
+    | '/travel/agencies/$id'
+    | '/travel/car-rental/$id'
+    | '/travel/flights/$id'
+    | '/travel/hajj-umrah/$id'
+    | '/travel/tours/$id'
+    | '/travel/visa/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -414,6 +486,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoryKeyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/travel/visa/$id': {
+      id: '/travel/visa/$id'
+      path: '/$id'
+      fullPath: '/travel/visa/$id'
+      preLoaderRoute: typeof TravelVisaIdRouteImport
+      parentRoute: typeof TravelVisaRoute
+    }
+    '/travel/tours/$id': {
+      id: '/travel/tours/$id'
+      path: '/$id'
+      fullPath: '/travel/tours/$id'
+      preLoaderRoute: typeof TravelToursIdRouteImport
+      parentRoute: typeof TravelToursRoute
+    }
+    '/travel/hajj-umrah/$id': {
+      id: '/travel/hajj-umrah/$id'
+      path: '/$id'
+      fullPath: '/travel/hajj-umrah/$id'
+      preLoaderRoute: typeof TravelHajjUmrahIdRouteImport
+      parentRoute: typeof TravelHajjUmrahRoute
+    }
+    '/travel/flights/$id': {
+      id: '/travel/flights/$id'
+      path: '/$id'
+      fullPath: '/travel/flights/$id'
+      preLoaderRoute: typeof TravelFlightsIdRouteImport
+      parentRoute: typeof TravelFlightsRoute
+    }
+    '/travel/car-rental/$id': {
+      id: '/travel/car-rental/$id'
+      path: '/$id'
+      fullPath: '/travel/car-rental/$id'
+      preLoaderRoute: typeof TravelCarRentalIdRouteImport
+      parentRoute: typeof TravelCarRentalRoute
+    }
+    '/travel/agencies/$id': {
+      id: '/travel/agencies/$id'
+      path: '/$id'
+      fullPath: '/travel/agencies/$id'
+      preLoaderRoute: typeof TravelAgenciesIdRouteImport
+      parentRoute: typeof TravelAgenciesRoute
+    }
     '/hotels/$id/book': {
       id: '/hotels/$id/book'
       path: '/book'
@@ -449,22 +563,94 @@ const HotelsRouteChildren: HotelsRouteChildren = {
 const HotelsRouteWithChildren =
   HotelsRoute._addFileChildren(HotelsRouteChildren)
 
+interface TravelAgenciesRouteChildren {
+  TravelAgenciesIdRoute: typeof TravelAgenciesIdRoute
+}
+
+const TravelAgenciesRouteChildren: TravelAgenciesRouteChildren = {
+  TravelAgenciesIdRoute: TravelAgenciesIdRoute,
+}
+
+const TravelAgenciesRouteWithChildren = TravelAgenciesRoute._addFileChildren(
+  TravelAgenciesRouteChildren,
+)
+
+interface TravelCarRentalRouteChildren {
+  TravelCarRentalIdRoute: typeof TravelCarRentalIdRoute
+}
+
+const TravelCarRentalRouteChildren: TravelCarRentalRouteChildren = {
+  TravelCarRentalIdRoute: TravelCarRentalIdRoute,
+}
+
+const TravelCarRentalRouteWithChildren = TravelCarRentalRoute._addFileChildren(
+  TravelCarRentalRouteChildren,
+)
+
+interface TravelFlightsRouteChildren {
+  TravelFlightsIdRoute: typeof TravelFlightsIdRoute
+}
+
+const TravelFlightsRouteChildren: TravelFlightsRouteChildren = {
+  TravelFlightsIdRoute: TravelFlightsIdRoute,
+}
+
+const TravelFlightsRouteWithChildren = TravelFlightsRoute._addFileChildren(
+  TravelFlightsRouteChildren,
+)
+
+interface TravelHajjUmrahRouteChildren {
+  TravelHajjUmrahIdRoute: typeof TravelHajjUmrahIdRoute
+}
+
+const TravelHajjUmrahRouteChildren: TravelHajjUmrahRouteChildren = {
+  TravelHajjUmrahIdRoute: TravelHajjUmrahIdRoute,
+}
+
+const TravelHajjUmrahRouteWithChildren = TravelHajjUmrahRoute._addFileChildren(
+  TravelHajjUmrahRouteChildren,
+)
+
+interface TravelToursRouteChildren {
+  TravelToursIdRoute: typeof TravelToursIdRoute
+}
+
+const TravelToursRouteChildren: TravelToursRouteChildren = {
+  TravelToursIdRoute: TravelToursIdRoute,
+}
+
+const TravelToursRouteWithChildren = TravelToursRoute._addFileChildren(
+  TravelToursRouteChildren,
+)
+
+interface TravelVisaRouteChildren {
+  TravelVisaIdRoute: typeof TravelVisaIdRoute
+}
+
+const TravelVisaRouteChildren: TravelVisaRouteChildren = {
+  TravelVisaIdRoute: TravelVisaIdRoute,
+}
+
+const TravelVisaRouteWithChildren = TravelVisaRoute._addFileChildren(
+  TravelVisaRouteChildren,
+)
+
 interface TravelRouteChildren {
-  TravelAgenciesRoute: typeof TravelAgenciesRoute
-  TravelCarRentalRoute: typeof TravelCarRentalRoute
-  TravelFlightsRoute: typeof TravelFlightsRoute
-  TravelHajjUmrahRoute: typeof TravelHajjUmrahRoute
-  TravelToursRoute: typeof TravelToursRoute
-  TravelVisaRoute: typeof TravelVisaRoute
+  TravelAgenciesRoute: typeof TravelAgenciesRouteWithChildren
+  TravelCarRentalRoute: typeof TravelCarRentalRouteWithChildren
+  TravelFlightsRoute: typeof TravelFlightsRouteWithChildren
+  TravelHajjUmrahRoute: typeof TravelHajjUmrahRouteWithChildren
+  TravelToursRoute: typeof TravelToursRouteWithChildren
+  TravelVisaRoute: typeof TravelVisaRouteWithChildren
 }
 
 const TravelRouteChildren: TravelRouteChildren = {
-  TravelAgenciesRoute: TravelAgenciesRoute,
-  TravelCarRentalRoute: TravelCarRentalRoute,
-  TravelFlightsRoute: TravelFlightsRoute,
-  TravelHajjUmrahRoute: TravelHajjUmrahRoute,
-  TravelToursRoute: TravelToursRoute,
-  TravelVisaRoute: TravelVisaRoute,
+  TravelAgenciesRoute: TravelAgenciesRouteWithChildren,
+  TravelCarRentalRoute: TravelCarRentalRouteWithChildren,
+  TravelFlightsRoute: TravelFlightsRouteWithChildren,
+  TravelHajjUmrahRoute: TravelHajjUmrahRouteWithChildren,
+  TravelToursRoute: TravelToursRouteWithChildren,
+  TravelVisaRoute: TravelVisaRouteWithChildren,
 }
 
 const TravelRouteWithChildren =
@@ -486,13 +672,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

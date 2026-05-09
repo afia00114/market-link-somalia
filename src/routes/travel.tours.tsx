@@ -69,6 +69,11 @@ function ToursPage() {
         {step === 2 && (
           <div className="space-y-3">
             <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+              {(["All", "Safari", "Beach", "Cultural", "Adventure", "City"] as const).map((t) => (
+                <Chip key={t} active={tourType === t} onClick={() => setTourType(t)}>{t}</Chip>
+              ))}
+            </div>
+            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
               <Chip active={sort === "price"} onClick={() => setSort("price")}>💰 Lowest</Chip>
               <Chip active={sort === "rating"} onClick={() => setSort("rating")}>⭐ Top Rated</Chip>
               <Chip active={sort === "duration"} onClick={() => setSort("duration")}>🗓 Shortest</Chip>
