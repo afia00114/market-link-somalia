@@ -98,6 +98,13 @@ export function SummaryShare({
         <ArrowLeft className="h-3 w-3" /> Edit request
       </button>
 
+      {/* Pre-submission notice */}
+      <div className="mb-3 rounded-xl border border-primary/30 bg-primary/5 p-3 text-[11px] leading-relaxed text-foreground">
+        <div className="mb-1 font-semibold text-primary">Before you submit</div>
+        Agencies will first send your official ticket to your <b>email</b>, then follow up on <b>WhatsApp</b> to
+        confirm. Make sure your name, email and phone are correct.
+      </div>
+
       {/* Captured card */}
       <div
         ref={cardRef}
