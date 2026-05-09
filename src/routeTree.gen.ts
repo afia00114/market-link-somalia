@@ -18,6 +18,7 @@ import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
 import { Route as TravelToursRouteImport } from './routes/travel.tours'
 import { Route as TravelHajjUmrahRouteImport } from './routes/travel.hajj-umrah'
@@ -73,6 +74,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const HotelsIndexRoute = HotelsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HotelsRoute,
 } as any)
 const TravelVisaRoute = TravelVisaRouteImport.update({
   id: '/visa',
@@ -144,13 +150,13 @@ export interface FileRoutesByFullPath {
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
+  '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/explore': typeof ExploreRoute
   '/home': typeof HomeRoute
-  '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRoute
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
@@ -165,6 +171,7 @@ export interface FileRoutesByTo {
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
+  '/hotels': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
 }
 export interface FileRoutesById {
@@ -187,6 +194,7 @@ export interface FileRoutesById {
   '/travel/hajj-umrah': typeof TravelHajjUmrahRoute
   '/travel/tours': typeof TravelToursRoute
   '/travel/visa': typeof TravelVisaRoute
+  '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
 }
 export interface FileRouteTypes {
@@ -210,13 +218,13 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah'
     | '/travel/tours'
     | '/travel/visa'
+    | '/hotels/'
     | '/hotels/$id/book'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/explore'
     | '/home'
-    | '/hotels'
     | '/messages'
     | '/post'
     | '/profile'
@@ -231,6 +239,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah'
     | '/travel/tours'
     | '/travel/visa'
+    | '/hotels'
     | '/hotels/$id/book'
   id:
     | '__root__'
@@ -252,6 +261,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah'
     | '/travel/tours'
     | '/travel/visa'
+    | '/hotels/'
     | '/hotels/$id/book'
   fileRoutesById: FileRoutesById
 }
@@ -333,6 +343,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/hotels/': {
+      id: '/hotels/'
+      path: '/'
+      fullPath: '/hotels/'
+      preLoaderRoute: typeof HotelsIndexRouteImport
+      parentRoute: typeof HotelsRoute
     }
     '/travel/visa': {
       id: '/travel/visa'
@@ -421,10 +438,12 @@ const HotelsIdRouteWithChildren = HotelsIdRoute._addFileChildren(
 
 interface HotelsRouteChildren {
   HotelsIdRoute: typeof HotelsIdRouteWithChildren
+  HotelsIndexRoute: typeof HotelsIndexRoute
 }
 
 const HotelsRouteChildren: HotelsRouteChildren = {
   HotelsIdRoute: HotelsIdRouteWithChildren,
+  HotelsIndexRoute: HotelsIndexRoute,
 }
 
 const HotelsRouteWithChildren =
