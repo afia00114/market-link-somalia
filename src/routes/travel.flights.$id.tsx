@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { DetailHeader } from "@/components/travel/DetailHeader";
