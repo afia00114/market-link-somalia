@@ -164,10 +164,9 @@ function FlightsPage() {
           </button>
         </div>
 
-        {/* Active step UI */}
-        {step === 0 && (
-          <div className="space-y-5">
-            {/* (sections rendered below — always visible) */}
+        {/* Always-visible sections */}
+        <div className="space-y-5">
+          {/* USPs, Popular Routes, Airlines, How It Works, Why Book, Support, Reminder */}
 
             {/* USPs */}
             <div className="grid grid-cols-3 gap-2">
