@@ -28,15 +28,114 @@ export interface TravelSub {
   short: string;
   icon: LucideIcon;
   href: string;
+  description: string;
+  offers: string[];
+  highlights: { label: string; value: string }[];
 }
 
 export const TRAVEL_SUBS: TravelSub[] = [
-  { key: "flights", label: "Airline Tickets", emoji: "✈️", short: "Find & book flights", icon: Plane, href: "/travel/flights" },
-  { key: "agencies", label: "Travel Agencies", emoji: "🏢", short: "Browse all agencies", icon: Building2, href: "/travel/agencies" },
-  { key: "visa", label: "Visa Services", emoji: "🛂", short: "Tourist & business visas", icon: FileCheck, href: "/travel/visa" },
-  { key: "hajj-umrah", label: "Hajj & Umrah", emoji: "🕋", short: "Pilgrimage packages", icon: Star, href: "/travel/hajj-umrah" },
-  { key: "tours", label: "Tour Packages", emoji: "🗺️", short: "Safari, beach, culture", icon: Map, href: "/travel/tours" },
-  { key: "car-rental", label: "Car Rental", emoji: "🚗", short: "Rent any vehicle", icon: Car, href: "/travel/car-rental" },
+  {
+    key: "flights", label: "Airline Tickets", emoji: "✈️", short: "Find & book flights", icon: Plane, href: "/travel/flights",
+    description: "Compare verified airlines and travel agencies for one-way and round trips across East Africa, the Gulf, and beyond.",
+    offers: [
+      "Domestic & international flights",
+      "One-way and round-trip search",
+      "Filter by price, duration & airline",
+      "Direct or via stopover options",
+      "Baggage & refund policy details",
+      "Confirm via WhatsApp or call",
+    ],
+    highlights: [
+      { label: "Providers", value: "20+ agencies" },
+      { label: "Routes", value: "Local + Intl." },
+      { label: "Booking", value: "WhatsApp / Call" },
+    ],
+  },
+  {
+    key: "agencies", label: "Travel Agencies", emoji: "🏢", short: "Browse all agencies", icon: Building2, href: "/travel/agencies",
+    description: "Browse all verified travel agencies, view their services, ratings, and contact them directly.",
+    offers: [
+      "Verified agency profiles",
+      "Ratings & customer reviews",
+      "Available services per agency",
+      "Office location & hours",
+      "Linked flights, tours & visas",
+      "Direct WhatsApp & call",
+    ],
+    highlights: [
+      { label: "Agencies", value: "30+ listed" },
+      { label: "Verification", value: "Manual check" },
+      { label: "Coverage", value: "All major cities" },
+    ],
+  },
+  {
+    key: "visa", label: "Visa Services", emoji: "🛂", short: "Tourist & business visas", icon: FileCheck, href: "/travel/visa",
+    description: "Apply for tourist, business, study and work visas with the help of trusted agents.",
+    offers: [
+      "Tourist & business visas",
+      "Document checklist per country",
+      "Processing time & fees",
+      "Application status tracking",
+      "Upload-ready document slots",
+      "Agent assistance via WhatsApp",
+    ],
+    highlights: [
+      { label: "Countries", value: "40+ supported" },
+      { label: "Types", value: "Tourist / Biz / Study" },
+      { label: "Processing", value: "3–15 days" },
+    ],
+  },
+  {
+    key: "hajj-umrah", label: "Hajj & Umrah", emoji: "🕋", short: "Pilgrimage packages", icon: Star, href: "/travel/hajj-umrah",
+    description: "Verified Hajj and Umrah packages with hotel tiers, daily schedule, and flexible payment plans.",
+    offers: [
+      "Economy, standard & VIP tiers",
+      "Hotel distance to Haram",
+      "Daily schedule & rituals",
+      "Visa, transport & meals included",
+      "Payment plan options",
+      "Group leader contact",
+    ],
+    highlights: [
+      { label: "Tiers", value: "Economy → VIP" },
+      { label: "Duration", value: "10–25 days" },
+      { label: "Includes", value: "Visa + Hotel" },
+    ],
+  },
+  {
+    key: "tours", label: "Tour Packages", emoji: "🗺️", short: "Safari, beach, culture", icon: Map, href: "/travel/tours",
+    description: "Curated tour packages covering safari, beach, cultural and city experiences across the region.",
+    offers: [
+      "Safari, beach & cultural tours",
+      "Day-by-day itineraries",
+      "Group & private options",
+      "Inclusions & exclusions list",
+      "Transport & guide arrangement",
+      "Reserve via WhatsApp",
+    ],
+    highlights: [
+      { label: "Categories", value: "Safari / Beach / Culture" },
+      { label: "Length", value: "1–14 days" },
+      { label: "Group size", value: "Private or shared" },
+    ],
+  },
+  {
+    key: "car-rental", label: "Car Rental", emoji: "🚗", short: "Rent any vehicle", icon: Car, href: "/travel/car-rental",
+    description: "Rent sedans, SUVs, vans and 4x4s with or without driver, with clear insurance and fuel policies.",
+    offers: [
+      "Sedans, SUVs, vans & 4x4",
+      "With or without driver",
+      "Daily, weekly & monthly rates",
+      "Insurance & mileage details",
+      "Fuel policy & deposit info",
+      "Pickup & delivery options",
+    ],
+    highlights: [
+      { label: "Fleet", value: "100+ vehicles" },
+      { label: "Rate", value: "From $25 / day" },
+      { label: "Driver", value: "Optional" },
+    ],
+  },
 ];
 
 export interface Provider {
