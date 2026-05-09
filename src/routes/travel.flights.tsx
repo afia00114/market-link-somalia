@@ -140,24 +140,169 @@ function FlightsPage() {
       <Stepper steps={steps} current={step} />
 
       <section className="px-4 pb-8">
-        {/* Step 1 — Country */}
+        {/* Step 1 — Landing */}
         {step === 0 && (
-          <div className="space-y-4">
-            <p className="text-xs text-muted-foreground">
-              Pick the country you're flying <b>from</b>. We'll show airports available there.
-            </p>
-            <CountryPickerSheet
-              label="Departure country"
-              selected={country}
-              onSelect={(c) => {
-                setCountry(c.code);
-                const first = AIRPORTS[c.code]?.[0];
-                if (first) setFrom(first.code);
-              }}
-            />
-            <PrimaryBtn onClick={() => setStep(1)} disabled={!country}>
-              Continue
-            </PrimaryBtn>
+          <div className="space-y-5">
+            {/* Hero */}
+            <div className="grad-travel rounded-2xl p-4 text-white shadow-card">
+              <h2 className="text-lg font-bold leading-tight">Find Flights. Get Best Deals.</h2>
+              <p className="mt-1 text-xs text-white/85">Contact agencies directly — no in-app payments.</p>
+              <p className="mt-3 text-[11px] text-white/80">Flying from</p>
+              <div className="mt-1">
+                <CountryPickerSheet
+                  label=""
+                  selected={country}
+                  onSelect={(c) => {
+                    setCountry(c.code);
+                    const first = AIRPORTS[c.code]?.[0];
+                    if (first) setFrom(first.code);
+                  }}
+                />
+              </div>
+              <button
+                onClick={() => setStep(1)}
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-primary shadow-soft active:scale-[0.99]"
+              >
+                <Search className="h-4 w-4" /> Search Flights
+              </button>
+            </div>
+
+            {/* USPs */}
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { icon: Wallet, t: "No In-App Pay", s: "Pay agency directly" },
+                { icon: MessagesSquare, t: "WhatsApp First", s: "Easy chat" },
+                { icon: ShieldCheck, t: "Trusted", s: "Verified agencies" },
+              ].map(({ icon: Ic, t, s }) => (
+                <div key={t} className="rounded-xl border border-border bg-card p-2.5 text-center shadow-soft">
+                  <Ic className="mx-auto h-4 w-4 text-primary" />
+                  <div className="mt-1 text-[11px] font-bold text-foreground">{t}</div>
+                  <div className="text-[10px] text-muted-foreground leading-tight">{s}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Popular Routes */}
+            <div>
+              <h3 className="mb-2 text-sm font-bold text-foreground">Popular Routes</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { f: "MGQ", t: "NBO", price: 250 },
+                  { f: "MGQ", t: "DXB", price: 280 },
+                  { f: "MGQ", t: "IST", price: 320 },
+                  { f: "MGQ", t: "JED", price: 310 },
+                ].map((r) => (
+                  <button
+                    key={r.t}
+                    onClick={() => {
+                      setFrom(r.f);
+                      setTo(r.t);
+                      setStep(2);
+                    }}
+                    className="rounded-xl border border-border bg-card p-3 text-left shadow-soft active:scale-[0.99]"
+                  >
+                    <div className="flex items-center gap-1 text-sm font-bold text-foreground">
+                      {r.f} <ArrowRight className="h-3 w-3 text-muted-foreground" /> {r.t}
+                    </div>
+                    <div className="mt-0.5 text-[11px] text-muted-foreground">From ${r.price}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Featured Airlines */}
+            <div>
+              <h3 className="mb-2 text-sm font-bold text-foreground">Featured Airlines</h3>
+              <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {["Turkish", "Qatar", "Ethiopian", "flydubai", "Daallo", "Somali"].map((a) => (
+                  <div
+                    key={a}
+                    className="flex-shrink-0 rounded-xl border border-border bg-card px-3 py-2 text-[11px] font-semibold text-foreground shadow-soft"
+                  >
+                    {a} Airlines
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* How It Works */}
+            <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+              <h3 className="text-sm font-bold text-foreground">How It Works</h3>
+              <p className="text-[11px] text-muted-foreground">Simple steps to book your flight</p>
+              <ol className="mt-3 space-y-2.5">
+                {[
+                  { t: "Search", s: "Pick route and date" },
+                  { t: "Choose Agency", s: "Compare offers" },
+                  { t: "Get Contacted", s: "Via WhatsApp, call or email" },
+                  { t: "Pay Directly", s: "Discuss price with the agency" },
+                ].map((s, i) => (
+                  <li key={s.t} className="flex items-start gap-2.5">
+                    <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
+                      {i + 1}
+                    </span>
+                    <div>
+                      <div className="text-xs font-semibold text-foreground">{s.t}</div>
+                      <div className="text-[11px] text-muted-foreground">{s.s}</div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Why Book With Us */}
+            <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+              <h3 className="text-sm font-bold text-foreground">Why Book With Us?</h3>
+              <ul className="mt-2 space-y-2">
+                {[
+                  { icon: ShieldCheck, t: "Trusted & Verified Agencies", s: "All agencies are verified by our team" },
+                  { icon: BadgePercent, t: "Best Price Guarantee", s: "Compare offers from multiple agencies" },
+                  { icon: MessagesSquare, t: "WhatsApp First", s: "Easy communication on WhatsApp" },
+                  { icon: Wallet, t: "No Hidden Charges", s: "Transparent and simple process" },
+                  { icon: Headphones, t: "24/7 Support", s: "We are here to help you anytime" },
+                ].map(({ icon: Ic, t, s }) => (
+                  <li key={t} className="flex items-start gap-2.5">
+                    <Ic className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
+                    <div>
+                      <div className="text-xs font-semibold text-foreground">{t}</div>
+                      <div className="text-[11px] text-muted-foreground">{s}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Need Help */}
+            <a
+              href="https://wa.me/252610000000"
+              target="_blank"
+              rel="noreferrer"
+              className="block rounded-2xl bg-gradient-to-br from-primary to-primary/80 p-4 text-white shadow-card"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
+                  <Headphones className="h-5 w-5" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-bold">Need Help With Booking?</div>
+                  <div className="text-[11px] text-white/85">Chat with our support team on WhatsApp</div>
+                </div>
+              </div>
+              <div className="mt-3 flex items-center justify-center gap-2 rounded-xl bg-white/15 py-2 text-xs font-semibold backdrop-blur">
+                <MessagesSquare className="h-4 w-4" /> Chat on WhatsApp
+              </div>
+            </a>
+
+            {/* Important Reminder */}
+            <div className="flex items-start gap-2.5 rounded-2xl border border-amber-200 bg-amber-50 p-3 dark:border-amber-900/40 dark:bg-amber-950/30">
+              <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
+              <div>
+                <div className="text-xs font-bold text-amber-900 dark:text-amber-200">Important Reminder</div>
+                <p className="mt-0.5 text-[11px] leading-relaxed text-amber-900/80 dark:text-amber-200/80">
+                  Payments are handled directly between you and the travel agency through WhatsApp, bank transfer,
+                  mobile money or office payment. MaalsoorHub does not process any payments.
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
