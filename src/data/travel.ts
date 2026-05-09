@@ -751,9 +751,75 @@ export const AGENCIES: Agency[] = [
   },
 ];
 
-// VISA, HAJJ, TOURS, CAR RENTAL remain exactly as in original (unchanged)
-// ... (the rest of the file - VISA_SERVICES, PILGRIM_PACKAGES, TOUR_PACKAGES, CAR_OFFERS)
-// We keep them identical to the user's original code for brevity, but they are present in the final output.
+// ============= VISA =============
+export interface VisaService extends Provider {
+  visaType: string;
+  destination: string;
+  fee: number;
+  processingDays: string;
+  successRate: number;
+  requirements: string[];
+}
+export const VISA_SERVICES: VisaService[] = [
+  { id: "v1", name: "Salaam Visa Center", logo: u("1436491865332-7a61a109cc05"), rating: 4.7, reviews: 210, city: "Mogadishu", countryCode: "SO", whatsapp: "252615556677", phone: "+252 61 555 6677", verified: true, visaType: "Tourist", destination: "AE", fee: 180, processingDays: "5–7 days", successRate: 96, requirements: ["Passport (6+ months)", "Photo", "Flight booking", "Hotel reservation"] },
+  { id: "v2", name: "Horn Visa Services", logo: u("1556388158-158ea5ccacbd"), rating: 4.5, reviews: 145, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340101", phone: "+252 61 234 0101", verified: true, visaType: "Tourist", destination: "TR", fee: 90, processingDays: "3–5 days", successRate: 98, requirements: ["Passport", "Photo", "Bank statement"] },
+  { id: "v3", name: "Addis Sky Visa", logo: u("1547471080-7cc2caa01a7e"), rating: 4.6, reviews: 180, city: "Addis Ababa", countryCode: "ET", whatsapp: "251911445566", phone: "+251 911 445 566", verified: true, visaType: "Business", destination: "SA", fee: 220, processingDays: "7–10 days", successRate: 92, requirements: ["Passport", "Invitation letter", "Company docs", "Photo"] },
+  { id: "v4", name: "Dubai Falcon Visa", logo: u("1591604129939-f1efa4d9f7fa"), rating: 4.8, reviews: 520, city: "Dubai", countryCode: "AE", whatsapp: "971501234567", phone: "+971 50 123 4567", verified: true, visaType: "Tourist", destination: "AE", fee: 150, processingDays: "2–4 days", successRate: 99, requirements: ["Passport", "Photo", "Flight booking"] },
+];
 
-// For completeness, include all original data structures below (VISA_SERVICES, PILGRIM_PACKAGES, TOUR_PACKAGES, CAR_OFFERS)
-// (They are unchanged, so we omit repeating them here to save space, but in the final answer they will be included exactly as provided by the user.)
+// ============= HAJJ / UMRAH =============
+export type PilgrimType = "Hajj" | "Umrah";
+export type PilgrimTier = "Economy" | "Standard" | "VIP";
+export interface PilgrimPackage extends Provider {
+  type: PilgrimType;
+  tier: PilgrimTier;
+  durationDays: number;
+  groupSize: number;
+  price: number;
+  inclusions: string[];
+}
+export const PILGRIM_PACKAGES: PilgrimPackage[] = [
+  { id: "p1", name: "Barakah Umrah Economy", logo: u("1519817914152-22d216bb9170"), rating: 4.7, reviews: 145, city: "Mogadishu", countryCode: "SO", whatsapp: "252617778899", phone: "+252 61 777 8899", verified: true, type: "Umrah", tier: "Economy", durationDays: 12, groupSize: 30, price: 1800, inclusions: ["Flights", "3★ Hotel", "Transfers", "Visa", "Guide"] },
+  { id: "p2", name: "Barakah Umrah Standard", logo: u("1519817914152-22d216bb9170"), rating: 4.8, reviews: 102, city: "Mogadishu", countryCode: "SO", whatsapp: "252617778899", phone: "+252 61 777 8899", verified: true, type: "Umrah", tier: "Standard", durationDays: 14, groupSize: 25, price: 2600, inclusions: ["Flights", "4★ Hotel", "Transfers", "Visa", "Meals", "Guide"] },
+  { id: "p3", name: "Barakah Umrah VIP", logo: u("1519817914152-22d216bb9170"), rating: 4.9, reviews: 64, city: "Mogadishu", countryCode: "SO", whatsapp: "252617778899", phone: "+252 61 777 8899", verified: true, type: "Umrah", tier: "VIP", durationDays: 14, groupSize: 15, price: 4200, inclusions: ["Flights", "5★ Hotel near Haram", "Private transfers", "Visa", "All meals", "Scholar guide"] },
+  { id: "p4", name: "Salaam Hajj Standard", logo: u("1436491865332-7a61a109cc05"), rating: 4.8, reviews: 88, city: "Mogadishu", countryCode: "SO", whatsapp: "252615556677", phone: "+252 61 555 6677", verified: true, type: "Hajj", tier: "Standard", durationDays: 21, groupSize: 40, price: 6500, inclusions: ["Flights", "4★ Hotel", "Mina tents", "Visa", "Meals", "Guide"] },
+  { id: "p5", name: "Salaam Hajj VIP", logo: u("1436491865332-7a61a109cc05"), rating: 4.9, reviews: 42, city: "Mogadishu", countryCode: "SO", whatsapp: "252615556677", phone: "+252 61 555 6677", verified: true, type: "Hajj", tier: "VIP", durationDays: 21, groupSize: 20, price: 9800, inclusions: ["Flights", "5★ Hotel", "VIP Mina tents", "Visa", "All meals", "Scholar guide"] },
+];
+
+// ============= TOURS =============
+export type TourType = "Safari" | "Beach" | "Cultural" | "Adventure" | "City";
+export interface TourPackage extends Provider {
+  tourType: TourType;
+  destinationCountry: string;
+  days: number;
+  private: boolean;
+  pricePerPerson: number;
+  itinerary: string[];
+  inclusions: string[];
+}
+export const TOUR_PACKAGES: TourPackage[] = [
+  { id: "t1", name: "Jambo Travel", logo: u("1469854523086-cc02fe5d8800"), rating: 4.8, reviews: 312, city: "Nairobi", countryCode: "KE", whatsapp: "254712340105", phone: "+254 712 340 105", verified: true, tourType: "Safari", destinationCountry: "KE", days: 5, private: false, pricePerPerson: 890, itinerary: ["Nairobi", "Maasai Mara", "Lake Nakuru", "Amboseli", "Nairobi"], inclusions: ["Hotel", "Meals", "Park fees", "Guide", "Transport"] },
+  { id: "t2", name: "Dubai Falcon Tours", logo: u("1591604129939-f1efa4d9f7fa"), rating: 4.7, reviews: 580, city: "Dubai", countryCode: "AE", whatsapp: "971501234567", phone: "+971 50 123 4567", verified: true, tourType: "City", destinationCountry: "AE", days: 4, private: true, pricePerPerson: 720, itinerary: ["Dubai Marina", "Burj Khalifa", "Desert Safari", "Old Dubai"], inclusions: ["Hotel", "Breakfast", "City tours", "Transfers"] },
+  { id: "t3", name: "Istanbul Gate Travel", logo: u("1519817914152-22d216bb9170"), rating: 4.6, reviews: 410, city: "Istanbul", countryCode: "TR", whatsapp: "905321234567", phone: "+90 532 123 4567", verified: true, tourType: "Cultural", destinationCountry: "TR", days: 6, private: false, pricePerPerson: 950, itinerary: ["Istanbul", "Bursa", "Cappadocia", "Konya", "Pamukkale", "Istanbul"], inclusions: ["Hotel", "Meals", "Guide", "Transport", "Entry fees"] },
+  { id: "t4", name: "Horn Aviation", logo: u("1556388158-158ea5ccacbd"), rating: 4.5, reviews: 130, city: "Mogadishu", countryCode: "SO", whatsapp: "252612340101", phone: "+252 61 234 0101", verified: true, tourType: "Beach", destinationCountry: "SO", days: 3, private: true, pricePerPerson: 380, itinerary: ["Mogadishu", "Lido Beach", "Jazeera Beach"], inclusions: ["Hotel", "Breakfast", "Transport", "Guide"] },
+  { id: "t5", name: "Addis Sky Travel", logo: u("1547471080-7cc2caa01a7e"), rating: 4.7, reviews: 220, city: "Addis Ababa", countryCode: "ET", whatsapp: "251911445566", phone: "+251 911 445 566", verified: true, tourType: "Adventure", destinationCountry: "ET", days: 7, private: false, pricePerPerson: 1150, itinerary: ["Addis Ababa", "Lalibela", "Gondar", "Simien Mts", "Bahir Dar", "Axum", "Addis"], inclusions: ["Hotel", "Meals", "Guide", "Domestic flights", "Entry fees"] },
+];
+
+// ============= CAR RENTAL =============
+export type CarType = "Economy" | "SUV" | "Luxury" | "Minibus" | "4x4";
+export interface CarOffer extends Provider {
+  model: string;
+  carType: CarType;
+  transmission: "Automatic" | "Manual";
+  dailyRate: number;
+  mileageLimit: string;
+  deposit: number;
+  features: string[];
+}
+export const CAR_OFFERS: CarOffer[] = [
+  { id: "c1", name: "Mogadishu Auto", logo: u("1542296332-2e4473faf563"), rating: 4.5, reviews: 96, city: "Mogadishu", countryCode: "SO", whatsapp: "252615001122", phone: "+252 61 500 1122", verified: true, model: "Toyota Corolla 2022", carType: "Economy", transmission: "Automatic", dailyRate: 45, mileageLimit: "200 km/day", deposit: 200, features: ["A/C", "Bluetooth", "USB", "Insurance"] },
+  { id: "c2", name: "Hargeisa Wings Cars", logo: u("1530521954074-e64f6810b32d"), rating: 4.6, reviews: 78, city: "Hargeisa", countryCode: "SO", whatsapp: "252634556677", phone: "+252 63 455 6677", verified: true, model: "Toyota Land Cruiser 2023", carType: "4x4", transmission: "Automatic", dailyRate: 120, mileageLimit: "Unlimited", deposit: 500, features: ["A/C", "4WD", "GPS", "Insurance", "Driver opt."] },
+  { id: "c3", name: "Dubai Falcon Rentals", logo: u("1591604129939-f1efa4d9f7fa"), rating: 4.8, reviews: 410, city: "Dubai", countryCode: "AE", whatsapp: "971501234567", phone: "+971 50 123 4567", verified: true, model: "Nissan Patrol 2024", carType: "SUV", transmission: "Automatic", dailyRate: 150, mileageLimit: "250 km/day", deposit: 800, features: ["A/C", "Leather", "Sunroof", "GPS", "Insurance"] },
+  { id: "c4", name: "Nairobi Drive", logo: u("1469854523086-cc02fe5d8800"), rating: 4.4, reviews: 156, city: "Nairobi", countryCode: "KE", whatsapp: "254712005566", phone: "+254 712 005 566", verified: true, model: "Toyota Hiace 2022", carType: "Minibus", transmission: "Manual", dailyRate: 95, mileageLimit: "300 km/day", deposit: 400, features: ["A/C", "14 seats", "Roof rack", "Insurance"] },
+  { id: "c5", name: "Dubai Falcon Luxury", logo: u("1591604129939-f1efa4d9f7fa"), rating: 4.9, reviews: 220, city: "Dubai", countryCode: "AE", whatsapp: "971501234567", phone: "+971 50 123 4567", verified: true, model: "Mercedes S-Class 2024", carType: "Luxury", transmission: "Automatic", dailyRate: 380, mileageLimit: "200 km/day", deposit: 1500, features: ["A/C", "Leather", "Premium sound", "Chauffeur opt.", "Insurance"] },
+];
