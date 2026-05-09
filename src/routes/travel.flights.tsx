@@ -303,9 +303,8 @@ function FlightsPage() {
                   mobile money or office payment. MaalsoorHub does not process any payments.
                 </p>
               </div>
-            </div>
           </div>
-        )}
+        </div>
 
         {/* Step 2 — Route */}
         {step === 1 && (
