@@ -13,7 +13,7 @@ import { FlightResultCard } from "@/components/travel/FlightResultCard";
 import { Field, TextInput, Select, TextArea, PrimaryBtn, Chip } from "@/components/travel/FormUI";
 import { SummaryShare } from "@/components/travel/SummaryShare";
 import { FLIGHT_OFFERS, AIRPORTS, INTL_DESTINATIONS, COUNTRIES, type FlightOffer } from "@/data/travel";
-import { Plane, BadgeCheck, ArrowLeft } from "lucide-react";
+import { Plane, BadgeCheck, ArrowLeft, Search, MessagesSquare, ShieldCheck, BadgePercent, Headphones, Wallet, AlertTriangle, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/travel/flights")({
   head: () => ({ meta: [{ title: "Airline Tickets — MaalsoorHub" }] }),
