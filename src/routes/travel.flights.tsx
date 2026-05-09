@@ -139,33 +139,34 @@ function FlightsPage() {
       <PageHeader title="Airline Tickets" subtitle="Find & book flights" />
       <Stepper steps={steps} current={step} />
 
-      <section className="px-4 pb-8">
-        {/* Step 1 — Landing */}
-        {step === 0 && (
-          <div className="space-y-5">
-            {/* Hero */}
-            <div className="grad-travel rounded-2xl p-4 text-white shadow-card">
-              <h2 className="text-lg font-bold leading-tight">Find Flights. Get Best Deals.</h2>
-              <p className="mt-1 text-xs text-white/85">Contact agencies directly — no in-app payments.</p>
-              <p className="mt-3 text-[11px] text-white/80">Flying from</p>
-              <div className="mt-1">
-                <CountryPickerSheet
-                  label=""
-                  selected={country}
-                  onSelect={(c) => {
-                    setCountry(c.code);
-                    const first = AIRPORTS[c.code]?.[0];
-                    if (first) setFrom(first.code);
-                  }}
-                />
-              </div>
-              <button
-                onClick={() => setStep(1)}
-                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-primary shadow-soft active:scale-[0.99]"
-              >
-                <Search className="h-4 w-4" /> Search Flights
-              </button>
-            </div>
+      <section className="px-4 pb-8 space-y-5">
+        {/* Hero — always visible */}
+        <div className="grad-travel rounded-2xl p-4 text-white shadow-card">
+          <h2 className="text-lg font-bold leading-tight">Find Flights. Get Best Deals.</h2>
+          <p className="mt-1 text-xs text-white/85">Contact agencies directly — no in-app payments.</p>
+          <p className="mt-3 text-[11px] text-white/80">Flying from</p>
+          <div className="mt-1">
+            <CountryPickerSheet
+              label=""
+              selected={country}
+              onSelect={(c) => {
+                setCountry(c.code);
+                const first = AIRPORTS[c.code]?.[0];
+                if (first) setFrom(first.code);
+              }}
+            />
+          </div>
+          <button
+            onClick={() => setStep(1)}
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-primary shadow-soft active:scale-[0.99]"
+          >
+            <Search className="h-4 w-4" /> {step === 0 ? "Search Flights" : "New Search"}
+          </button>
+        </div>
+
+        {/* Always-visible sections */}
+        <div className="space-y-5">
+          {/* USPs, Popular Routes, Airlines, How It Works, Why Book, Support, Reminder */}
 
             {/* USPs */}
             <div className="grid grid-cols-3 gap-2">
@@ -302,9 +303,8 @@ function FlightsPage() {
                   mobile money or office payment. MaalsoorHub does not process any payments.
                 </p>
               </div>
-            </div>
           </div>
-        )}
+        </div>
 
         {/* Step 2 — Route */}
         {step === 1 && (
