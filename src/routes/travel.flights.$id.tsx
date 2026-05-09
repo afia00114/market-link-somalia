@@ -1,15 +1,15 @@
 import { createFileRoute, Link, notFound, useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import { DetailHeader } from "@/components/travel/DetailHeader";
-import { ContactBar } from "@/components/travel/InfoList";
 import {
   FLIGHT_OFFERS, AIRPORTS, INTL_DESTINATIONS,
   DEFAULT_AMENITIES, flightClassesFor,
 } from "@/data/travel";
+import { whatsappLink, telLink } from "@/lib/contact";
 import {
   Plane, BadgeCheck, Star, Wifi, Utensils, BatteryCharging, Armchair,
-  Tv, Crown, Luggage, Calendar, Clock, MapPin, ShieldCheck, Share2, Bookmark,
+  Tv, Crown, Luggage, Briefcase, Calendar, Clock, ArrowLeft, ArrowRight,
+  Share2, Bookmark, MessageCircle, Phone, ShieldCheck, MapPin,
 } from "lucide-react";
 
 export const Route = createFileRoute("/travel/flights/$id")({
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/travel/flights/$id")({
   notFoundComponent: () => (
     <AppShell>
       <div className="p-8 text-center text-sm">
-        Flight not found. <Link to="/travel/flights" className="text-primary">Back</Link>
+        Flight not found. <Link to="/travel/flights" className="text-flights">Back</Link>
       </div>
     </AppShell>
   ),
@@ -43,6 +43,7 @@ const AMENITY_ICONS: Record<string, React.ComponentType<{ className?: string }>>
 
 function FlightDetail() {
   const { id } = useParams({ from: "/travel/flights/$id" });
+  const navigate = useNavigate();
   const offer = FLIGHT_OFFERS.find((f) => f.id === id)!;
   const allAirports = [...Object.values(AIRPORTS).flat(), ...INTL_DESTINATIONS];
   const fromCity = allAirports.find((a) => a.code === offer.from)?.city ?? offer.from;
@@ -54,101 +55,149 @@ function FlightDetail() {
   const departDate = offer.departDate ?? "20 May 2026";
   const returnDate = offer.returnDate ?? "23 May 2026";
   const returnTime = offer.returnTime ?? "19:30";
+  const code = (offer.name.match(/\b[A-Z]/g) || []).slice(0, 2).join("") || "AL";
+  const hours = Math.floor(offer.durationHrs);
+  const mins = Math.round((offer.durationHrs - hours) * 60);
+  const selectedPrice = classes.find((c) => c.cls === selectedCls)?.price ?? offer.price;
+  const waMsg = `Hello ${offer.name}, I'd like to book a ${selectedCls} ticket from ${fromCity} (${offer.from}) to ${toCity} (${offer.to}) on ${departDate}.`;
 
   return (
     <AppShell hideNav>
-      <DetailHeader
-        title={offer.name}
-        subtitle={`${fromCity} (${offer.from}) → ${toCity} (${offer.to})`}
-        image={offer.logo}
-      />
-
-      {/* Trust + actions */}
-      <section className="px-4 pt-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {offer.verified && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-[11px] font-semibold text-primary">
-                <ShieldCheck className="h-3.5 w-3.5" /> Verified Airline
-              </span>
-            )}
-            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
-              <Star className="h-3.5 w-3.5 fill-accent text-accent" />
-              {offer.rating} ({offer.reviews} reviews)
-            </span>
+      {/* Blue gradient hero */}
+      <header className="bg-flights-hero text-white">
+        <div className="flex items-center justify-between px-4 pt-4">
+          <button
+            onClick={() => navigate({ to: "/travel/flights" })}
+            aria-label="Back"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 backdrop-blur active:scale-95"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <div className="flex items-center gap-1.5 text-sm font-bold">
+            <Plane className="h-4 w-4" /> Flight Detail
           </div>
           <div className="flex gap-2">
-            <button className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary" aria-label="Save">
+            <button aria-label="Save" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 backdrop-blur active:scale-95">
               <Bookmark className="h-4 w-4" />
             </button>
-            <button className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary" aria-label="Share">
+            <button aria-label="Share" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 backdrop-blur active:scale-95">
               <Share2 className="h-4 w-4" />
             </button>
           </div>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">
-          Discover top airlines, compare fares, and send booking requests directly via WhatsApp or call.
-        </p>
-        <div className="mt-2 grid grid-cols-2 gap-2 text-[10px] sm:grid-cols-4">
-          {["No In-App Payments", "WhatsApp Booking", "Verified Airlines", "Save & Share"].map((t) => (
-            <div key={t} className="flex items-center justify-center rounded-lg bg-secondary px-2 py-1.5 font-medium text-muted-foreground">
-              {t}
+
+        {/* Airline identity card overlapping bottom */}
+        <div className="px-4 pb-6 pt-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-white text-base font-extrabold text-flights shadow-soft">
+              {code}
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="truncate text-lg font-extrabold leading-tight">{offer.name}</h1>
+              <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
+                {offer.verified && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 font-semibold backdrop-blur">
+                    <ShieldCheck className="h-3 w-3" /> Verified
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 font-semibold backdrop-blur">
+                  <Star className="h-3 w-3 fill-amber-300 text-amber-300" /> {offer.rating} · {offer.reviews}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 font-semibold backdrop-blur">
+                  <Plane className="h-3 w-3" /> Intl
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Route timeline card (overlap) */}
+      <section className="-mt-4 px-4">
+        <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+          <div className="mb-2 flex items-center justify-between text-[11px] font-semibold text-muted-foreground">
+            <span className="inline-flex items-center gap-1"><Calendar className="h-3.5 w-3.5 text-flights" /> {departDate}</span>
+            <span className="rounded-full bg-flights-soft px-2 py-0.5 text-flights">
+              {offer.direct ? "Direct" : `1 stop · via ${offer.via}`}
+            </span>
+          </div>
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <div className="text-2xl font-extrabold leading-none">{offer.departTime ?? "—"}</div>
+              <div className="mt-1 text-xs font-bold">{offer.from}</div>
+              <div className="text-[11px] text-muted-foreground">{fromCity}</div>
+            </div>
+            <div className="flex flex-1 flex-col items-center px-2">
+              <div className="text-[10px] font-semibold text-muted-foreground">{hours}h{mins ? ` ${mins}m` : ""}</div>
+              <div className="my-1 flex w-full items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-flights" />
+                <span className="h-px flex-1 bg-flights/40" />
+                <Plane className="h-3.5 w-3.5 -rotate-90 text-flights" />
+                <span className="h-px flex-1 bg-flights/40" />
+                <span className="h-2 w-2 rounded-full bg-flights" />
+              </div>
+              <div className="text-[10px] text-muted-foreground">{offer.direct ? "Non-stop" : `Via ${offer.via}`}</div>
+            </div>
+            <div className="text-right">
+              <div className="text-2xl font-extrabold leading-none">{offer.arriveTime ?? "—"}</div>
+              <div className="mt-1 text-xs font-bold">{offer.to}</div>
+              <div className="text-[11px] text-muted-foreground">{toCity}</div>
+            </div>
+          </div>
+
+          {/* Return leg */}
+          <div className="mt-3 flex items-center justify-between rounded-xl bg-secondary/60 px-3 py-2 text-[11px]">
+            <div className="flex items-center gap-1.5">
+              <ArrowRight className="h-3 w-3 text-flights" />
+              <span className="font-semibold">Return</span>
+              <span className="text-muted-foreground">· {returnDate}</span>
+            </div>
+            <span className="font-bold">{returnTime}</span>
+          </div>
+
+          {/* Baggage chips */}
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            <span className="inline-flex items-center gap-1 rounded-full bg-flights-soft px-2 py-1 text-[11px] font-medium text-flights">
+              <Luggage className="h-3 w-3" /> 20kg check-in
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full bg-flights-soft px-2 py-1 text-[11px] font-medium text-flights">
+              <Briefcase className="h-3 w-3" /> 7kg cabin
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-1 text-[11px] font-medium text-muted-foreground">
+              <Clock className="h-3 w-3" /> On-time 92%
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust strip */}
+      <section className="px-4 pt-4">
+        <div className="grid grid-cols-4 gap-2 text-[10px]">
+          {[
+            { icon: ShieldCheck, t: "Verified" },
+            { icon: MessageCircle, t: "WhatsApp" },
+            { icon: BadgeCheck, t: "No prepay" },
+            { icon: Bookmark, t: "Save" },
+          ].map((x) => (
+            <div key={x.t} className="flex flex-col items-center gap-1 rounded-xl bg-secondary px-2 py-2 font-medium text-muted-foreground">
+              <x.icon className="h-4 w-4 text-flights" />
+              <span>{x.t}</span>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Route card */}
-      <section className="px-4 pt-4">
-        <div className="rounded-2xl border border-border bg-card p-4">
-          <h3 className="mb-3 flex items-center gap-1 text-sm font-bold">
-            <MapPin className="h-4 w-4 text-primary" /> Route
-          </h3>
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-xs text-muted-foreground">From</div>
-              <div className="text-lg font-extrabold">{offer.departTime ?? "—"}</div>
-              <div className="text-xs text-muted-foreground">{fromCity} ({offer.from})</div>
-            </div>
-            <div className="flex flex-col items-center text-[10px] text-muted-foreground">
-              <Plane className="h-4 w-4 text-primary" />
-              <span>{offer.durationHrs}h</span>
-              <span className="font-semibold">{offer.direct ? "Direct" : `Via ${offer.via}`}</span>
-            </div>
-            <div className="text-right">
-              <div className="text-xs text-muted-foreground">To</div>
-              <div className="text-lg font-extrabold">{offer.arriveTime ?? "—"}</div>
-              <div className="text-xs text-muted-foreground">{toCity} ({offer.to})</div>
-            </div>
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-3 text-xs">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="h-3.5 w-3.5 text-primary" />
-              <span className="text-muted-foreground">Depart:</span>
-              <span className="font-semibold">{departDate} · {offer.departTime}</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Calendar className="h-3.5 w-3.5 text-primary" />
-              <span className="text-muted-foreground">Return:</span>
-              <span className="font-semibold">{returnDate} · {returnTime}</span>
-            </div>
-            <div className="col-span-2 flex items-center gap-1.5">
-              <Clock className="h-3.5 w-3.5 text-primary" />
-              <span className="font-semibold">{offer.direct ? "Direct Flight" : `1 Stop (${offer.via})`} · {offer.durationHrs}h {Math.round((offer.durationHrs % 1) * 60)}m</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Amenities */}
-      <section className="px-4 pt-4">
+      <section className="px-4 pt-5">
         <h3 className="mb-2 text-sm font-bold">Amenities</h3>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {amenities.map((a) => {
             const Icon = AMENITY_ICONS[a] ?? Plane;
             return (
               <div key={a} className="flex flex-col items-center gap-1 rounded-xl border border-border bg-card p-3 text-center">
-                <Icon className="h-5 w-5 text-primary" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-flights-soft">
+                  <Icon className="h-4 w-4 text-flights" />
+                </div>
                 <span className="text-[11px] font-medium leading-tight">{a}</span>
               </div>
             );
@@ -157,8 +206,11 @@ function FlightDetail() {
       </section>
 
       {/* Available Classes */}
-      <section className="px-4 pb-32 pt-4">
-        <h3 className="mb-2 text-sm font-bold">Available Classes</h3>
+      <section className="px-4 pt-5">
+        <div className="mb-2 flex items-center justify-between">
+          <h3 className="text-sm font-bold">Available Classes</h3>
+          <span className="text-[11px] text-muted-foreground">Select to update price</span>
+        </div>
         <div className="space-y-2">
           {classes.map((c) => {
             const active = selectedCls === c.cls;
@@ -167,23 +219,26 @@ function FlightDetail() {
                 key={c.cls}
                 onClick={() => setSelectedCls(c.cls)}
                 className={`w-full rounded-2xl border p-3 text-left transition ${
-                  active ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border bg-card"
+                  active ? "border-flights bg-flights-soft ring-1 ring-flights" : "border-border bg-card"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-bold">{c.cls}</div>
-                    <div className="text-[11px] text-muted-foreground">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 text-sm font-bold">
+                      {c.cls}
+                      {active && (
+                        <span className="inline-flex items-center gap-0.5 rounded-full bg-flights px-1.5 py-0.5 text-[9px] font-semibold text-white">
+                          <BadgeCheck className="h-2.5 w-2.5" /> Selected
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-0.5 text-[11px] text-muted-foreground">
                       {c.bags} Bag{c.bags > 1 ? "s" : ""} · {c.seat}
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-extrabold text-primary">${c.price}</div>
-                    {active && (
-                      <div className="flex items-center justify-end gap-0.5 text-[10px] font-semibold text-primary">
-                        <BadgeCheck className="h-3 w-3" /> Selected
-                      </div>
-                    )}
+                    <div className="text-lg font-extrabold text-flights">${c.price}</div>
+                    <div className="text-[10px] text-muted-foreground">per person</div>
                   </div>
                 </div>
               </button>
@@ -192,34 +247,54 @@ function FlightDetail() {
         </div>
       </section>
 
+      {/* Route summary text */}
+      <section className="px-4 pb-32 pt-5">
+        <div className="rounded-2xl border border-border bg-card p-4">
+          <h3 className="mb-2 flex items-center gap-1 text-sm font-bold">
+            <MapPin className="h-4 w-4 text-flights" /> About this route
+          </h3>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            {offer.name} operates {offer.direct ? "a direct flight" : `a connecting flight via ${offer.via}`} from {fromCity} ({offer.from}) to {toCity} ({offer.to}). Total travel time is approximately {hours}h{mins ? ` ${mins}m` : ""}. Confirm baggage policy and visa requirements with the airline before traveling.
+          </p>
+        </div>
+      </section>
+
       {/* Sticky CTA */}
       <section className="fixed bottom-0 left-1/2 z-30 w-full max-w-md -translate-x-1/2 border-t border-border bg-card/95 px-4 py-3 backdrop-blur safe-bottom">
-        <div className="mb-2 flex items-center justify-between text-xs">
-          <span className="text-muted-foreground">{selectedCls}</span>
-          <span className="text-base font-extrabold text-primary">
-            ${classes.find((c) => c.cls === selectedCls)?.price}
-          </span>
+        <div className="mb-2 flex items-end justify-between">
+          <div>
+            <div className="text-[10px] text-muted-foreground">{selectedCls} · per person</div>
+            <div className="text-xl font-extrabold text-flights">${selectedPrice}</div>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <a
+              href={whatsappLink(offer.whatsapp || "252610000000", waMsg)}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="WhatsApp"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-whatsapp text-whatsapp-foreground active:scale-95"
+            >
+              <MessageCircle className="h-4 w-4" />
+            </a>
+            <a
+              href={telLink(offer.phone || "+252610000000")}
+              aria-label="Call"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-foreground active:scale-95"
+            >
+              <Phone className="h-4 w-4" />
+            </a>
+          </div>
         </div>
-        <BookCTA offerId={offer.id} cls={selectedCls} whatsapp={offer.whatsapp} phone={offer.phone} />
+        <button
+          onClick={() => {
+            try { sessionStorage.setItem("flightBook", JSON.stringify({ id: offer.id, cls: selectedCls })); } catch { /* ignore */ }
+            navigate({ to: "/travel/flights", search: { book: offer.id } as never });
+          }}
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-flights font-bold text-white shadow-soft active:scale-[0.98]"
+        >
+          <Plane className="h-4 w-4" /> Request Ticket
+        </button>
       </section>
     </AppShell>
-  );
-}
-
-function BookCTA({ offerId, cls, whatsapp, phone }: { offerId: string; cls: string; whatsapp: string; phone: string }) {
-  const navigate = useNavigate();
-  return (
-    <div className="space-y-2">
-      <button
-        onClick={() => {
-          try { sessionStorage.setItem("flightBook", JSON.stringify({ id: offerId, cls })); } catch { /* ignore */ }
-          navigate({ to: "/travel/flights", search: { book: offerId } as never });
-        }}
-        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary font-semibold text-primary-foreground shadow-soft active:scale-[0.98]"
-      >
-        Continue to Booking Form
-      </button>
-      <ContactBar whatsapp={whatsapp} phone={phone} label="Quick WhatsApp" />
-    </div>
   );
 }
