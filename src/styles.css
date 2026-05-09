@@ -139,4 +139,8 @@
   .shadow-soft { box-shadow: var(--shadow-soft); }
   .shadow-card { box-shadow: var(--shadow-card); }
   .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0.5rem); }
+  .bg-flights { background-color: oklch(0.42 0.11 155); color: oklch(0.99 0 0); }
+  .text-flights { color: oklch(0.42 0.11 155); }
+  .bg-flights-soft { background-color: oklch(0.95 0.04 155); }
+  .border-flights { border-color: oklch(0.42 0.11 155); }
 }
