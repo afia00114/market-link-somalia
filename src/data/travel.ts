@@ -188,9 +188,31 @@ export const INTL_DESTINATIONS: Airport[] = [
 ];
 
 // FLIGHTS — agency offerings per route
+export type FlightAmenity =
+  | "Free Wi-Fi" | "In-flight Meals" | "USB Charging" | "Extra Legroom"
+  | "Entertainment" | "Lounge Access" | "Check-in Baggage";
+export interface FlightClassOption {
+  cls: "Economy" | "Business" | "First Class";
+  price: number; bags: number; seat: string;
+}
 export interface FlightOffer extends Provider {
   from: string; to: string; price: number; durationHrs: number; direct: boolean;
   departTime?: string; arriveTime?: string; via?: string; yearsInBusiness?: number;
+  departDate?: string; returnDate?: string; returnTime?: string;
+  amenities?: FlightAmenity[];
+  classes?: FlightClassOption[];
+}
+
+export const DEFAULT_AMENITIES: FlightAmenity[] = [
+  "Free Wi-Fi", "In-flight Meals", "USB Charging", "Extra Legroom",
+  "Entertainment", "Lounge Access", "Check-in Baggage",
+];
+export function flightClassesFor(basePrice: number): FlightClassOption[] {
+  return [
+    { cls: "Economy", price: basePrice, bags: 1, seat: "Standard Seat" },
+    { cls: "Business", price: Math.round(basePrice * 2.7), bags: 2, seat: "Lie-Flat Seat" },
+    { cls: "First Class", price: Math.round(basePrice * 4.3), bags: 3, seat: "Private Suite" },
+  ];
 }
 export const FLIGHT_OFFERS: FlightOffer[] = [
   { id: "fl1", name: "Salaam Travel", logo: u("1436491865332-7a61a109cc05"), rating: 4.7, reviews: 320, city: "Mogadishu", countryCode: "SO", whatsapp: "252615556677", phone: "+252 61 555 6677", verified: true, from: "MGQ", to: "NBO", price: 180, durationHrs: 2.5, direct: true, departTime: "08:00", arriveTime: "10:30", yearsInBusiness: 14 },
