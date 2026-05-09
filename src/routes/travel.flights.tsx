@@ -85,6 +85,24 @@ function FlightsPage() {
     }));
   }, [priceMin, priceMax, airlineOptions]);
 
+  // Resume from a flight detail page → jump straight into the booking form
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("flightBook");
+      if (!raw) return;
+      const { id, cls } = JSON.parse(raw) as { id: string; cls?: string };
+      const offer = FLIGHT_OFFERS.find((o) => o.id === id);
+      if (offer) {
+        setPicked(offer);
+        setFrom(offer.from);
+        setTo(offer.to);
+        if (cls) setForm((f) => ({ ...f, cls }));
+        setStep(3);
+      }
+      sessionStorage.removeItem("flightBook");
+    } catch { /* ignore */ }
+  }, []);
+
   const filtered = useMemo(() => {
     let r = routeOffers;
     if (filters.directOnly) r = r.filter((f) => f.direct);
