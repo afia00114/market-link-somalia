@@ -137,7 +137,7 @@ function TravelHub() {
               return (
                 <button
                   key={s.key}
-                  onClick={() => setActive(s)}
+                  onClick={() => navigate({ to: s.href as any })}
                   className="group relative flex h-32 flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-3 text-left shadow-soft transition active:scale-[0.98]"
                 >
                   <span className="pointer-events-none absolute -right-4 -top-4 h-16 w-16 rounded-full bg-primary-soft" />
