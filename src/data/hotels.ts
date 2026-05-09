@@ -61,7 +61,6 @@ export const HOTELS: Hotel[] = [
     whatsapp: "252611234567",
     tags: ["featured", "top-rated"],
   },
-  [
   {
     id: "syl-hotel",
     name: "SYL Hotel & Resort",
@@ -355,8 +354,7 @@ export const HOTELS: Hotel[] = [
     phone: "+252612345691",
     whatsapp: "252612345691",
     tags: [],
-  }
-]
+  },
   {
     id: "maansoor-hotel",
     name: "Maansoor Hotel",
