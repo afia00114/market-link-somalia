@@ -823,3 +823,37 @@ export const CAR_OFFERS: CarOffer[] = [
   { id: "c4", name: "Nairobi Drive", logo: u("1469854523086-cc02fe5d8800"), rating: 4.4, reviews: 156, city: "Nairobi", countryCode: "KE", whatsapp: "254712005566", phone: "+254 712 005 566", verified: true, model: "Toyota Hiace 2022", carType: "Minibus", transmission: "Manual", dailyRate: 95, mileageLimit: "300 km/day", deposit: 400, features: ["A/C", "14 seats", "Roof rack", "Insurance"] },
   { id: "c5", name: "Dubai Falcon Luxury", logo: u("1591604129939-f1efa4d9f7fa"), rating: 4.9, reviews: 220, city: "Dubai", countryCode: "AE", whatsapp: "971501234567", phone: "+971 50 123 4567", verified: true, model: "Mercedes S-Class 2024", carType: "Luxury", transmission: "Automatic", dailyRate: 380, mileageLimit: "200 km/day", deposit: 1500, features: ["A/C", "Leather", "Premium sound", "Chauffeur opt.", "Insurance"] },
 ];
+import TravelGrid from "./TravelGrid";
+
+export default function Home() {
+  return (
+    <main className="min-h-screen bg-gray-100">
+      <h1 className="text-xl font-bold p-4">
+        Travel & Tourism
+      </h1>
+
+      <TravelGrid />
+    </main>
+  );
+}
+``export default function FlightsPage() {
+  return <div className="p-6">Flights Page</div>;
+}
+export default function AgenciesPage() {
+  return <div className="p-6">Agencies Page</div>;
+}
+export default function VisaPage() {
+  return <div className="p-6">Visa Page</div>;
+}
+export default function HajjPage() {
+  return <div className="p-6">Hajj & Umrah Page</div>;
+}
+export default function ToursPage() {
+  return <div className="p-6">Tours Page</div>;
+}
+export default function CarsPage() {
+  return <div className="p-6">Car Rental Page</div>;
+}
+``@tailwind base;
+@tailwind components;
+@tailwind utilities;
