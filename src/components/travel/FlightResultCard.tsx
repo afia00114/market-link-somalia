@@ -18,7 +18,14 @@ export function FlightResultCard({
   const classes = offer.classes ?? flightClassesFor(offer.price);
   const hours = Math.floor(offer.durationHrs);
   const mins = Math.round((offer.durationHrs - hours) * 60);
-  const waMsg = `Hello ${offer.name}, I found you on MaalsoorHub. I'd like to book a flight from ${fromCity ?? offer.from} to ${toCity ?? offer.to} (around $${offer.price}).`;
+  const waMsg = [
+    "Flight request:",
+    `Route: ${offer.from} → ${offer.to}`,
+    `Departure: ${offer.departTime ?? "—"}`,
+    `Arrival: ${offer.arriveTime ?? "—"}`,
+    `Provider: ${offer.name}`,
+    `Price: $${offer.price}`,
+  ].join("\n");
 
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
