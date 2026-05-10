@@ -18,7 +18,14 @@ export function FlightResultCard({
   const classes = offer.classes ?? flightClassesFor(offer.price);
   const hours = Math.floor(offer.durationHrs);
   const mins = Math.round((offer.durationHrs - hours) * 60);
-  const waMsg = `Hello ${offer.name}, I found you on MaalsoorHub. I'd like to book a flight from ${fromCity ?? offer.from} to ${toCity ?? offer.to} (around $${offer.price}).`;
+  const waMsg = [
+    "Flight request:",
+    `Route: ${offer.from} → ${offer.to}`,
+    `Departure: ${offer.departTime ?? "—"}`,
+    `Arrival: ${offer.arriveTime ?? "—"}`,
+    `Provider: ${offer.name}`,
+    `Price: $${offer.price}`,
+  ].join("\n");
 
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
@@ -106,34 +113,48 @@ export function FlightResultCard({
         ))}
       </div>
 
-      {/* Footer: contact + CTA */}
+      {/* Footer: contact + CTA — agency only */}
       <div className="mt-3 flex items-center justify-between gap-2 border-t border-border p-3">
-        <div className="flex items-center gap-1.5">
-          <a
-            href={whatsappLink(offer.whatsapp || "252610000000", waMsg)}
-            target="_blank"
-            rel="noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            aria-label="WhatsApp"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-whatsapp text-whatsapp-foreground active:scale-95"
+        {isAgency ? (
+          <>
+            <div className="flex items-center gap-1.5">
+              <a
+                href={whatsappLink(offer.whatsapp, waMsg)}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                aria-label="WhatsApp"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-whatsapp text-whatsapp-foreground active:scale-95"
+              >
+                <MessageCircle className="h-4 w-4" />
+              </a>
+              <a
+                href={telLink(offer.phone)}
+                onClick={(e) => e.stopPropagation()}
+                aria-label="Call"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground active:scale-95"
+              >
+                <Phone className="h-4 w-4" />
+              </a>
+            </div>
+            <a
+              href={whatsappLink(offer.whatsapp, waMsg)}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-flights px-4 text-xs font-bold text-white shadow-soft active:scale-[0.98]"
+            >
+              Send via WhatsApp <ArrowRight className="h-3.5 w-3.5" />
+            </a>
+          </>
+        ) : (
+          <button
+            onClick={onSelect}
+            className="inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-full bg-secondary px-4 text-xs font-bold text-muted-foreground active:scale-[0.98]"
           >
-            <MessageCircle className="h-4 w-4" />
-          </a>
-          <a
-            href={telLink(offer.phone || "+252610000000")}
-            onClick={(e) => e.stopPropagation()}
-            aria-label="Call"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-foreground active:scale-95"
-          >
-            <Phone className="h-4 w-4" />
-          </a>
-        </div>
-        <button
-          onClick={onSelect}
-          className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-flights px-4 text-xs font-bold text-white shadow-soft active:scale-[0.98]"
-        >
-          {isAgency ? "Request via WhatsApp" : "View Flight"} <ArrowRight className="h-3.5 w-3.5" />
-        </button>
+            View details only <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        )}
       </div>
     </article>
   );
