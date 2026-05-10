@@ -135,9 +135,9 @@ function TravelHub() {
             {items.map((s) => {
               const Icon = s.icon;
               return (
-                <button
+                <Link
                   key={s.key}
-                  onClick={() => navigate({ to: s.href as any })}
+                  to={s.href as any}
                   className="group relative flex h-32 flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-3 text-left shadow-soft transition active:scale-[0.98]"
                 >
                   <span className="pointer-events-none absolute -right-4 -top-4 h-16 w-16 rounded-full bg-primary-soft" />
@@ -153,7 +153,7 @@ function TravelHub() {
                       {cityParam ? `${s.short} · ${cityParam}` : s.short}
                     </div>
                   </div>
-                </button>
+                </Link>
               );
             })}
           </div>
