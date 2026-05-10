@@ -220,16 +220,20 @@ function FlightsPage() {
         {/* Results */}
         {step === 2 && (
           <div className="space-y-3">
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-end justify-between gap-2">
               <div className="min-w-0">
-                <div className="flex items-center gap-1 text-sm font-extrabold">
-                  {from} <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" /> {to}
-                </div>
-                <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                  <span>{filtered.length} agencies found</span>
+                <h2 className="text-lg font-extrabold leading-tight">
+                  {filtered.length} Flight{filtered.length === 1 ? "" : "s"} Found
+                </h2>
+                <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                  <span className="inline-flex items-center gap-1 font-semibold text-foreground">
+                    {from} <ArrowRight className="h-3 w-3 text-muted-foreground" /> {to}
+                  </span>
+                  <span>·</span>
+                  <span>{dateStr}</span>
                   {isIntl && (
                     <span className="inline-flex items-center gap-0.5 rounded-full bg-flights-soft px-1.5 py-0.5 font-semibold text-flights">
-                      <Globe className="h-3 w-3" /> International
+                      <Globe className="h-3 w-3" /> Intl
                     </span>
                   )}
                 </div>
