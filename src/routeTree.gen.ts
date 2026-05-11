@@ -22,6 +22,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
 import { Route as TravelToursRouteImport } from './routes/travel.tours'
+import { Route as TravelMyTicketsRouteImport } from './routes/travel.my-tickets'
 import { Route as TravelHajjUmrahRouteImport } from './routes/travel.hajj-umrah'
 import { Route as TravelFlightsRouteImport } from './routes/travel.flights'
 import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
@@ -102,6 +103,11 @@ const TravelVisaRoute = TravelVisaRouteImport.update({
 const TravelToursRoute = TravelToursRouteImport.update({
   id: '/tours',
   path: '/tours',
+  getParentRoute: () => TravelRoute,
+} as any)
+const TravelMyTicketsRoute = TravelMyTicketsRouteImport.update({
+  id: '/my-tickets',
+  path: '/my-tickets',
   getParentRoute: () => TravelRoute,
 } as any)
 const TravelHajjUmrahRoute = TravelHajjUmrahRouteImport.update({
@@ -204,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
   '/travel/flights': typeof TravelFlightsRouteWithChildren
   '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels/': typeof HotelsIndexRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
   '/travel/flights': typeof TravelFlightsRouteWithChildren
   '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels': typeof HotelsIndexRoute
@@ -266,6 +274,7 @@ export interface FileRoutesById {
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
   '/travel/flights': typeof TravelFlightsRouteWithChildren
   '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels/': typeof HotelsIndexRoute
@@ -299,6 +308,7 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
+    | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels/'
@@ -329,6 +339,7 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
+    | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels'
@@ -360,6 +371,7 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
+    | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels/'
@@ -479,6 +491,13 @@ declare module '@tanstack/react-router' {
       path: '/tours'
       fullPath: '/travel/tours'
       preLoaderRoute: typeof TravelToursRouteImport
+      parentRoute: typeof TravelRoute
+    }
+    '/travel/my-tickets': {
+      id: '/travel/my-tickets'
+      path: '/my-tickets'
+      fullPath: '/travel/my-tickets'
+      preLoaderRoute: typeof TravelMyTicketsRouteImport
       parentRoute: typeof TravelRoute
     }
     '/travel/hajj-umrah': {
@@ -709,6 +728,7 @@ interface TravelRouteChildren {
   TravelCarRentalRoute: typeof TravelCarRentalRouteWithChildren
   TravelFlightsRoute: typeof TravelFlightsRouteWithChildren
   TravelHajjUmrahRoute: typeof TravelHajjUmrahRouteWithChildren
+  TravelMyTicketsRoute: typeof TravelMyTicketsRoute
   TravelToursRoute: typeof TravelToursRouteWithChildren
   TravelVisaRoute: typeof TravelVisaRouteWithChildren
   TravelBookIdRoute: typeof TravelBookIdRoute
@@ -719,6 +739,7 @@ const TravelRouteChildren: TravelRouteChildren = {
   TravelCarRentalRoute: TravelCarRentalRouteWithChildren,
   TravelFlightsRoute: TravelFlightsRouteWithChildren,
   TravelHajjUmrahRoute: TravelHajjUmrahRouteWithChildren,
+  TravelMyTicketsRoute: TravelMyTicketsRoute,
   TravelToursRoute: TravelToursRouteWithChildren,
   TravelVisaRoute: TravelVisaRouteWithChildren,
   TravelBookIdRoute: TravelBookIdRoute,
