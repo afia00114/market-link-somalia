@@ -81,7 +81,7 @@ function BookFlightPage() {
 
   const waMessage = useMemo(() => {
     const lines = [
-      `Hello ${offer.providerName ?? offer.name},`,
+      `Hello ${offer.name},`,
       ``,
       `I'd like to book a flight via MaalsoorHub:`,
       `• Route: ${route}`,
@@ -116,7 +116,7 @@ function BookFlightPage() {
     const booking = saveBooking({
       service: "flight",
       offerId: offer.id,
-      providerName: offer.providerName ?? offer.name,
+      providerName: offer.name,
       providerPhone: offer.phone,
       route,
       departDate,
@@ -297,7 +297,7 @@ function BookFlightPage() {
         <section className="space-y-4 px-4 pb-32 pt-4">
           <div className="rounded-2xl border border-border bg-card p-4">
             <h3 className="mb-3 text-sm font-bold">Trip</h3>
-            <Row k="Airline" v={offer.providerName ?? offer.name} />
+            <Row k="Airline" v={offer.name} />
             <Row k="Route" v={route} />
             <Row k="Depart" v={departDate} />
             {returnDate && <Row k="Return" v={returnDate} />}

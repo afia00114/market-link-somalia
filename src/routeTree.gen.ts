@@ -35,6 +35,7 @@ import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
 import { Route as TravelHajjUmrahIdRouteImport } from './routes/travel.hajj-umrah.$id'
 import { Route as TravelFlightsIdRouteImport } from './routes/travel.flights.$id'
 import { Route as TravelCarRentalIdRouteImport } from './routes/travel.car-rental.$id'
+import { Route as TravelBookIdRouteImport } from './routes/travel.book.$id'
 import { Route as TravelAgenciesIdRouteImport } from './routes/travel.agencies.$id'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 
@@ -168,6 +169,11 @@ const TravelCarRentalIdRoute = TravelCarRentalIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => TravelCarRentalRoute,
 } as any)
+const TravelBookIdRoute = TravelBookIdRouteImport.update({
+  id: '/book/$id',
+  path: '/book/$id',
+  getParentRoute: () => TravelRoute,
+} as any)
 const TravelAgenciesIdRoute = TravelAgenciesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -203,6 +209,7 @@ export interface FileRoutesByFullPath {
   '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
   '/travel/flights/$id': typeof TravelFlightsIdRoute
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
@@ -232,6 +239,7 @@ export interface FileRoutesByTo {
   '/hotels': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
   '/travel/flights/$id': typeof TravelFlightsIdRoute
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
@@ -263,6 +271,7 @@ export interface FileRoutesById {
   '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
   '/travel/flights/$id': typeof TravelFlightsIdRoute
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/hotels/'
     | '/hotels/$id/book'
     | '/travel/agencies/$id'
+    | '/travel/book/$id'
     | '/travel/car-rental/$id'
     | '/travel/flights/$id'
     | '/travel/hajj-umrah/$id'
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/hotels'
     | '/hotels/$id/book'
     | '/travel/agencies/$id'
+    | '/travel/book/$id'
     | '/travel/car-rental/$id'
     | '/travel/flights/$id'
     | '/travel/hajj-umrah/$id'
@@ -354,6 +365,7 @@ export interface FileRouteTypes {
     | '/hotels/'
     | '/hotels/$id/book'
     | '/travel/agencies/$id'
+    | '/travel/book/$id'
     | '/travel/car-rental/$id'
     | '/travel/flights/$id'
     | '/travel/hajj-umrah/$id'
@@ -560,6 +572,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TravelCarRentalIdRouteImport
       parentRoute: typeof TravelCarRentalRoute
     }
+    '/travel/book/$id': {
+      id: '/travel/book/$id'
+      path: '/book/$id'
+      fullPath: '/travel/book/$id'
+      preLoaderRoute: typeof TravelBookIdRouteImport
+      parentRoute: typeof TravelRoute
+    }
     '/travel/agencies/$id': {
       id: '/travel/agencies/$id'
       path: '/$id'
@@ -692,6 +711,7 @@ interface TravelRouteChildren {
   TravelHajjUmrahRoute: typeof TravelHajjUmrahRouteWithChildren
   TravelToursRoute: typeof TravelToursRouteWithChildren
   TravelVisaRoute: typeof TravelVisaRouteWithChildren
+  TravelBookIdRoute: typeof TravelBookIdRoute
 }
 
 const TravelRouteChildren: TravelRouteChildren = {
@@ -701,6 +721,7 @@ const TravelRouteChildren: TravelRouteChildren = {
   TravelHajjUmrahRoute: TravelHajjUmrahRouteWithChildren,
   TravelToursRoute: TravelToursRouteWithChildren,
   TravelVisaRoute: TravelVisaRouteWithChildren,
+  TravelBookIdRoute: TravelBookIdRoute,
 }
 
 const TravelRouteWithChildren =
