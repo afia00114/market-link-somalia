@@ -55,14 +55,22 @@ function TravelHub() {
   return (
     <AppShell>
       <header className="grad-travel rounded-b-3xl px-4 pb-6 pt-5 text-white shadow-card">
-        <div className="flex items-center gap-3">
-          <Link to="/home" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <div>
-            <h1 className="text-lg font-bold">Travel & Tourism</h1>
-            <p className="text-xs text-white/85">Flights · Visa · Tours · Cars</p>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Link to="/home" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <div>
+              <h1 className="text-lg font-bold">Travel & Tourism</h1>
+              <p className="text-xs text-white/85">Flights · Visa · Tours · Cars</p>
+            </div>
           </div>
+          <Link
+            to="/travel/my-tickets"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-[11px] font-semibold backdrop-blur active:scale-95"
+          >
+            🎫 My Tickets
+          </Link>
         </div>
         <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium backdrop-blur">
           <ShieldCheck className="h-3.5 w-3.5" /> All providers verified · No in‑app payments
