@@ -1,71 +1,40 @@
-# Travel & Tourism — Full Module Build-Out
+## Goal
+Add end-to-end ticket processing on the Airline Tickets flow.
 
-This is a large spec covering the Travel hub, all 6 sub-flows (Flights, Agencies, Visa, Hajj/Umrah, Tours, Cars), each with list + detail + booking screens, plus global features (Profile, Wallet, Notifications, Chat). Building it all in one pass would be ~25+ new screens and unreviewable. Proposing a phased plan.
+## Scope
+1. **Flight booking form** — on `/travel/flights/$id`, add a "Book this flight" panel: passenger name, email, phone, passengers count, travel class (uses `flight.classes`). Validated with Zod.
+2. **Checkout step** — review screen showing route, dates, provider, class, total price, then two actions:
+   - **Pay online (Stripe)** — Lovable built-in Stripe payments, one-time charge in the chosen currency.
+   - **Request via WhatsApp** — only shown when the offer has `whatsapp` (agency type); opens WhatsApp with the exact required message format.
+3. **Booking history** — new `/travel/my-tickets` route listing the current user's bookings (status: `pending` for WhatsApp, `paid` for Stripe). Linked from the travel hub and bottom nav.
+4. **Agencies list & detail polish** — ensure `/travel/agencies` shows all agencies with ratings/contact, and `/travel/agencies/$id` shows agency details + their flight offers (already partly in place — wire bookings/WhatsApp through the same flow).
 
-## Current state (already shipped)
-- `/travel` hub with 6 category cards (matches your screenshot)
-- `/travel/flights` — full 6-step flow (country → route → agency list → filters sheet → passenger form → summary/share)
-- `/travel/agencies` — country → filter → results → profile (basic)
-- `/travel/visa`, `/travel/tours`, `/travel/hajj-umrah`, `/travel/car-rental` — basic single-page flows
+## Backend (Lovable Cloud)
+- Enable Lovable Cloud (Supabase under the hood).
+- Table `bookings`:
+  - `id uuid pk`, `user_id uuid` (nullable for guest WhatsApp), `flight_id text`, `provider_name text`, `route text`, `depart_at timestamptz`, `arrive_at timestamptz`, `class text`, `passengers int`, `passenger_name text`, `passenger_email text`, `passenger_phone text`, `amount_cents int`, `currency text`, `channel text` (`stripe` | `whatsapp`), `status text` (`pending` | `paid` | `cancelled`), `stripe_session_id text`, `created_at timestamptz default now()`.
+  - RLS: user can `select`/`insert` own rows; service role used by Stripe webhook to update `status`.
 
-## What's missing vs spec
-- Travel hub: search bar with filter icon at top
-- Flights: dedicated **detail view** (stopover, refund policy, baggage, payment options) before booking
-- Agencies: **agency profile page** with packages list, dedicated route
-- Visa: **detail page** with document checklist, upload area, status tracker
-- Hajj/Umrah: **detail page** with daily schedule, hotel/flight details, payment schedule
-- Tours: category tabs (Safari/Beach/Culture), **detail page** with day-by-day itinerary
-- Cars: **car detail page** with insurance, mileage, fuel policy, deposit
-- Global: Profile booking history, Wallet, Notifications, Chat support — all new
+## Payments (Stripe)
+- Run `recommend_payment_provider`, then enable **Stripe** built-in payments (digital service: ticket booking).
+- Server function `createBookingCheckout` → creates the booking row (`status=pending`, `channel=stripe`) and a Stripe Checkout session, returns the URL.
+- `/api/public/stripe-webhook` route → on `checkout.session.completed`, mark booking `paid`.
+- Success URL: `/travel/my-tickets?session_id={CHECKOUT_SESSION_ID}`. Cancel URL: back to flight detail.
 
-## Proposed phasing
+## Auth
+- Optional sign-in (email + Google) so users can see history. Guest checkout still allowed (booking saved by `stripe_session_id`).
 
-**Phase A — Travel hub polish + sub-flow detail pages** (this round)
-- Add search bar + filter icon to `/travel` hub header
-- Add `/travel/flights/$id` detail screen (stopover, refund, baggage, payment options) between agency list and summary
-- Add `/travel/agencies/$id` route — full agency profile with packages
-- Add `/travel/visa/$country` detail page (checklist, upload placeholder, status stub)
-- Add `/travel/hajj-umrah/$id` detail (schedule, hotel, flight, payment plan)
-- Add `/travel/tours/$id` detail (day-by-day itinerary)
-- Add `/travel/car-rental/$id` detail (insurance, mileage, fuel, deposit)
-- Add category tabs (Safari/Beach/Culture) to Tours list
+## Files to add/edit
+- `src/routes/travel.flights.$id.tsx` — add booking panel + checkout step.
+- `src/routes/travel.my-tickets.tsx` — new history page.
+- `src/routes/travel.agencies.$id.tsx` — wire booking flow.
+- `src/routes/travel.tsx` — add "My Tickets" card.
+- `src/lib/booking.functions.ts` — `createBookingCheckout`, `listMyBookings`.
+- `src/routes/api/public/stripe-webhook.ts` — webhook handler.
+- `src/lib/whatsapp.ts` — builds the exact required message format.
 
-**Phase B — List/search upgrades** (next round)
-- Tours/Cars/Visa: align to flights pattern (filters sheet, sort, multi-select)
-- Hajj season + package-type selectors
-- Visa country selector → results
+## Out of scope (this round)
+- Seat selection, multi-leg itineraries, refunds, multi-currency conversion, admin dashboard.
 
-**Phase C — Global features** (separate round, larger)
-- Profile: booking history + saved items tabs
-- Wallet: transactions, refunds, payment methods
-- Notifications center
-- Chat support drawer
-
-## Phase A — files to add
-- `src/routes/travel.flights.$id.tsx` — flight detail (mock stopover/refund/baggage)
-- `src/routes/travel.agencies.$id.tsx` — agency profile + packages
-- `src/routes/travel.visa.$country.tsx` — visa detail + checklist
-- `src/routes/travel.hajj-umrah.$id.tsx` — package detail
-- `src/routes/travel.tours.$id.tsx` — tour detail + itinerary
-- `src/routes/travel.car-rental.$id.tsx` — car detail
-- `src/components/travel/DetailHeader.tsx` — shared back-arrow + image-cover header
-- `src/components/travel/InfoList.tsx` — shared key/value rows for policies
-
-## Phase A — files to modify
-- `src/routes/travel.tsx` — add search bar with filter icon
-- `src/routes/travel.flights.tsx` — wire Select → flight detail page (instead of straight to passenger form)
-- `src/routes/travel.tours.tsx` — add Safari/Beach/Culture tabs
-- `src/data/travel.ts` — add mock fields: `stopover`, `refundPolicy`, `baggage`, `itinerary[]`, `dailySchedule[]`, `insurance`, `mileageLimit`, `fuelPolicy`, `deposit`, `packages[]` on agencies
-- `src/data/visa.ts` (new) — countries, types, requirements checklist mock
-- `src/data/hotels.ts` not affected
-
-## Out of scope this round
-- Real backend / Lovable Cloud (still mock data)
-- Document upload (placeholder UI only — no storage)
-- Real payment integration
-- Phase B + Phase C work
-
-## Questions before I start Phase A
-1. Confirm Phase A scope (6 detail pages + hub search) is the right batch, or do you want it smaller (e.g. just Flights detail + Tours tabs first)?
-2. Document upload on Visa detail — placeholder UI now, or skip until Cloud is enabled?
-3. Top hub search — should it actually search across all sub-flows, or be a visual placeholder for now?
+## Confirm before I proceed
+This needs **Lovable Cloud** + **Stripe built-in payments** (Pro plan required for Stripe). OK to enable both now?
