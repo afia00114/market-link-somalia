@@ -47,6 +47,7 @@ function FlightsPage() {
   const [filters, setFilters] = useState<FlightFilters>(DEFAULT_FILTERS);
   const [picked, setPicked] = useState<FlightOffer>();
   const [form, setForm] = useState({ name: "", phone: "", adults: 1, children: 0, cls: "Economy", notes: "" });
+  const [extras, setExtras] = useState<string[]>([]);
 
   const allAirports = useMemo(
     () => [...Object.values(AIRPORTS).flat(), ...INTL_DESTINATIONS],
