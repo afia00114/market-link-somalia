@@ -47,6 +47,7 @@ function FlightsPage() {
   const [filters, setFilters] = useState<FlightFilters>(DEFAULT_FILTERS);
   const [picked, setPicked] = useState<FlightOffer>();
   const [form, setForm] = useState({ name: "", phone: "", adults: 1, children: 0, cls: "Economy", notes: "" });
+  const [extras, setExtras] = useState<string[]>([]);
 
   const allAirports = useMemo(
     () => [...Object.values(AIRPORTS).flat(), ...INTL_DESTINATIONS],
@@ -126,7 +127,7 @@ function FlightsPage() {
     form.children ? `, ${form.children} child${form.children > 1 ? "ren" : ""}` : ""
   }`;
   const summary = picked
-    ? `✈️ Flight Request from MaalsoorHub\n\nAgency: ${picked.name}\nCustomer: ${form.name}\nPhone: ${form.phone}\n\nRoute: ${fromAirport?.city ?? from} (${from}) → ${toAirport?.city ?? to} (${to})\nTrip: ${tripType === "round" ? "Round trip" : "One way"}\nDeparture: ${dateStr}${tripType === "round" ? `\nReturn: ${returnStr}` : ""}\nPassengers: ${pax}\nClass: ${form.cls}\n${form.notes ? `Special requests: ${form.notes}\n` : ""}\nPlease contact the customer with availability and total price.`
+    ? `✈️ Flight Request from MaalsoorHub\n\nAgency: ${picked.name}\nCustomer: ${form.name}\nPhone: ${form.phone}\n\nRoute: ${fromAirport?.city ?? from} (${from}) → ${toAirport?.city ?? to} (${to})\nTrip: ${tripType === "round" ? "Round trip" : "One way"}\nDeparture: ${dateStr}${tripType === "round" ? `\nReturn: ${returnStr}` : ""}\nPassengers: ${pax}\nClass: ${form.cls}\n${extras.length ? `Add-ons: ${extras.join(", ")}\n` : ""}${form.notes ? `Special requests: ${form.notes}\n` : ""}\nPlease contact the customer with availability and total price.`
     : "";
 
   return (
@@ -330,6 +331,50 @@ function FlightsPage() {
                 <option>Business</option>
                 <option>First</option>
               </Select>
+            </Field>
+            <Field label="Available options">
+              <div className="grid grid-cols-2 gap-1.5">
+                {[
+                  "Extra baggage (23kg)",
+                  "Halal meal",
+                  "Vegetarian meal",
+                  "Window seat",
+                  "Aisle seat",
+                  "Extra legroom",
+                  "Wheelchair assistance",
+                  "Travel insurance",
+                  "Lounge access",
+                  "Priority boarding",
+                  "Hotel pickup",
+                  "Flexible date change",
+                ].map((opt) => {
+                  const active = extras.includes(opt);
+                  return (
+                    <button
+                      type="button"
+                      key={opt}
+                      onClick={() =>
+                        setExtras((xs) => (active ? xs.filter((x) => x !== opt) : [...xs, opt]))
+                      }
+                      className={`flex items-center gap-2 rounded-xl border px-2.5 py-2 text-left text-[11px] font-medium transition ${
+                        active
+                          ? "border-flights bg-flights-soft text-flights"
+                          : "border-border bg-card text-foreground"
+                      }`}
+                    >
+                      <span
+                        className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-md border ${
+                          active ? "border-flights bg-flights text-white" : "border-border bg-card"
+                        }`}
+                        aria-hidden
+                      >
+                        {active && <BadgeCheck className="h-3 w-3" />}
+                      </span>
+                      <span className="leading-tight">{opt}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </Field>
             <Field label="Special requests (optional)">
               <TextArea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Wheelchair assistance, halal meal…" />
