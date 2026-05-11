@@ -22,6 +22,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
 import { Route as TravelToursRouteImport } from './routes/travel.tours'
+import { Route as TravelMyTicketsRouteImport } from './routes/travel.my-tickets'
 import { Route as TravelHajjUmrahRouteImport } from './routes/travel.hajj-umrah'
 import { Route as TravelFlightsRouteImport } from './routes/travel.flights'
 import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
@@ -35,6 +36,7 @@ import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
 import { Route as TravelHajjUmrahIdRouteImport } from './routes/travel.hajj-umrah.$id'
 import { Route as TravelFlightsIdRouteImport } from './routes/travel.flights.$id'
 import { Route as TravelCarRentalIdRouteImport } from './routes/travel.car-rental.$id'
+import { Route as TravelBookIdRouteImport } from './routes/travel.book.$id'
 import { Route as TravelAgenciesIdRouteImport } from './routes/travel.agencies.$id'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 
@@ -103,6 +105,11 @@ const TravelToursRoute = TravelToursRouteImport.update({
   path: '/tours',
   getParentRoute: () => TravelRoute,
 } as any)
+const TravelMyTicketsRoute = TravelMyTicketsRouteImport.update({
+  id: '/my-tickets',
+  path: '/my-tickets',
+  getParentRoute: () => TravelRoute,
+} as any)
 const TravelHajjUmrahRoute = TravelHajjUmrahRouteImport.update({
   id: '/hajj-umrah',
   path: '/hajj-umrah',
@@ -168,6 +175,11 @@ const TravelCarRentalIdRoute = TravelCarRentalIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => TravelCarRentalRoute,
 } as any)
+const TravelBookIdRoute = TravelBookIdRouteImport.update({
+  id: '/book/$id',
+  path: '/book/$id',
+  getParentRoute: () => TravelRoute,
+} as any)
 const TravelAgenciesIdRoute = TravelAgenciesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -198,11 +210,13 @@ export interface FileRoutesByFullPath {
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
   '/travel/flights': typeof TravelFlightsRouteWithChildren
   '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
   '/travel/flights/$id': typeof TravelFlightsIdRoute
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
@@ -227,11 +241,13 @@ export interface FileRoutesByTo {
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
   '/travel/flights': typeof TravelFlightsRouteWithChildren
   '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
   '/travel/flights/$id': typeof TravelFlightsIdRoute
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
@@ -258,11 +274,13 @@ export interface FileRoutesById {
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
   '/travel/flights': typeof TravelFlightsRouteWithChildren
   '/travel/hajj-umrah': typeof TravelHajjUmrahRouteWithChildren
+  '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
+  '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
   '/travel/flights/$id': typeof TravelFlightsIdRoute
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
@@ -290,11 +308,13 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
+    | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels/'
     | '/hotels/$id/book'
     | '/travel/agencies/$id'
+    | '/travel/book/$id'
     | '/travel/car-rental/$id'
     | '/travel/flights/$id'
     | '/travel/hajj-umrah/$id'
@@ -319,11 +339,13 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
+    | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels'
     | '/hotels/$id/book'
     | '/travel/agencies/$id'
+    | '/travel/book/$id'
     | '/travel/car-rental/$id'
     | '/travel/flights/$id'
     | '/travel/hajj-umrah/$id'
@@ -349,11 +371,13 @@ export interface FileRouteTypes {
     | '/travel/car-rental'
     | '/travel/flights'
     | '/travel/hajj-umrah'
+    | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels/'
     | '/hotels/$id/book'
     | '/travel/agencies/$id'
+    | '/travel/book/$id'
     | '/travel/car-rental/$id'
     | '/travel/flights/$id'
     | '/travel/hajj-umrah/$id'
@@ -469,6 +493,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TravelToursRouteImport
       parentRoute: typeof TravelRoute
     }
+    '/travel/my-tickets': {
+      id: '/travel/my-tickets'
+      path: '/my-tickets'
+      fullPath: '/travel/my-tickets'
+      preLoaderRoute: typeof TravelMyTicketsRouteImport
+      parentRoute: typeof TravelRoute
+    }
     '/travel/hajj-umrah': {
       id: '/travel/hajj-umrah'
       path: '/hajj-umrah'
@@ -559,6 +590,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/travel/car-rental/$id'
       preLoaderRoute: typeof TravelCarRentalIdRouteImport
       parentRoute: typeof TravelCarRentalRoute
+    }
+    '/travel/book/$id': {
+      id: '/travel/book/$id'
+      path: '/book/$id'
+      fullPath: '/travel/book/$id'
+      preLoaderRoute: typeof TravelBookIdRouteImport
+      parentRoute: typeof TravelRoute
     }
     '/travel/agencies/$id': {
       id: '/travel/agencies/$id'
@@ -690,8 +728,10 @@ interface TravelRouteChildren {
   TravelCarRentalRoute: typeof TravelCarRentalRouteWithChildren
   TravelFlightsRoute: typeof TravelFlightsRouteWithChildren
   TravelHajjUmrahRoute: typeof TravelHajjUmrahRouteWithChildren
+  TravelMyTicketsRoute: typeof TravelMyTicketsRoute
   TravelToursRoute: typeof TravelToursRouteWithChildren
   TravelVisaRoute: typeof TravelVisaRouteWithChildren
+  TravelBookIdRoute: typeof TravelBookIdRoute
 }
 
 const TravelRouteChildren: TravelRouteChildren = {
@@ -699,8 +739,10 @@ const TravelRouteChildren: TravelRouteChildren = {
   TravelCarRentalRoute: TravelCarRentalRouteWithChildren,
   TravelFlightsRoute: TravelFlightsRouteWithChildren,
   TravelHajjUmrahRoute: TravelHajjUmrahRouteWithChildren,
+  TravelMyTicketsRoute: TravelMyTicketsRoute,
   TravelToursRoute: TravelToursRouteWithChildren,
   TravelVisaRoute: TravelVisaRouteWithChildren,
+  TravelBookIdRoute: TravelBookIdRoute,
 }
 
 const TravelRouteWithChildren =

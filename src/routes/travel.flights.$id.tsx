@@ -288,7 +288,7 @@ function FlightDetail() {
         <button
           onClick={() => {
             try { sessionStorage.setItem("flightBook", JSON.stringify({ id: offer.id, cls: selectedCls })); } catch { /* ignore */ }
-            navigate({ to: "/travel/flights", search: { book: offer.id } as never });
+            navigate({ to: "/travel/book/$id", params: { id: offer.id } });
           }}
           className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-flights font-bold text-white shadow-soft active:scale-[0.98]"
         >
