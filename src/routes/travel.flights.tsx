@@ -332,6 +332,50 @@ function FlightsPage() {
                 <option>First</option>
               </Select>
             </Field>
+            <Field label="Available options">
+              <div className="grid grid-cols-2 gap-1.5">
+                {[
+                  "Extra baggage (23kg)",
+                  "Halal meal",
+                  "Vegetarian meal",
+                  "Window seat",
+                  "Aisle seat",
+                  "Extra legroom",
+                  "Wheelchair assistance",
+                  "Travel insurance",
+                  "Lounge access",
+                  "Priority boarding",
+                  "Hotel pickup",
+                  "Flexible date change",
+                ].map((opt) => {
+                  const active = extras.includes(opt);
+                  return (
+                    <button
+                      type="button"
+                      key={opt}
+                      onClick={() =>
+                        setExtras((xs) => (active ? xs.filter((x) => x !== opt) : [...xs, opt]))
+                      }
+                      className={`flex items-center gap-2 rounded-xl border px-2.5 py-2 text-left text-[11px] font-medium transition ${
+                        active
+                          ? "border-flights bg-flights-soft text-flights"
+                          : "border-border bg-card text-foreground"
+                      }`}
+                    >
+                      <span
+                        className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-md border ${
+                          active ? "border-flights bg-flights text-white" : "border-border bg-card"
+                        }`}
+                        aria-hidden
+                      >
+                        {active && <BadgeCheck className="h-3 w-3" />}
+                      </span>
+                      <span className="leading-tight">{opt}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </Field>
             <Field label="Special requests (optional)">
               <TextArea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Wheelchair assistance, halal meal…" />
             </Field>
