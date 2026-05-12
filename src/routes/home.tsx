@@ -44,8 +44,9 @@ function HomePage() {
       <section className="px-4 pt-5">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-base font-bold text-foreground">Browse Categories</h2>
+          <Link to="/explore" className="text-xs font-semibold text-primary">See all</Link>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-4 gap-2.5">
           {CATEGORIES.map((c) => <CategoryCard key={c.key} category={c} />)}
         </div>
       </section>
