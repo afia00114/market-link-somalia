@@ -71,7 +71,12 @@ function BookListingPage() {
       `Time: ${time || "Not specified"}`,
       notes ? `Notes: ${notes}` : "",
     ].filter(Boolean).join("\n");
-    window.location.href = whatsappLink(item.provider.whatsapp, msg);
+    window.open(whatsappLink(item.provider.whatsapp, msg), "_blank", "noopener,noreferrer");
+    navigate({
+      to: "/listing/$id/booked",
+      params: { id: item.id },
+      search: { service: service.name, price: service.price, date, time, notes: notes || undefined },
+    });
   }
 
   return (
