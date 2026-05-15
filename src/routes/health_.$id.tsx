@@ -9,7 +9,7 @@ import { AppShell } from "@/components/AppShell";
 import { getHospital, DEPARTMENTS } from "@/data/health";
 import { whatsappLink, telLink } from "@/lib/contact";
 
-export const Route = createFileRoute("/health/$id")({
+export const Route = createFileRoute("/health_/$id")({
   loader: ({ params }) => {
     const hospital = getHospital(params.id);
     if (!hospital) throw notFound();
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/health/$id")({
 });
 
 function HospitalDetail() {
-  const { id } = useParams({ from: "/health/$id" });
+  const { id } = useParams({ from: "/health_/$id" });
   const h = getHospital(id)!;
   const depts = useMemo(() => DEPARTMENTS.filter((d) => h.departments.includes(d.key)), [h]);
   const gallery = h.gallery && h.gallery.length > 0 ? h.gallery : [h.image];
