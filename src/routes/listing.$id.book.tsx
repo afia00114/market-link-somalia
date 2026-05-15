@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useParams, useSearch, notFound } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useParams, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -25,12 +25,6 @@ import { LISTINGS } from "@/data/listings";
 
 export const Route = createFileRoute("/listing/$id/book")({
   component: BookListingPage,
-  validateSearch: (search) => {
-    const rawStep = Number(search.step);
-    const step = rawStep === 2 || rawStep === 3 ? rawStep : 1;
-    const service = typeof search.service === "string" ? search.service : undefined;
-    return { step: step as 1 | 2 | 3, service };
-  },
   loader: ({ params }) => {
     const item = LISTINGS.find((l) => l.id === params.id);
     if (!item) throw notFound();
@@ -103,17 +97,15 @@ function formatDateLabel(iso: string) {
 
 function BookListingPage() {
   const { id } = useParams({ from: "/listing/$id/book" });
-  const search = useSearch({ from: "/listing/$id/book" });
   const item = LISTINGS.find((l) => l.id === id)!;
   const navigate = useNavigate();
   const services = useMemo(() => defaultServicesFor(item.title, item.subtitle), [item]);
+  const storageKey = `listing-book:${id}`;
 
-  const [step, setStep] = useState<1 | 2 | 3>(search.step);
-  const [selected, setSelected] = useState<string>(() => {
-    const fromSearch = search.service;
-    if (fromSearch && services.some((service) => service.id === fromSearch)) return fromSearch;
-    return services.find((service) => service.popular)?.id ?? services[0].id;
-  });
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [selected, setSelected] = useState<string>(
+    services.find((service) => service.popular)?.id ?? services[0].id
+  );
   const [date, setDate] = useState<string>(addDaysISO(1));
   const [time, setTime] = useState<string>("10:00");
   const [notes, setNotes] = useState<string>("");
