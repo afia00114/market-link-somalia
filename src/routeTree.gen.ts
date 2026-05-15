@@ -206,14 +206,14 @@ const TravelAgenciesIdRoute = TravelAgenciesIdRouteImport.update({
   getParentRoute: () => TravelAgenciesRoute,
 } as any)
 const ListingIdBookedRoute = ListingIdBookedRouteImport.update({
-  id: '/booked',
-  path: '/booked',
-  getParentRoute: () => ListingIdRoute,
+  id: '/listing/$id/booked',
+  path: '/listing/$id/booked',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ListingIdBookRoute = ListingIdBookRouteImport.update({
-  id: '/book',
-  path: '/book',
-  getParentRoute: () => ListingIdRoute,
+  id: '/listing/$id/book',
+  path: '/listing/$id/book',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const HotelsIdBookRoute = HotelsIdBookRouteImport.update({
   id: '/book',
@@ -457,6 +457,8 @@ export interface RootRouteChildren {
   TravelRoute: typeof TravelRouteWithChildren
   CategoryKeyRoute: typeof CategoryKeyRoute
   PropertyIdRoute: typeof PropertyIdRoute
+  ListingIdBookRoute: typeof ListingIdBookRoute
+  ListingIdBookedRoute: typeof ListingIdBookedRoute
   ListingIdIndexRoute: typeof ListingIdIndexRoute
 }
 
@@ -688,17 +690,17 @@ declare module '@tanstack/react-router' {
     }
     '/listing/$id/booked': {
       id: '/listing/$id/booked'
-      path: '/booked'
+      path: '/listing/$id/booked'
       fullPath: '/listing/$id/booked'
       preLoaderRoute: typeof ListingIdBookedRouteImport
-      parentRoute: typeof ListingIdRoute
+      parentRoute: typeof rootRouteImport
     }
     '/listing/$id/book': {
       id: '/listing/$id/book'
-      path: '/book'
+      path: '/listing/$id/book'
       fullPath: '/listing/$id/book'
       preLoaderRoute: typeof ListingIdBookRouteImport
-      parentRoute: typeof ListingIdRoute
+      parentRoute: typeof rootRouteImport
     }
     '/hotels/$id/book': {
       id: '/hotels/$id/book'
@@ -859,18 +861,10 @@ const rootRouteChildren: RootRouteChildren = {
   TravelRoute: TravelRouteWithChildren,
   CategoryKeyRoute: CategoryKeyRoute,
   PropertyIdRoute: PropertyIdRoute,
+  ListingIdBookRoute: ListingIdBookRoute,
+  ListingIdBookedRoute: ListingIdBookedRoute,
   ListingIdIndexRoute: ListingIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
