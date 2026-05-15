@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useParams, notFound } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   Check,
@@ -12,6 +12,11 @@ import {
   MessageCircle,
   MapPin,
   StickyNote,
+  Camera,
+  X,
+  User,
+  Phone,
+  Home,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { LISTINGS } from "@/data/listings";
