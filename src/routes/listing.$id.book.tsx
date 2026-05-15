@@ -579,7 +579,8 @@ function BookListingPage() {
         <div className="pointer-events-auto mx-auto flex w-full max-w-md gap-2">
           {step > 1 ? (
             <button
-              onClick={() => setStep((s) => (s - 1) as 1 | 2 | 3)}
+              type="button"
+              onClick={() => setStep(step === 3 ? 2 : 1)}
               className="flex h-13 flex-1 items-center justify-center rounded-2xl border border-border bg-card text-sm font-bold transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
             >
@@ -588,14 +589,15 @@ function BookListingPage() {
           ) : null}
           {step < 3 ? (
             <button
+              type="button"
               onClick={() => {
-                if (canContinue) {
-                  setShowValidation(false);
-                  setStep((s) => (s + 1) as 1 | 2 | 3);
+                if (!canContinue) {
+                  setShowValidation(true);
                   return;
                 }
 
-                setShowValidation(true);
+                setShowValidation(false);
+                setStep(step === 1 ? 2 : 3);
               }}
               className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
@@ -605,6 +607,7 @@ function BookListingPage() {
             </button>
           ) : (
             <button
+              type="button"
               onClick={send}
               className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
