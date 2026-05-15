@@ -40,6 +40,7 @@ import { Route as TravelFlightsIdRouteImport } from './routes/travel.flights.$id
 import { Route as TravelCarRentalIdRouteImport } from './routes/travel.car-rental.$id'
 import { Route as TravelBookIdRouteImport } from './routes/travel.book.$id'
 import { Route as TravelAgenciesIdRouteImport } from './routes/travel.agencies.$id'
+import { Route as ListingIdBookedRouteImport } from './routes/listing.$id.booked'
 import { Route as ListingIdBookRouteImport } from './routes/listing.$id.book'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 
@@ -198,6 +199,11 @@ const TravelAgenciesIdRoute = TravelAgenciesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => TravelAgenciesRoute,
 } as any)
+const ListingIdBookedRoute = ListingIdBookedRouteImport.update({
+  id: '/booked',
+  path: '/booked',
+  getParentRoute: () => ListingIdRoute,
+} as any)
 const ListingIdBookRoute = ListingIdBookRouteImport.update({
   id: '/book',
   path: '/book',
@@ -236,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
+  '/listing/$id/booked': typeof ListingIdBookedRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
   '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
@@ -270,6 +277,7 @@ export interface FileRoutesByTo {
   '/hotels': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
+  '/listing/$id/booked': typeof ListingIdBookedRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
   '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
@@ -306,6 +314,7 @@ export interface FileRoutesById {
   '/hotels/': typeof HotelsIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
+  '/listing/$id/booked': typeof ListingIdBookedRoute
   '/travel/agencies/$id': typeof TravelAgenciesIdRoute
   '/travel/book/$id': typeof TravelBookIdRoute
   '/travel/car-rental/$id': typeof TravelCarRentalIdRoute
@@ -343,6 +352,7 @@ export interface FileRouteTypes {
     | '/hotels/'
     | '/hotels/$id/book'
     | '/listing/$id/book'
+    | '/listing/$id/booked'
     | '/travel/agencies/$id'
     | '/travel/book/$id'
     | '/travel/car-rental/$id'
@@ -377,6 +387,7 @@ export interface FileRouteTypes {
     | '/hotels'
     | '/hotels/$id/book'
     | '/listing/$id/book'
+    | '/listing/$id/booked'
     | '/travel/agencies/$id'
     | '/travel/book/$id'
     | '/travel/car-rental/$id'
@@ -412,6 +423,7 @@ export interface FileRouteTypes {
     | '/hotels/'
     | '/hotels/$id/book'
     | '/listing/$id/book'
+    | '/listing/$id/booked'
     | '/travel/agencies/$id'
     | '/travel/book/$id'
     | '/travel/car-rental/$id'
@@ -657,6 +669,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TravelAgenciesIdRouteImport
       parentRoute: typeof TravelAgenciesRoute
     }
+    '/listing/$id/booked': {
+      id: '/listing/$id/booked'
+      path: '/booked'
+      fullPath: '/listing/$id/booked'
+      preLoaderRoute: typeof ListingIdBookedRouteImport
+      parentRoute: typeof ListingIdRoute
+    }
     '/listing/$id/book': {
       id: '/listing/$id/book'
       path: '/book'
@@ -809,10 +828,12 @@ const TravelRouteWithChildren =
 
 interface ListingIdRouteChildren {
   ListingIdBookRoute: typeof ListingIdBookRoute
+  ListingIdBookedRoute: typeof ListingIdBookedRoute
 }
 
 const ListingIdRouteChildren: ListingIdRouteChildren = {
   ListingIdBookRoute: ListingIdBookRoute,
+  ListingIdBookedRoute: ListingIdBookedRoute,
 }
 
 const ListingIdRouteWithChildren = ListingIdRoute._addFileChildren(
