@@ -20,7 +20,7 @@ export const COUNTRIES: Country[] = [
   { code: "EG", name: "Egypt", flag: "🇪🇬", dial: "20" },
 ];
 
-export type TravelSubKey = "flights" | "agencies" | "visa" | "hajj-umrah" | "tours" | "car-rental";
+export type TravelSubKey = "flights" | "agencies" | "visa" | "hajj-umrah" | "tours" | "car-rental" | "bus" | "cargo";
 
 export interface TravelSub {
   key: TravelSubKey;
