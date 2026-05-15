@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { LISTINGS } from "@/data/listings";
-import { whatsappLink } from "@/lib/contact";
+
 
 export const Route = createFileRoute("/listing/$id/book")({
   component: BookListingPage,
@@ -136,23 +136,19 @@ function BookListingPage() {
   }
 
   function send() {
-    const msg = [
-      `*Service Booking Request*`,
-      `Provider: ${item.provider.name}`,
-      `Service: ${service.name} (${service.price})`,
-      `Date: ${date || "Not specified"}`,
-      `Time: ${time || "Not specified"}`,
-      `Customer: ${name}`,
-      `Phone: ${phone}`,
-      address ? `Address: ${address}` : "",
-      notes ? `Notes: ${notes}` : "",
-      photos.length ? `Photos attached: ${photos.length}` : "",
-    ].filter(Boolean).join("\n");
-    window.open(whatsappLink(item.provider.whatsapp, msg), "_blank", "noopener,noreferrer");
     navigate({
       to: "/listing/$id/booked",
       params: { id: item.id },
-      search: { service: service.name, price: service.price, date, time, notes: notes || undefined },
+      search: {
+        service: service.name,
+        price: service.price,
+        date,
+        time,
+        notes: notes || undefined,
+        name: name || undefined,
+        phone: phone || undefined,
+        address: address || undefined,
+      },
     });
   }
 
