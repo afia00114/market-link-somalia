@@ -16,12 +16,65 @@ export const Route = createFileRoute("/listing/$id/")({
     if (!item) throw notFound();
     return { item };
   },
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: `${loaderData?.item.provider.name ?? "Provider"} — MaalsoorHub` },
-      { name: "description", content: loaderData?.item.description ?? "" },
-    ],
-  }),
+  head: ({ params, loaderData }) => {
+    const item = loaderData?.item;
+    const url = `https://market-link-somalia.lovable.app/listing/${params.id}`;
+    const name = item?.provider.name ?? "Provider";
+    const title = `${name} — ${item?.title ?? "Service"} | MaalsoorHub`.slice(0, 70);
+    const description = (item?.description ?? `Connect with ${name} on MaalsoorHub via WhatsApp or call.`).slice(0, 160);
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "profile" },
+        ...(item?.image ? [
+          { property: "og:image", content: item.image },
+          { name: "twitter:image", content: item.image },
+        ] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: item ? [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ProfessionalService",
+            name: item.provider.name,
+            description: item.description,
+            image: item.image,
+            url,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: item.city,
+              ...(item.district ? { addressRegion: item.district } : {}),
+              addressCountry: "SO",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: item.provider.rating,
+              reviewCount: item.provider.reviews,
+            },
+            telephone: item.provider.phone,
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQS.map((f) => ({
+              "@type": "Question",
+              name: f.q,
+              acceptedAnswer: { "@type": "Answer", text: f.a },
+            })),
+          }),
+        },
+      ] : [],
+    };
+  },
   notFoundComponent: () => (
     <div className="p-8 text-center">
       <h1 className="text-lg font-bold">Listing not found</h1>
