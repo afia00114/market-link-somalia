@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TravelRouteImport } from './routes/travel'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RealEstateRouteImport } from './routes/real-estate'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
@@ -43,6 +44,11 @@ import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 const TravelRoute = TravelRouteImport.update({
   id: '/travel',
   path: '/travel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RealEstateRoute = RealEstateRouteImport.update({
@@ -201,6 +207,7 @@ export interface FileRoutesByFullPath {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
@@ -232,6 +239,7 @@ export interface FileRoutesByTo {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
@@ -265,6 +273,7 @@ export interface FileRoutesById {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
@@ -299,6 +308,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/sitemap.xml'
     | '/travel'
     | '/category/$key'
     | '/health/$id'
@@ -330,6 +340,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/sitemap.xml'
     | '/travel'
     | '/category/$key'
     | '/health/$id'
@@ -362,6 +373,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/sitemap.xml'
     | '/travel'
     | '/category/$key'
     | '/health/$id'
@@ -395,6 +407,7 @@ export interface RootRouteChildren {
   PostRoute: typeof PostRoute
   ProfileRoute: typeof ProfileRoute
   RealEstateRoute: typeof RealEstateRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TravelRoute: typeof TravelRouteWithChildren
   CategoryKeyRoute: typeof CategoryKeyRoute
   PropertyIdRoute: typeof PropertyIdRoute
@@ -407,6 +420,13 @@ declare module '@tanstack/react-router' {
       path: '/travel'
       fullPath: '/travel'
       preLoaderRoute: typeof TravelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/real-estate': {
@@ -758,6 +778,7 @@ const rootRouteChildren: RootRouteChildren = {
   PostRoute: PostRoute,
   ProfileRoute: ProfileRoute,
   RealEstateRoute: RealEstateRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TravelRoute: TravelRouteWithChildren,
   CategoryKeyRoute: CategoryKeyRoute,
   PropertyIdRoute: PropertyIdRoute,

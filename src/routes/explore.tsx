@@ -5,6 +5,18 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/explore")({
+  head: () => ({
+    meta: [
+      { title: "Explore Categories — MaalsoorHub" },
+      { name: "description", content: "Explore all service categories: real estate, travel, health, jobs, and more across Somalia." },
+      { property: "og:title", content: "Explore Categories — MaalsoorHub" },
+      { property: "og:description", content: "Explore all service categories on MaalsoorHub." },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/explore" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://market-link-somalia.lovable.app/explore" },
+    ],
+  }),
   component: Explore,
 });
 

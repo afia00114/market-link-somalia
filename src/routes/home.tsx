@@ -10,7 +10,13 @@ export const Route = createFileRoute("/home")({
   head: () => ({
     meta: [
       { title: "MaalsoorHub — Home" },
-      { name: "description", content: "Browse verified businesses, real estate, and services across Somalia and East Africa." },
+      { name: "description", content: "Browse verified businesses, real estate, travel, and services across Somalia and East Africa." },
+      { property: "og:title", content: "MaalsoorHub — Home" },
+      { property: "og:description", content: "Browse verified businesses, real estate, travel, and services across Somalia and East Africa." },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/home" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://market-link-somalia.lovable.app/home" },
     ],
   }),
   component: HomePage,

@@ -3,6 +3,19 @@ import { AppShell } from "@/components/AppShell";
 import { Heart, List, Star, Settings, ShieldCheck, ChevronRight, User } from "lucide-react";
 
 export const Route = createFileRoute("/profile")({
+  head: () => ({
+    meta: [
+      { title: "Profile — MaalsoorHub" },
+      { name: "description", content: "Your MaalsoorHub account: saved listings, your listings, reviews, and settings." },
+      { property: "og:title", content: "Profile — MaalsoorHub" },
+      { property: "og:description", content: "Your MaalsoorHub account and saved listings." },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/profile" },
+      { name: "robots", content: "noindex" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://market-link-somalia.lovable.app/profile" },
+    ],
+  }),
   component: Profile,
 });
 
