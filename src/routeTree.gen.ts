@@ -20,6 +20,7 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TravelIndexRouteImport } from './routes/travel.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
 import { Route as TravelToursRouteImport } from './routes/travel.tours'
@@ -98,6 +99,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const TravelIndexRoute = TravelIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TravelRoute,
 } as any)
 const HotelsIndexRoute = HotelsIndexRouteImport.update({
   id: '/',
@@ -240,6 +246,7 @@ export interface FileRoutesByFullPath {
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels/': typeof HotelsIndexRoute
+  '/travel/': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -261,7 +268,6 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -275,6 +281,7 @@ export interface FileRoutesByTo {
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels': typeof HotelsIndexRoute
+  '/travel': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -312,6 +319,7 @@ export interface FileRoutesById {
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/hotels/': typeof HotelsIndexRoute
+  '/travel/': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -350,6 +358,7 @@ export interface FileRouteTypes {
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels/'
+    | '/travel/'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -371,7 +380,6 @@ export interface FileRouteTypes {
     | '/profile'
     | '/real-estate'
     | '/sitemap.xml'
-    | '/travel'
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
@@ -385,6 +393,7 @@ export interface FileRouteTypes {
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels'
+    | '/travel'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -421,6 +430,7 @@ export interface FileRouteTypes {
     | '/travel/tours'
     | '/travel/visa'
     | '/hotels/'
+    | '/travel/'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -528,6 +538,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/travel/': {
+      id: '/travel/'
+      path: '/'
+      fullPath: '/travel/'
+      preLoaderRoute: typeof TravelIndexRouteImport
+      parentRoute: typeof TravelRoute
     }
     '/hotels/': {
       id: '/hotels/'
@@ -809,6 +826,7 @@ interface TravelRouteChildren {
   TravelMyTicketsRoute: typeof TravelMyTicketsRoute
   TravelToursRoute: typeof TravelToursRouteWithChildren
   TravelVisaRoute: typeof TravelVisaRouteWithChildren
+  TravelIndexRoute: typeof TravelIndexRoute
   TravelBookIdRoute: typeof TravelBookIdRoute
 }
 
@@ -820,6 +838,7 @@ const TravelRouteChildren: TravelRouteChildren = {
   TravelMyTicketsRoute: TravelMyTicketsRoute,
   TravelToursRoute: TravelToursRouteWithChildren,
   TravelVisaRoute: TravelVisaRouteWithChildren,
+  TravelIndexRoute: TravelIndexRoute,
   TravelBookIdRoute: TravelBookIdRoute,
 }
 
