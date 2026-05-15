@@ -72,6 +72,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "BRzgHGB6W_8QTXEuDCDBoSlNKTEXwGcmRO5ZKGEZ5dU" },
       { title: "MaalsoorHub — Somalia's Smart Marketplace" },
       { name: "description", content: "MaalsoorHub connects users with verified businesses, agents, and service providers in Somalia and East Africa." },
       { name: "author", content: "MaalsoorHub" },
