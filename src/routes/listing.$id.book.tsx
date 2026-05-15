@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useParams, notFound } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useParams, useSearch, notFound } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -25,6 +25,11 @@ import { LISTINGS } from "@/data/listings";
 
 export const Route = createFileRoute("/listing/$id/book")({
   component: BookListingPage,
+  validateSearch: (search) => {
+    const rawStep = Number(search.step);
+    const step = rawStep === 2 || rawStep === 3 ? rawStep : 1;
+    return { step: step as 1 | 2 | 3 };
+  },
   loader: ({ params }) => {
     const item = LISTINGS.find((l) => l.id === params.id);
     if (!item) throw notFound();
@@ -97,11 +102,11 @@ function formatDateLabel(iso: string) {
 
 function BookListingPage() {
   const { id } = useParams({ from: "/listing/$id/book" });
+  const { step } = useSearch({ from: "/listing/$id/book" });
   const item = LISTINGS.find((l) => l.id === id)!;
   const navigate = useNavigate();
   const services = useMemo(() => defaultServicesFor(item.title, item.subtitle), [item]);
 
-  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selected, setSelected] = useState<string>(
     services.find((s) => s.popular)?.id ?? services[0].id
   );
@@ -128,6 +133,15 @@ function BookListingPage() {
     []
   );
 
+  function goToStep(nextStep: 1 | 2 | 3) {
+    navigate({
+      to: "/listing/$id/book",
+      params: { id: item.id },
+      search: { step: nextStep },
+      replace: true,
+    });
+  }
+
   function onPickPhotos(files: FileList | null) {
     if (!files) return;
     const next: string[] = [];
@@ -140,7 +154,7 @@ function BookListingPage() {
   function send() {
     if (!canContinue) {
       setShowValidation(true);
-      if (step !== 2) setStep(2);
+      if (step !== 2) goToStep(2);
       return;
     }
 
