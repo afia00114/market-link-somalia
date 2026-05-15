@@ -15,12 +15,45 @@ export const Route = createFileRoute("/hotels/$id")({
     if (!hotel) throw notFound();
     return { hotel };
   },
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: `${loaderData?.hotel.name ?? "Hotel"} — MaalsoorHub` },
-      { name: "description", content: loaderData?.hotel.about ?? "Hotel details" },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const h = loaderData?.hotel;
+    if (!h) return { meta: [{ title: "Hotel — MaalsoorHub" }] };
+    return {
+      meta: [
+        { title: `${h.name} — MaalsoorHub` },
+        { name: "description", content: h.about ?? `${h.name} in ${h.city}, ${h.region}. Book via WhatsApp on MaalsoorHub.` },
+        { property: "og:title", content: `${h.name} — MaalsoorHub` },
+        { property: "og:description", content: h.about ?? `${h.name} in ${h.city}, ${h.region}.` },
+        { property: "og:image", content: h.image },
+        { property: "og:type", content: "website" },
+        { name: "twitter:image", content: h.image },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            name: h.name,
+            description: h.about,
+            image: h.image,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: h.city,
+              addressRegion: h.region,
+              addressCountry: "SO",
+            },
+            aggregateRating: h.rating ? {
+              "@type": "AggregateRating",
+              ratingValue: h.rating,
+              reviewCount: h.reviews,
+            } : undefined,
+            priceRange: h.pricePerNight ? `$${h.pricePerNight}` : undefined,
+          }),
+        },
+      ],
+    };
+  },
 });
 
 const AMENITY_ICON: Record<string, typeof Wifi> = {
