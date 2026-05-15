@@ -15,18 +15,24 @@ export const Route = createFileRoute("/hotels/$id")({
     if (!hotel) throw notFound();
     return { hotel };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     const h = loaderData?.hotel;
-    if (!h) return { meta: [{ title: "Hotel — MaalsoorHub" }] };
+    const url = `https://market-link-somalia.lovable.app/hotels/${params.id}`;
+    if (!h) return { meta: [{ title: "Hotel — MaalsoorHub" }], links: [{ rel: "canonical", href: url }] };
+    const title = `${h.name} — MaalsoorHub`.slice(0, 60);
     return {
       meta: [
-        { title: `${h.name} — MaalsoorHub` },
+        { title },
         { name: "description", content: h.about ?? `${h.name} in ${h.city}, ${h.region}. Book via WhatsApp on MaalsoorHub.` },
-        { property: "og:title", content: `${h.name} — MaalsoorHub` },
+        { property: "og:title", content: title },
         { property: "og:description", content: h.about ?? `${h.name} in ${h.city}, ${h.region}.` },
         { property: "og:image", content: h.image },
         { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
         { name: "twitter:image", content: h.image },
+      ],
+      links: [
+        { rel: "canonical", href: url },
       ],
       scripts: [
         {

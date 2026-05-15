@@ -5,7 +5,7 @@ import { PROPERTIES } from "@/data/properties";
 import { HOSPITALS } from "@/data/health";
 import { HOTELS } from "@/data/hotels";
 import { LISTINGS } from "@/data/listings";
-import { AGENCIES, FLIGHT_OFFERS, PILGRIM_PACKAGES, TOUR_PACKAGES, CAR_OFFERS } from "@/data/travel";
+import { AGENCIES, FLIGHT_OFFERS, PILGRIM_PACKAGES, TOUR_PACKAGES, CAR_OFFERS, VISA_SERVICES } from "@/data/travel";
 
 const BASE_URL = "https://market-link-somalia.lovable.app";
 
@@ -53,6 +53,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           ...PILGRIM_PACKAGES.map((p) => ({ path: `/travel/hajj-umrah/${p.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...TOUR_PACKAGES.map((t) => ({ path: `/travel/tours/${t.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...CAR_OFFERS.map((c) => ({ path: `/travel/car-rental/${c.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...VISA_SERVICES.map((v) => ({ path: `/travel/visa/${v.id}`, changefreq: "weekly" as const, priority: "0.6" })),
         ];
 
         const urls = entries.map((e) =>

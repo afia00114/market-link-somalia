@@ -9,6 +9,10 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Somalia's smart marketplace. Discover trusted businesses, real estate, and services. Connect directly via WhatsApp." },
       { property: "og:title", content: "MaalsoorHub" },
       { property: "og:description", content: "Search. Connect. WhatsApp." },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://market-link-somalia.lovable.app/" },
     ],
   }),
   component: Splash,
