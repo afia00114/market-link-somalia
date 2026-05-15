@@ -1,40 +1,47 @@
 ## Goal
-Add end-to-end ticket processing on the Airline Tickets flow.
+Polish every booking flow (Flights, Listings, Hotels) end-to-end with better UX, real validation, a great confirmation screen, persistence to Lovable Cloud, and an email submission option alongside WhatsApp/Call.
 
-## Scope
-1. **Flight booking form** — on `/travel/flights/$id`, add a "Book this flight" panel: passenger name, email, phone, passengers count, travel class (uses `flight.classes`). Validated with Zod.
-2. **Checkout step** — review screen showing route, dates, provider, class, total price, then two actions:
-   - **Pay online (Stripe)** — Lovable built-in Stripe payments, one-time charge in the chosen currency.
-   - **Request via WhatsApp** — only shown when the offer has `whatsapp` (agency type); opens WhatsApp with the exact required message format.
-3. **Booking history** — new `/travel/my-tickets` route listing the current user's bookings (status: `pending` for WhatsApp, `paid` for Stripe). Linked from the travel hub and bottom nav.
-4. **Agencies list & detail polish** — ensure `/travel/agencies` shows all agencies with ratings/contact, and `/travel/agencies/$id` shows agency details + their flight offers (already partly in place — wire bookings/WhatsApp through the same flow).
+## 1. Enable backend
+- Enable **Lovable Cloud** (Supabase under the hood).
+- Create a `bookings` table:
+  - `id uuid pk`, `ref text unique`, `user_id uuid null`, `service text` (flight/listing/hotel/...), `offer_id text`, `provider_name text`, `provider_phone text`, `provider_whatsapp text`,
+    `details jsonb` (route, dates, class, qty, hotel/listing fields),
+    `passenger_name text`, `passenger_email text`, `passenger_phone text`, `notes text`,
+    `unit_price numeric`, `total numeric`, `currency text`, `channel text` (whatsapp/call/email), `status text` default 'pending', `created_at timestamptz default now()`.
+  - RLS: anyone can `insert`; only the owner (or matching email) can `select`.
 
-## Backend (Lovable Cloud)
-- Enable Lovable Cloud (Supabase under the hood).
-- Table `bookings`:
-  - `id uuid pk`, `user_id uuid` (nullable for guest WhatsApp), `flight_id text`, `provider_name text`, `route text`, `depart_at timestamptz`, `arrive_at timestamptz`, `class text`, `passengers int`, `passenger_name text`, `passenger_email text`, `passenger_phone text`, `amount_cents int`, `currency text`, `channel text` (`stripe` | `whatsapp`), `status text` (`pending` | `paid` | `cancelled`), `stripe_session_id text`, `created_at timestamptz default now()`.
-  - RLS: user can `select`/`insert` own rows; service role used by Stripe webhook to update `status`.
+## 2. Email infrastructure
+- Set up Lovable Emails (need user to configure email domain).
+- Create one transactional template `booking-request-confirmation` covering all services with dynamic data (service, route/title, dates, total, ref, provider).
+- After form submission, fire-and-forget email to the customer + a copy via the same template to provider email if available.
 
-## Payments (Stripe)
-- Run `recommend_payment_provider`, then enable **Stripe** built-in payments (digital service: ticket booking).
-- Server function `createBookingCheckout` → creates the booking row (`status=pending`, `channel=stripe`) and a Stripe Checkout session, returns the URL.
-- `/api/public/stripe-webhook` route → on `checkout.session.completed`, mark booking `paid`.
-- Success URL: `/travel/my-tickets?session_id={CHECKOUT_SESSION_ID}`. Cancel URL: back to flight detail.
+## 3. Shared booking module
+Create `src/lib/booking/` with:
+- `schema.ts` — single Zod schema with field-level errors (name min 2, valid email, phone E.164-ish, agree to terms).
+- `submit.functions.ts` — `createBooking` server fn → inserts row, returns `{ ref, id }`.
+- `useBookingForm.ts` — React hook handling state, validation, dirty tracking, friendly error map.
+- `BookingFields.tsx` — reusable form section (Name, Email, Phone, Notes, Submit-channel toggle).
+- `BookingReviewCard.tsx` — reusable review summary.
+- `BookingSuccess.tsx` — reusable confirmation screen with: ref + copy, “We’ve emailed you a confirmation”, share buttons, view My Tickets, return home.
 
-## Auth
-- Optional sign-in (email + Google) so users can see history. Guest checkout still allowed (booking saved by `stripe_session_id`).
+## 4. Refactor each flow to use the shared module
+- `src/routes/travel.book.$id.tsx` (flights)
+- `src/routes/listing.$id.book.tsx` (listings)
+- `src/routes/hotels.$id.book.tsx` (hotels)
+Each keeps its own service-specific top section (class picker / dates / room) but pipes everything through `BookingFields`, `BookingReviewCard`, `createBooking`, and `BookingSuccess`.
 
-## Files to add/edit
-- `src/routes/travel.flights.$id.tsx` — add booking panel + checkout step.
-- `src/routes/travel.my-tickets.tsx` — new history page.
-- `src/routes/travel.agencies.$id.tsx` — wire booking flow.
-- `src/routes/travel.tsx` — add "My Tickets" card.
-- `src/lib/booking.functions.ts` — `createBookingCheckout`, `listMyBookings`.
-- `src/routes/api/public/stripe-webhook.ts` — webhook handler.
-- `src/lib/whatsapp.ts` — builds the exact required message format.
+## 5. Visual polish & micro-interactions
+- Smooth step transitions (Framer-Motion-free CSS: `transition-all`, slide-in/fade).
+- Animated step indicator with check ticks.
+- Sticky bottom CTA with price + channel chips (WhatsApp / Email / Call).
+- Skeleton + spinner state on submit, success bounce-in animation, copy-ref feedback.
+- Inline field validation (red ring + helper text) on blur.
 
-## Out of scope (this round)
-- Seat selection, multi-leg itineraries, refunds, multi-currency conversion, admin dashboard.
+## 6. My Tickets
+- `travel.my-tickets.tsx` reads from Cloud (`bookings` table) for the signed-in user, falls back to localStorage history for guests. Status badge per booking.
+
+## Out of scope
+- Online payments (Stripe), seat selection, refunds, multi-currency.
 
 ## Confirm before I proceed
-This needs **Lovable Cloud** + **Stripe built-in payments** (Pro plan required for Stripe). OK to enable both now?
+This needs **Lovable Cloud** and **Lovable Emails** (which needs a verified email domain). OK to enable both?
