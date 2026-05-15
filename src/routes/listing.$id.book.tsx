@@ -594,7 +594,7 @@ function BookListingPage() {
           {step > 1 ? (
             <button
               type="button"
-              onClick={() => setStep(step === 3 ? 2 : 1)}
+              onClick={() => goToStep(step === 3 ? 2 : 1)}
               className="flex h-13 flex-1 items-center justify-center rounded-2xl border border-border bg-card text-sm font-bold transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
             >
@@ -605,14 +605,13 @@ function BookListingPage() {
             <button
               type="button"
               onClick={() => {
-                console.log("listing-book-continue", { step, canContinue });
                 if (!canContinue) {
                   setShowValidation(true);
                   return;
                 }
 
                 setShowValidation(false);
-                setStep(step === 1 ? 2 : 3);
+                goToStep(step === 1 ? 2 : 3);
               }}
               className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
