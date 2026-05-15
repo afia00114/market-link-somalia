@@ -6,14 +6,42 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "
 import { TRAVEL_SUBS, type TravelSub, type TravelSubKey } from "@/data/travel";
 
 export const Route = createFileRoute("/travel/")({
-  head: () => ({
-    meta: [
-      { title: "Travel & Tourism — MaalsoorHub" },
-      { name: "description", content: "Flights, visas, Hajj & Umrah, tours and car rental from verified East Africa providers." },
-      { property: "og:title", content: "Travel & Tourism — MaalsoorHub" },
-      { property: "og:description", content: "Search trusted travel providers and contact via WhatsApp." },
-    ],
-  }),
+  head: () => {
+    const url = "https://market-link-somalia.lovable.app/travel";
+    const title = "Travel & Tourism — MaalsoorHub";
+    const description = "Flights, visas, Hajj & Umrah, tours and car rental from verified East Africa providers.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              itemListElement: TRAVEL_SUBS.map((s, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: s.label,
+                url: `https://market-link-somalia.lovable.app${s.href}`,
+              })),
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: TravelHub,
 });
 
