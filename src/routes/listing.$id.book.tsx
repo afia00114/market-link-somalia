@@ -591,6 +591,7 @@ function BookListingPage() {
             <button
               type="button"
               onClick={() => {
+                console.log("listing-book-continue", { step, canContinue });
                 if (!canContinue) {
                   setShowValidation(true);
                   return;
