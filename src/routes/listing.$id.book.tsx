@@ -151,7 +151,7 @@ function BookListingPage() {
     setStep(nextStep);
     navigate({
       to: ".",
-      search: (prev) => ({ ...prev, step: nextStep, service: selected }),
+      search: { step: nextStep, service: selected },
       replace: true,
     });
   }
