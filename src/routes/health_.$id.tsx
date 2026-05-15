@@ -9,7 +9,7 @@ import { AppShell } from "@/components/AppShell";
 import { getHospital, DEPARTMENTS } from "@/data/health";
 import { whatsappLink, telLink } from "@/lib/contact";
 
-export const Route = createFileRoute("/health/$id")({
+export const Route = createFileRoute("/health_/$id")({
   loader: ({ params }) => {
     const hospital = getHospital(params.id);
     if (!hospital) throw notFound();
