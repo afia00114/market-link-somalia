@@ -32,14 +32,13 @@ function Splash() {
 
   if (stage === "splash") {
     return (
-      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center grad-hero text-white">
+      <main className="mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center grad-hero text-white">
         <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/15 backdrop-blur-sm shadow-card">
           <MapPin className="h-10 w-10" />
         </div>
-        <h1 className="mt-6 text-3xl font-extrabold tracking-tight">MaalsoorHub</h1>
+        <h1 className="mt-6 text-3xl font-extrabold tracking-tight">MaalsoorHub — Somalia's Smart Marketplace</h1>
         <p className="mt-2 text-sm font-medium text-white/85">Search. Connect. WhatsApp.</p>
-        <p className="mt-1 text-xs text-white/70">Somalia's Smart Marketplace</p>
-      </div>
+      </main>
     );
   }
 
@@ -48,7 +47,7 @@ function Splash() {
   const last = step === SLIDES.length - 1;
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
+    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
       <div className="flex justify-end p-4">
         <button
           onClick={() => navigate({ to: "/home" })}
@@ -80,6 +79,6 @@ function Splash() {
           {last ? "Get Started" : "Next"} <ChevronRight className="h-5 w-5" />
         </button>
       </div>
-    </div>
+    </main>
   );
 }

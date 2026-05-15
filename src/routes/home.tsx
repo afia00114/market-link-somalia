@@ -41,6 +41,7 @@ function HomePage() {
         <div className="mt-4 flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 shadow-soft">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
+            aria-label="Search properties, services, jobs"
             placeholder="Search properties, services, jobs…"
             className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />

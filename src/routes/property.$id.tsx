@@ -44,22 +44,22 @@ function PropertyDetail() {
   const [idx, setIdx] = useState(0);
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-md bg-background pb-28">
+    <main className="mx-auto min-h-screen w-full max-w-md bg-background pb-28">
       <div className="relative">
         <img src={p.images[idx]} alt={p.title} className="h-72 w-full object-cover" />
         <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
-          <Link to="/real-estate" className="flex h-10 w-10 items-center justify-center rounded-full bg-card/95 shadow-soft">
+          <Link to="/real-estate" aria-label="Go back" className="flex h-10 w-10 items-center justify-center rounded-full bg-card/95 shadow-soft">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="flex gap-2">
-            <button className="flex h-10 w-10 items-center justify-center rounded-full bg-card/95 shadow-soft"><Share2 className="h-5 w-5" /></button>
-            <button className="flex h-10 w-10 items-center justify-center rounded-full bg-card/95 shadow-soft"><Heart className="h-5 w-5" /></button>
+            <button aria-label="Share" className="flex h-10 w-10 items-center justify-center rounded-full bg-card/95 shadow-soft"><Share2 className="h-5 w-5" /></button>
+            <button aria-label="Save to favorites" className="flex h-10 w-10 items-center justify-center rounded-full bg-card/95 shadow-soft"><Heart className="h-5 w-5" /></button>
           </div>
         </div>
         {p.images.length > 1 && (
           <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
             {p.images.map((_x: string, i: number) => (
-              <button key={i} onClick={() => setIdx(i)} className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-white" : "w-1.5 bg-white/60"}`} />
+              <button key={i} aria-label={`View image ${i + 1}`} onClick={() => setIdx(i)} className={`h-1.5 rounded-full transition-all ${i === idx ? "w-6 bg-white" : "w-1.5 bg-white/60"}`} />
             ))}
           </div>
         )}
@@ -114,7 +114,7 @@ function PropertyDetail() {
       </div>
 
       <ContactBar whatsapp={p.agent.whatsapp} phone={p.agent.phone} />
-    </div>
+    </main>
   );
 }
 

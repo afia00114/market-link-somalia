@@ -36,7 +36,7 @@ function HotelsPage() {
     <AppShell>
       <header className="sticky top-0 z-30 border-b border-border bg-card/95 px-4 py-3 backdrop-blur">
         <div className="flex items-center gap-3">
-          <Link to="/home" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary">
+          <Link to="/home" aria-label="Go back" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <h1 className="flex-1 text-base font-bold">Hotels</h1>
@@ -45,13 +45,14 @@ function HotelsPage() {
           <div className="flex flex-1 items-center gap-2 rounded-2xl bg-secondary px-3 py-2.5">
             <Search className="h-4 w-4 text-muted-foreground" />
             <input
+              aria-label="Search hotels"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search hotels…"
               className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
           </div>
-          <button className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary">
+          <button aria-label="Filter results" className="flex h-10 w-10 items-center justify-center rounded-2xl bg-secondary">
             <SlidersHorizontal className="h-4 w-4" />
           </button>
         </div>
