@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { LISTINGS } from "@/data/listings";
-import { whatsappLink } from "@/lib/contact";
+
 
 export const Route = createFileRoute("/listing/$id/book")({
   component: BookListingPage,
