@@ -10,7 +10,14 @@ import { SummaryShare } from "@/components/travel/SummaryShare";
 import { PILGRIM_PACKAGES, type PilgrimPackage, type PilgrimType, type PilgrimTier } from "@/data/travel";
 
 export const Route = createFileRoute("/travel/hajj-umrah")({
-  head: () => ({ meta: [{ title: "Hajj & Umrah — MaalsoorHub" }] }),
+  head: () => ({
+    meta: [
+      { title: "Hajj & Umrah Packages — MaalsoorHub" },
+      { name: "description", content: "Browse Hajj and Umrah packages from verified Somali agencies. Compare tiers, durations, and inclusions, and book directly via WhatsApp." },
+      { property: "og:title", content: "Hajj & Umrah Packages — MaalsoorHub" },
+      { property: "og:description", content: "Compare verified Hajj and Umrah packages and contact agencies via WhatsApp." },
+    ],
+  }),
   component: HajjPage,
 });
 
