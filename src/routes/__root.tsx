@@ -91,6 +91,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "MaalsoorHub",
+          url: "https://market-link-somalia.lovable.app",
+          description: "Somalia's smart marketplace. Search, connect, WhatsApp.",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "MaalsoorHub",
+          url: "https://market-link-somalia.lovable.app",
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
