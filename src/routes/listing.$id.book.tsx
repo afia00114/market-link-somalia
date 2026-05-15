@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useParams, notFound } from "@tanstack/react-router";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -100,10 +100,11 @@ function BookListingPage() {
   const item = LISTINGS.find((l) => l.id === id)!;
   const navigate = useNavigate();
   const services = useMemo(() => defaultServicesFor(item.title, item.subtitle), [item]);
+  const storageKey = `listing-book:${id}`;
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selected, setSelected] = useState<string>(
-    services.find((s) => s.popular)?.id ?? services[0].id
+    services.find((service) => service.popular)?.id ?? services[0].id
   );
   const [date, setDate] = useState<string>(addDaysISO(1));
   const [time, setTime] = useState<string>("10:00");
@@ -128,6 +129,34 @@ function BookListingPage() {
     []
   );
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const saved = window.sessionStorage.getItem(storageKey);
+      if (!saved) return;
+      const parsed = JSON.parse(saved) as { step?: number; selected?: string };
+      if (parsed.step === 2 || parsed.step === 3) setStep(parsed.step);
+      if (parsed.selected && services.some((service) => service.id === parsed.selected)) {
+        setSelected(parsed.selected);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [storageKey, services]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.sessionStorage.setItem(storageKey, JSON.stringify({ step, selected }));
+    } catch {
+      /* ignore */
+    }
+  }, [storageKey, step, selected]);
+
+  function goToStep(nextStep: 1 | 2 | 3) {
+    setStep(nextStep);
+  }
+
   function onPickPhotos(files: FileList | null) {
     if (!files) return;
     const next: string[] = [];
@@ -140,7 +169,7 @@ function BookListingPage() {
   function send() {
     if (!canContinue) {
       setShowValidation(true);
-      if (step !== 2) setStep(2);
+      if (step !== 2) goToStep(2);
       return;
     }
 
@@ -580,7 +609,7 @@ function BookListingPage() {
           {step > 1 ? (
             <button
               type="button"
-              onClick={() => setStep(step === 3 ? 2 : 1)}
+              onClick={() => goToStep(step === 3 ? 2 : 1)}
               className="flex h-13 flex-1 items-center justify-center rounded-2xl border border-border bg-card text-sm font-bold transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
             >
@@ -591,14 +620,13 @@ function BookListingPage() {
             <button
               type="button"
               onClick={() => {
-                console.log("listing-book-continue", { step, canContinue });
                 if (!canContinue) {
                   setShowValidation(true);
                   return;
                 }
 
                 setShowValidation(false);
-                setStep(step === 1 ? 2 : 3);
+                goToStep(step === 1 ? 2 : 3);
               }}
               className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
