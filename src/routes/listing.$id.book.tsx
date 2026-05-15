@@ -324,6 +324,92 @@ function BookListingPage() {
             </div>
           </div>
 
+          {/* Customer contact */}
+          <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
+            <h2 className="text-sm font-bold">Your contact details</h2>
+            <label className="block">
+              <span className="mb-1 block text-[11px] font-semibold text-muted-foreground">Full name</span>
+              <div className="flex h-11 items-center rounded-xl border border-border bg-background px-3 focus-within:border-primary">
+                <User className="mr-2 h-4 w-4 text-muted-foreground" />
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. Amina Hassan"
+                  className="w-full bg-transparent text-sm outline-none"
+                />
+              </div>
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-[11px] font-semibold text-muted-foreground">Phone / WhatsApp</span>
+              <div className="flex h-11 items-center rounded-xl border border-border bg-background px-3 focus-within:border-primary">
+                <Phone className="mr-2 h-4 w-4 text-muted-foreground" />
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  inputMode="tel"
+                  placeholder="+252 61 234 5678"
+                  className="w-full bg-transparent text-sm outline-none"
+                />
+              </div>
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-[11px] font-semibold text-muted-foreground">
+                Address <span className="font-normal">(optional)</span>
+              </span>
+              <div className="flex h-11 items-center rounded-xl border border-border bg-background px-3 focus-within:border-primary">
+                <Home className="mr-2 h-4 w-4 text-muted-foreground" />
+                <input
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="District, street, building…"
+                  className="w-full bg-transparent text-sm outline-none"
+                />
+              </div>
+            </label>
+          </div>
+
+          {/* Photos */}
+          <div>
+            <h2 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
+              <Camera className="h-3.5 w-3.5" />
+              Add photos <span className="font-normal text-muted-foreground">(optional · up to 4)</span>
+            </h2>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              onChange={(e) => onPickPhotos(e.target.files)}
+            />
+            <div className="grid grid-cols-4 gap-2">
+              {photos.map((src, i) => (
+                <div key={i} className="relative aspect-square overflow-hidden rounded-xl border border-border">
+                  <img src={src} alt={`Upload ${i + 1}`} className="h-full w-full object-cover" />
+                  <button
+                    onClick={() => setPhotos((p) => p.filter((_, idx) => idx !== i))}
+                    className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-foreground/70 text-white"
+                    aria-label="Remove photo"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+              {photos.length < 4 && (
+                <button
+                  onClick={() => fileRef.current?.click()}
+                  className="flex aspect-square flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-border bg-card text-muted-foreground transition hover:border-primary hover:text-primary"
+                >
+                  <Camera className="h-5 w-5" />
+                  <span className="text-[10px] font-semibold">Add</span>
+                </button>
+              )}
+            </div>
+            <p className="mt-1.5 text-[10px] text-muted-foreground">
+              Photos help the provider give you a better quote.
+            </p>
+          </div>
+
           <div>
             <h2 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
               <StickyNote className="h-3.5 w-3.5" />
