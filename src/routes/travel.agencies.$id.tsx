@@ -97,7 +97,7 @@ function AgencyDetail() {
       </section>
 
       <section className="sticky bottom-0 z-20 mt-4 border-t border-border bg-card/95 px-4 py-3 backdrop-blur">
-        <ContactBar whatsapp={a.whatsapp} phone={a.phone} />
+        <ContactBar whatsapp={a.whatsapp} phone={a.phone} email={a.email} />
       </section>
     </AppShell>
   );

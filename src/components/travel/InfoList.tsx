@@ -1,4 +1,6 @@
 import type { LucideIcon } from "lucide-react";
+import { MessageCircle, Phone, Mail, Copy, Check } from "lucide-react";
+import { useState } from "react";
 
 export interface InfoRow {
   icon?: LucideIcon;
@@ -26,23 +28,72 @@ export function InfoList({ rows, title }: { rows: InfoRow[]; title?: string }) {
   );
 }
 
-export function ContactBar({ whatsapp, phone, label = "WhatsApp" }: { whatsapp: string; phone: string; label?: string }) {
+export function ContactBar({
+  whatsapp,
+  phone,
+  email,
+  label = "WhatsApp",
+}: {
+  whatsapp: string;
+  phone: string;
+  email?: string;
+  label?: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        [phone, email].filter(Boolean).join(" · "),
+      );
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* noop */
+    }
+  };
+
   return (
     <div className="grid grid-cols-2 gap-2">
       <a
         href={`https://wa.me/${whatsapp}`}
         target="_blank"
         rel="noreferrer"
-        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-whatsapp font-semibold text-whatsapp-foreground shadow-soft active:scale-[0.98]"
+        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-whatsapp font-semibold text-whatsapp-foreground shadow-soft transition active:scale-[0.98]"
       >
-        {label}
+        <MessageCircle className="h-5 w-5" /> {label}
       </a>
       <a
         href={`tel:${phone.replace(/\s/g, "")}`}
-        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-primary font-semibold text-primary-foreground shadow-soft active:scale-[0.98]"
+        className="flex h-12 items-center justify-center gap-2 rounded-xl bg-primary font-semibold text-primary-foreground shadow-soft transition active:scale-[0.98]"
       >
-        Call
+        <Phone className="h-5 w-5" /> Call
       </a>
+      {email && (
+        <a
+          href={`mailto:${email}`}
+          className="flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-secondary active:scale-[0.98]"
+        >
+          <Mail className="h-4 w-4" /> Email
+        </a>
+      )}
+      <button
+        type="button"
+        onClick={copy}
+        className={`flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-secondary active:scale-[0.98] ${
+          email ? "" : "col-span-2"
+        }`}
+      >
+        {copied ? (
+          <>
+            <Check className="h-4 w-4 text-primary" /> Copied
+          </>
+        ) : (
+          <>
+            <Copy className="h-4 w-4" /> Copy contact
+          </>
+        )}
+      </button>
     </div>
   );
 }
