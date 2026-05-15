@@ -115,6 +115,8 @@ function BookListingPage() {
   const [showValidation, setShowValidation] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const normalizedName = name.trim();
+  const normalizedPhone = phone.replace(/\D/g, "");
   const service = services.find((s) => s.id === selected)!;
   const minDate = todayISO();
   const datePresets = useMemo(
@@ -136,6 +138,12 @@ function BookListingPage() {
   }
 
   function send() {
+    if (!canContinue) {
+      setShowValidation(true);
+      if (step !== 2) setStep(2);
+      return;
+    }
+
     navigate({
       to: "/listing/$id/booked",
       params: { id: item.id },
@@ -144,25 +152,29 @@ function BookListingPage() {
         price: service.price,
         date,
         time,
-        notes: notes || undefined,
-        name: name || undefined,
-        phone: phone || undefined,
-        address: address || undefined,
+        notes: notes.trim() || undefined,
+        name: normalizedName || undefined,
+        phone: phone.trim() || undefined,
+        address: address.trim() || undefined,
       },
     });
   }
 
-  const phoneOk = phone.replace(/\D/g, "").length >= 7;
+  const phoneOk = normalizedPhone.length >= 7;
+  const dateOk = Boolean(date);
+  const timeOk = Boolean(time);
+  const nameOk = normalizedName.length >= 2;
   const canContinue =
     step === 1
-      ? !!selected
+      ? Boolean(selected)
       : step === 2
-        ? !!date && !!time && name.trim().length > 1 && phoneOk
+        ? dateOk && timeOk && nameOk && phoneOk
         : true;
   const missingStep2 = [
-    !date ? "choose a date" : null,
-    name.trim().length <= 1 ? "enter your name" : null,
-    !phoneOk ? "add a valid phone number" : null,
+    !dateOk ? "choose a date" : null,
+    !timeOk ? "pick a time" : null,
+    !nameOk ? "enter your full name" : null,
+    !phoneOk ? "add a valid phone or WhatsApp number" : null,
   ].filter(Boolean) as string[];
 
   return (
@@ -263,6 +275,7 @@ function BookListingPage() {
               const on = s.id === selected;
               return (
                 <button
+                  type="button"
                   key={s.id}
                   onClick={() => setSelected(s.id)}
                   className={`group relative flex w-full items-center gap-4 rounded-3xl border-2 p-4 text-left transition-all ${
@@ -384,8 +397,12 @@ function BookListingPage() {
                 const on = t === time;
                 return (
                   <button
+                    type="button"
                     key={t}
-                    onClick={() => setTime(t)}
+                    onClick={() => {
+                      setTime(t);
+                      setShowValidation(false);
+                    }}
                     className={`flex h-11 items-center justify-center gap-1 rounded-xl border text-sm font-semibold transition ${
                       on
                         ? "border-primary bg-primary text-primary-foreground"
@@ -562,7 +579,8 @@ function BookListingPage() {
         <div className="pointer-events-auto mx-auto flex w-full max-w-md gap-2">
           {step > 1 ? (
             <button
-              onClick={() => setStep((s) => (s - 1) as 1 | 2 | 3)}
+              type="button"
+              onClick={() => setStep(step === 3 ? 2 : 1)}
               className="flex h-13 flex-1 items-center justify-center rounded-2xl border border-border bg-card text-sm font-bold transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
             >
@@ -571,14 +589,16 @@ function BookListingPage() {
           ) : null}
           {step < 3 ? (
             <button
+              type="button"
               onClick={() => {
-                if (canContinue) {
-                  setShowValidation(false);
-                  setStep((s) => (s + 1) as 1 | 2 | 3);
+                console.log("listing-book-continue", { step, canContinue });
+                if (!canContinue) {
+                  setShowValidation(true);
                   return;
                 }
 
-                setShowValidation(true);
+                setShowValidation(false);
+                setStep(step === 1 ? 2 : 3);
               }}
               className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
@@ -588,6 +608,7 @@ function BookListingPage() {
             </button>
           ) : (
             <button
+              type="button"
               onClick={send}
               className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
