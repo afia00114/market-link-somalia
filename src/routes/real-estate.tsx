@@ -9,7 +9,13 @@ export const Route = createFileRoute("/real-estate")({
   head: () => ({
     meta: [
       { title: "Real Estate — MaalsoorHub" },
-      { name: "description", content: "Buy, rent, or lease houses, apartments, villas, land, and commercial property from verified agents." },
+      { name: "description", content: "Buy, rent, or lease houses, apartments, villas, land, and commercial property from verified agents in Somalia." },
+      { property: "og:title", content: "Real Estate — MaalsoorHub" },
+      { property: "og:description", content: "Verified houses, apartments, villas, land, and commercial property in Somalia." },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/real-estate" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://market-link-somalia.lovable.app/real-estate" },
     ],
   }),
   component: RealEstatePage,

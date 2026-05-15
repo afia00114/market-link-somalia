@@ -1,0 +1,18 @@
+# MaalsoorHub
+
+> Somalia's smart marketplace. Search trusted businesses, real estate, travel, health, and services. Connect directly via WhatsApp.
+
+## Pages
+
+- [Home](/home): Browse categories, featured listings, and verified businesses.
+- [Explore](/explore): All service categories in one place.
+- [Real Estate](/real-estate): Buy or rent houses, apartments, villas, land, and commercial property.
+- [Travel](/travel): Flights, agencies, visas, Hajj & Umrah, tours, and car rental.
+- [Hotels](/hotels): Find and book hotels.
+- [Health](/health): Browse hospitals, clinics, and pharmacies.
+- [Messages](/messages): Conversations with providers.
+- [Profile](/profile): Account, saved listings, and settings.
+
+## Optional
+
+- [Post a listing](/post): Create a new listing.

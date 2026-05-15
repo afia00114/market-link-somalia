@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://market-link-somalia.lovable.app/sitemap.xml
