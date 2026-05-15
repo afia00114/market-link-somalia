@@ -22,6 +22,10 @@ export const Route = createFileRoute("/travel/flights")({
       { name: "description", content: "Search and compare flights from verified Somali and East African travel agencies. Filter by airline, price, and direct routes — book directly via WhatsApp." },
       { property: "og:title", content: "Airline Tickets & Flights — MaalsoorHub" },
       { property: "og:description", content: "Compare flights from trusted agencies and contact via WhatsApp." },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/travel/flights" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://market-link-somalia.lovable.app/travel/flights" },
     ],
   }),
   component: FlightsPage,
