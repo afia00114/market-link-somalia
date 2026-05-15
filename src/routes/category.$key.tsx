@@ -1,9 +1,59 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { ArrowLeft, Search, PackageOpen } from "lucide-react";
+import {
+  ArrowLeft, Search, PackageOpen, Wrench, Zap, Sparkles, Snowflake,
+  PaintBucket, Hammer, Brush, Truck, Car as CarIcon, Wheat, Briefcase,
+  Landmark, UtensilsCrossed, Stethoscope, Plane, Home as HomeIcon, MoreHorizontal,
+  type LucideIcon,
+} from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { CATEGORIES, type CategoryKey } from "@/data/categories";
 import { ListingCard } from "@/components/ListingCard";
 import { listingsByCategory } from "@/data/listings";
+
+type PopularItem = { label: string; icon: LucideIcon; tone: string };
+
+const POPULAR: Record<string, PopularItem[]> = {
+  services: [
+    { label: "Plumbing", icon: Wrench, tone: "text-sky-600 bg-sky-50" },
+    { label: "Electrical", icon: Zap, tone: "text-amber-600 bg-amber-50" },
+    { label: "Cleaning", icon: Sparkles, tone: "text-cyan-600 bg-cyan-50" },
+    { label: "AC Repair", icon: Snowflake, tone: "text-blue-600 bg-blue-50" },
+    { label: "Painting", icon: PaintBucket, tone: "text-rose-600 bg-rose-50" },
+    { label: "Carpentry", icon: Hammer, tone: "text-orange-700 bg-orange-50" },
+    { label: "Masonry", icon: Brush, tone: "text-emerald-700 bg-emerald-50" },
+    { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
+  ],
+  food: [
+    { label: "Restaurants", icon: UtensilsCrossed, tone: "text-rose-600 bg-rose-50" },
+    { label: "Delivery", icon: Truck, tone: "text-amber-600 bg-amber-50" },
+    { label: "Cafes", icon: Sparkles, tone: "text-emerald-600 bg-emerald-50" },
+    { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
+  ],
+  vehicles: [
+    { label: "Cars", icon: CarIcon, tone: "text-blue-600 bg-blue-50" },
+    { label: "Trucks", icon: Truck, tone: "text-orange-600 bg-orange-50" },
+    { label: "Parts", icon: Wrench, tone: "text-slate-600 bg-slate-100" },
+    { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
+  ],
+  livestock: [
+    { label: "Camels", icon: Wheat, tone: "text-amber-700 bg-amber-50" },
+    { label: "Cattle", icon: Wheat, tone: "text-emerald-700 bg-emerald-50" },
+    { label: "Farms", icon: HomeIcon, tone: "text-lime-700 bg-lime-50" },
+    { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
+  ],
+  jobs: [
+    { label: "Full-time", icon: Briefcase, tone: "text-indigo-600 bg-indigo-50" },
+    { label: "Part-time", icon: Briefcase, tone: "text-sky-600 bg-sky-50" },
+    { label: "Remote", icon: Plane, tone: "text-emerald-600 bg-emerald-50" },
+    { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
+  ],
+  banking: [
+    { label: "Banks", icon: Landmark, tone: "text-blue-700 bg-blue-50" },
+    { label: "Forex", icon: Landmark, tone: "text-emerald-700 bg-emerald-50" },
+    { label: "Insurance", icon: Stethoscope, tone: "text-rose-600 bg-rose-50" },
+    { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
+  ],
+};
 
 export const Route = createFileRoute("/category/$key")({
   component: CategoryPage,
