@@ -11,7 +11,14 @@ import { VISA_SERVICES, COUNTRIES, type VisaService } from "@/data/travel";
 import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/travel/visa")({
-  head: () => ({ meta: [{ title: "Visa Services — MaalsoorHub" }] }),
+  head: () => ({
+    meta: [
+      { title: "Visa Services — MaalsoorHub" },
+      { name: "description", content: "Apply for tourist, business, and transit visas through verified Somali agencies. Compare processing times and fees by destination and nationality." },
+      { property: "og:title", content: "Visa Services — MaalsoorHub" },
+      { property: "og:description", content: "Verified visa providers — compare processing time and fees, contact via WhatsApp." },
+    ],
+  }),
   component: VisaPage,
 });
 

@@ -3,6 +3,14 @@ import { AppShell } from "@/components/AppShell";
 import { ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/post")({
+  head: () => ({
+    meta: [
+      { title: "Post a Listing — MaalsoorHub" },
+      { name: "description", content: "Verified agents, agencies, developers, and businesses can post listings on MaalsoorHub. Apply for verification to get started." },
+      { property: "og:title", content: "Post a Listing — MaalsoorHub" },
+      { property: "og:description", content: "Apply for verification and post your listings on MaalsoorHub." },
+    ],
+  }),
   component: PostPage,
 });
 

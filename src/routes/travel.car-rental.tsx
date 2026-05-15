@@ -10,7 +10,14 @@ import { SummaryShare } from "@/components/travel/SummaryShare";
 import { CAR_OFFERS, type CarOffer, type CarType } from "@/data/travel";
 
 export const Route = createFileRoute("/travel/car-rental")({
-  head: () => ({ meta: [{ title: "Car Rental — MaalsoorHub" }] }),
+  head: () => ({
+    meta: [
+      { title: "Car Rental in Somalia — MaalsoorHub" },
+      { name: "description", content: "Rent cars from verified agencies across Somalia and East Africa. Compare daily rates, automatic vs manual, and book directly via WhatsApp." },
+      { property: "og:title", content: "Car Rental in Somalia — MaalsoorHub" },
+      { property: "og:description", content: "Compare and book car rentals from verified providers via WhatsApp." },
+    ],
+  }),
   component: CarRentalPage,
 });
 

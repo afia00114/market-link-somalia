@@ -10,7 +10,14 @@ import { SummaryShare } from "@/components/travel/SummaryShare";
 import { TOUR_PACKAGES, COUNTRIES, type TourPackage, type TourType } from "@/data/travel";
 
 export const Route = createFileRoute("/travel/tours")({
-  head: () => ({ meta: [{ title: "Tour Packages — MaalsoorHub" }] }),
+  head: () => ({
+    meta: [
+      { title: "Tour Packages — MaalsoorHub" },
+      { name: "description", content: "Discover tour packages across East Africa and beyond from verified Somali agencies. Compare itineraries, durations, and prices per traveler." },
+      { property: "og:title", content: "Tour Packages — MaalsoorHub" },
+      { property: "og:description", content: "Verified tour packages — compare and book via WhatsApp." },
+    ],
+  }),
   component: ToursPage,
 });
 

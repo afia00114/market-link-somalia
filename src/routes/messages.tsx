@@ -3,6 +3,15 @@ import { AppShell } from "@/components/AppShell";
 import { MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/messages")({
+  head: () => ({
+    meta: [
+      { title: "Messages — MaalsoorHub" },
+      { name: "description", content: "MaalsoorHub doesn't store chats. Tap WhatsApp on any listing to message providers directly." },
+      { property: "og:title", content: "Messages — MaalsoorHub" },
+      { property: "og:description", content: "Chat with verified providers directly on WhatsApp." },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
   component: Messages,
 });
 

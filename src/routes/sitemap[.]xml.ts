@@ -5,6 +5,7 @@ import { PROPERTIES } from "@/data/properties";
 import { HOSPITALS } from "@/data/health";
 import { HOTELS } from "@/data/hotels";
 import { LISTINGS } from "@/data/listings";
+import { AGENCIES, FLIGHT_OFFERS } from "@/data/travel";
 
 const BASE_URL = "https://market-link-somalia.lovable.app";
 
@@ -40,7 +41,11 @@ export const Route = createFileRoute("/sitemap.xml")({
           ...PROPERTIES.map((p) => ({ path: `/property/${p.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...HOSPITALS.map((h) => ({ path: `/health/${h.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...HOTELS.map((h) => ({ path: `/hotels/${h.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...HOTELS.map((h) => ({ path: `/hotels/${h.id}/book`, changefreq: "monthly" as const, priority: "0.4" })),
           ...LISTINGS.map((l) => ({ path: `/listing/${l.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...LISTINGS.map((l) => ({ path: `/listing/${l.id}/book`, changefreq: "monthly" as const, priority: "0.4" })),
+          ...AGENCIES.map((a) => ({ path: `/travel/agencies/${a.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...FLIGHT_OFFERS.map((f) => ({ path: `/travel/book/${f.id}`, changefreq: "monthly" as const, priority: "0.4" })),
         ];
 
         const urls = entries.map((e) =>
