@@ -35,7 +35,7 @@ export function ListingCard({ l }: { l: Listing }) {
             </span>
           </div>
         </div>
-      </div>
+      </Link>
       <div className="flex border-t border-border">
         <a
           href={whatsappLink(l.provider.whatsapp, `Hello ${l.provider.name}, I'm interested in "${l.title}" on MaalsoorHub.`)}
