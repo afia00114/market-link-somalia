@@ -440,9 +440,22 @@ function BookListingPage() {
               label="Date & Time"
               value={`${date || "—"}${date && time ? ` · ${time}` : ""}`}
             />
+            <SummaryRow label="Name" value={name || "—"} />
+            <SummaryRow label="Phone" value={phone || "—"} />
+            {address && <SummaryRow label="Address" value={address} />}
             {notes && <SummaryRow label="Notes" value={notes} />}
             <SummaryRow label="Estimated price" value={service.price} bold />
           </div>
+          {photos.length > 0 && (
+            <div className="rounded-2xl border border-border bg-card p-4">
+              <h3 className="mb-2 text-xs font-bold">Photos ({photos.length})</h3>
+              <div className="grid grid-cols-4 gap-2">
+                {photos.map((src, i) => (
+                  <img key={i} src={src} alt={`Attached ${i + 1}`} className="aspect-square w-full rounded-lg object-cover" />
+                ))}
+              </div>
+            </div>
+          )}
           <div className="flex items-start gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3 text-[11px] text-foreground">
             <MessageCircle className="mt-0.5 h-4 w-4 flex-none text-primary" />
             <p>
