@@ -80,6 +80,21 @@ function todayISO() {
   return d.toISOString().slice(0, 10);
 }
 
+function addDaysISO(days: number) {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 10);
+}
+
+function formatDateLabel(iso: string) {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 function BookListingPage() {
   const { id } = useParams({ from: "/listing/$id/book" });
   const item = LISTINGS.find((l) => l.id === id)!;
@@ -90,17 +105,26 @@ function BookListingPage() {
   const [selected, setSelected] = useState<string>(
     services.find((s) => s.popular)?.id ?? services[0].id
   );
-  const [date, setDate] = useState<string>("");
+  const [date, setDate] = useState<string>(addDaysISO(1));
   const [time, setTime] = useState<string>("10:00");
   const [notes, setNotes] = useState<string>("");
   const [photos, setPhotos] = useState<string[]>([]);
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const [showValidation, setShowValidation] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const service = services.find((s) => s.id === selected)!;
   const minDate = todayISO();
+  const datePresets = useMemo(
+    () => [
+      { id: addDaysISO(0), label: "Today" },
+      { id: addDaysISO(1), label: "Tomorrow" },
+      { id: addDaysISO(2), label: formatDateLabel(addDaysISO(2)) },
+    ],
+    []
+  );
 
   function onPickPhotos(files: FileList | null) {
     if (!files) return;
@@ -139,6 +163,11 @@ function BookListingPage() {
       : step === 2
         ? !!date && !!time && name.trim().length > 1 && phoneOk
         : true;
+  const missingStep2 = [
+    !date ? "choose a date" : null,
+    name.trim().length <= 1 ? "enter your name" : null,
+    !phoneOk ? "add a valid phone number" : null,
+  ].filter(Boolean) as string[];
 
   return (
     <AppShell hideNav>
@@ -308,16 +337,48 @@ function BookListingPage() {
         <section className="space-y-6 px-4 pt-6">
           <div>
             <h2 className="mb-2 text-sm font-bold">Pick a date</h2>
-            <label className="relative flex h-12 items-center rounded-xl border border-border bg-card px-3 focus-within:border-primary">
-              <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="date"
-                value={date}
-                min={minDate}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-transparent text-sm outline-none"
-              />
-            </label>
+            <div className="space-y-3 rounded-2xl border border-border bg-card p-3">
+              <div className="grid grid-cols-3 gap-2">
+                {datePresets.map((preset) => {
+                  const on = date === preset.id;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => {
+                        setDate(preset.id);
+                        setShowValidation(false);
+                      }}
+                      className={`rounded-xl border px-3 py-2 text-xs font-bold transition ${
+                        on
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-foreground hover:border-primary/40"
+                      }`}
+                    >
+                      {preset.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <label className="relative flex h-12 items-center rounded-xl border border-border bg-background px-3 focus-within:border-primary">
+                <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
+                <input
+                  type="date"
+                  value={date}
+                  min={minDate}
+                  onChange={(e) => {
+                    setDate(e.target.value);
+                    setShowValidation(false);
+                  }}
+                  className="w-full bg-transparent text-sm outline-none"
+                />
+              </label>
+
+              <p className="text-[11px] font-medium text-muted-foreground">
+                Scheduled for <span className="font-bold text-foreground">{formatDateLabel(date)}</span>
+              </p>
+            </div>
           </div>
 
           <div>
@@ -352,7 +413,10 @@ function BookListingPage() {
                 <User className="mr-2 h-4 w-4 text-muted-foreground" />
                 <input
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setShowValidation(false);
+                  }}
                   placeholder="e.g. Amina Hassan"
                   className="w-full bg-transparent text-sm outline-none"
                 />
@@ -364,7 +428,10 @@ function BookListingPage() {
                 <Phone className="mr-2 h-4 w-4 text-muted-foreground" />
                 <input
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    setShowValidation(false);
+                  }}
                   inputMode="tel"
                   placeholder="+252 61 234 5678"
                   className="w-full bg-transparent text-sm outline-none"
@@ -445,6 +512,12 @@ function BookListingPage() {
               {notes.length}/300
             </div>
           </div>
+
+          {showValidation && missingStep2.length > 0 && (
+            <div className="rounded-xl border border-border bg-card px-3 py-2 text-[11px] text-muted-foreground">
+              To continue, please {missingStep2.join(", ")}.
+            </div>
+          )}
         </section>
       )}
 
@@ -502,9 +575,16 @@ function BookListingPage() {
           ) : null}
           {step < 3 ? (
             <button
-              onClick={() => canContinue && setStep((s) => (s + 1) as 1 | 2 | 3)}
-              disabled={!canContinue}
-              className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98] disabled:opacity-50 disabled:shadow-none"
+              onClick={() => {
+                if (canContinue) {
+                  setShowValidation(false);
+                  setStep((s) => (s + 1) as 1 | 2 | 3);
+                  return;
+                }
+
+                setShowValidation(true);
+              }}
+              className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
               style={{ height: "3.25rem" }}
             >
               {step === 1 ? "Continue to Details" : "Continue to Confirm"}
