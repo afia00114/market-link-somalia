@@ -10,8 +10,10 @@ const TABS: Tab[] = ["All", "Near me", "Top Rated", "Featured"];
 export const Route = createFileRoute("/hotels/")({
   head: () => ({
     meta: [
-      { title: "Hotels — MaalsoorHub" },
-      { name: "description", content: "Discover hotels, view rooms, and book directly via WhatsApp or call." },
+      { title: "Hotels in Somalia — MaalsoorHub" },
+      { name: "description", content: "Discover verified hotels across Somalia and East Africa. Compare nightly rates, ratings, and rooms — book directly via WhatsApp or call." },
+      { property: "og:title", content: "Hotels in Somalia — MaalsoorHub" },
+      { property: "og:description", content: "Verified hotels — compare rates and book directly via WhatsApp." },
     ],
   }),
   component: HotelsPage,
