@@ -11,7 +11,14 @@ import { whatsappLink, telLink } from "@/lib/contact";
 import { MessageCircle, Phone, Mail, Clock, Search, BadgeCheck, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/travel/agencies")({
-  head: () => ({ meta: [{ title: "Travel Agencies — MaalsoorHub" }] }),
+  head: () => ({
+    meta: [
+      { title: "Travel Agencies — MaalsoorHub" },
+      { name: "description", content: "Browse verified travel agencies across Somalia and East Africa. Compare ratings, services, and contact directly via WhatsApp, call, or email." },
+      { property: "og:title", content: "Travel Agencies — MaalsoorHub" },
+      { property: "og:description", content: "Verified travel agencies — compare and contact directly." },
+    ],
+  }),
   component: AgenciesPage,
 });
 
