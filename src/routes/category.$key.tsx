@@ -63,6 +63,7 @@ function CategoryPage() {
   const { key } = useParams({ from: "/category/$key" });
   const cat = CATEGORIES.find((c) => c.key === (key as CategoryKey));
   const items = cat ? listingsByCategory(cat.key) : [];
+  const popular = POPULAR[key as string];
 
   return (
     <AppShell>
