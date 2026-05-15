@@ -30,10 +30,10 @@ import { Route as TravelFlightsRouteImport } from './routes/travel.flights'
 import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
-import { Route as ListingIdRouteImport } from './routes/listing.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health.$id'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
+import { Route as ListingIdIndexRouteImport } from './routes/listing.$id.index'
 import { Route as TravelVisaIdRouteImport } from './routes/travel.visa.$id'
 import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
 import { Route as TravelHajjUmrahIdRouteImport } from './routes/travel.hajj-umrah.$id'
@@ -150,11 +150,6 @@ const PropertyIdRoute = PropertyIdRouteImport.update({
   path: '/property/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ListingIdRoute = ListingIdRouteImport.update({
-  id: '/listing/$id',
-  path: '/listing/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HotelsIdRoute = HotelsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -168,6 +163,11 @@ const HealthIdRoute = HealthIdRouteImport.update({
 const CategoryKeyRoute = CategoryKeyRouteImport.update({
   id: '/category/$key',
   path: '/category/$key',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingIdIndexRoute = ListingIdIndexRouteImport.update({
+  id: '/listing/$id/',
+  path: '/listing/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TravelVisaIdRoute = TravelVisaIdRouteImport.update({
@@ -236,7 +236,6 @@ export interface FileRoutesByFullPath {
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
-  '/listing/$id': typeof ListingIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
@@ -257,6 +256,7 @@ export interface FileRoutesByFullPath {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/listing/$id/': typeof ListingIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -271,7 +271,6 @@ export interface FileRoutesByTo {
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
-  '/listing/$id': typeof ListingIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
@@ -292,6 +291,7 @@ export interface FileRoutesByTo {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/listing/$id': typeof ListingIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -309,7 +309,6 @@ export interface FileRoutesById {
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
-  '/listing/$id': typeof ListingIdRouteWithChildren
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
@@ -330,6 +329,7 @@ export interface FileRoutesById {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/listing/$id/': typeof ListingIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -348,7 +348,6 @@ export interface FileRouteTypes {
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
-    | '/listing/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/car-rental'
@@ -369,6 +368,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/listing/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -383,7 +383,6 @@ export interface FileRouteTypes {
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
-    | '/listing/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/car-rental'
@@ -404,6 +403,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/listing/$id'
   id:
     | '__root__'
     | '/'
@@ -420,7 +420,6 @@ export interface FileRouteTypes {
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
-    | '/listing/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/car-rental'
@@ -441,6 +440,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/listing/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -456,8 +456,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TravelRoute: typeof TravelRouteWithChildren
   CategoryKeyRoute: typeof CategoryKeyRoute
-  ListingIdRoute: typeof ListingIdRouteWithChildren
   PropertyIdRoute: typeof PropertyIdRoute
+  ListingIdIndexRoute: typeof ListingIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -609,13 +609,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertyIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/listing/$id': {
-      id: '/listing/$id'
-      path: '/listing/$id'
-      fullPath: '/listing/$id'
-      preLoaderRoute: typeof ListingIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/hotels/$id': {
       id: '/hotels/$id'
       path: '/$id'
@@ -635,6 +628,13 @@ declare module '@tanstack/react-router' {
       path: '/category/$key'
       fullPath: '/category/$key'
       preLoaderRoute: typeof CategoryKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listing/$id/': {
+      id: '/listing/$id/'
+      path: '/listing/$id'
+      fullPath: '/listing/$id/'
+      preLoaderRoute: typeof ListingIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/travel/visa/$id': {
@@ -845,20 +845,6 @@ const TravelRouteChildren: TravelRouteChildren = {
 const TravelRouteWithChildren =
   TravelRoute._addFileChildren(TravelRouteChildren)
 
-interface ListingIdRouteChildren {
-  ListingIdBookRoute: typeof ListingIdBookRoute
-  ListingIdBookedRoute: typeof ListingIdBookedRoute
-}
-
-const ListingIdRouteChildren: ListingIdRouteChildren = {
-  ListingIdBookRoute: ListingIdBookRoute,
-  ListingIdBookedRoute: ListingIdBookedRoute,
-}
-
-const ListingIdRouteWithChildren = ListingIdRoute._addFileChildren(
-  ListingIdRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExploreRoute: ExploreRoute,
@@ -872,9 +858,19 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TravelRoute: TravelRouteWithChildren,
   CategoryKeyRoute: CategoryKeyRoute,
-  ListingIdRoute: ListingIdRouteWithChildren,
   PropertyIdRoute: PropertyIdRoute,
+  ListingIdIndexRoute: ListingIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

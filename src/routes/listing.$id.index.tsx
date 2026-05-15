@@ -30,7 +30,7 @@ export const Route = createFileRoute("/listing/$id/")({
 });
 
 function ListingDetailPage() {
-  const { id } = useParams({ from: "/listing/$id" });
+  const { id } = useParams({ from: "/listing/$id/" });
   const item = LISTINGS.find((l) => l.id === id)!;
   const navigate = useNavigate();
   const p = item.provider;
