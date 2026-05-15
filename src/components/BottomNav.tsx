@@ -1,21 +1,24 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Home, Compass, Plus, MessageCircle, User } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
-type Tab = { to: string; label: string; icon: typeof Home; primary?: boolean };
+type Tab = { to: string; key: string; icon: typeof Home; primary?: boolean };
 const tabs: Tab[] = [
-  { to: "/home", label: "Home", icon: Home },
-  { to: "/explore", label: "Explore", icon: Compass },
-  { to: "/post", label: "Post", icon: Plus, primary: true },
-  { to: "/messages", label: "Messages", icon: MessageCircle },
-  { to: "/profile", label: "Profile", icon: User },
+  { to: "/home", key: "nav.home", icon: Home },
+  { to: "/explore", key: "nav.explore", icon: Compass },
+  { to: "/post", key: "nav.post", icon: Plus, primary: true },
+  { to: "/messages", key: "nav.messages", icon: MessageCircle },
+  { to: "/profile", key: "nav.profile", icon: User },
 ];
 
 export function BottomNav() {
   const { pathname } = useLocation();
+  const { t } = useI18n();
   return (
     <nav className="fixed bottom-0 left-1/2 z-40 w-full max-w-md -translate-x-1/2 border-t border-border bg-card/95 backdrop-blur safe-bottom">
       <ul className="grid grid-cols-5 px-2 pt-2">
-        {tabs.map(({ to, label, icon: Icon, primary }) => {
+        {tabs.map(({ to, key, icon: Icon, primary }) => {
+          const label = t(key);
           const active = pathname === to || (to === "/home" && pathname === "/");
           if (primary) {
             return (
