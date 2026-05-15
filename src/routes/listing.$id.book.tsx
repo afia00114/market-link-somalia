@@ -485,33 +485,41 @@ function BookListingPage() {
         </section>
       )}
 
+      <div className="h-32" />
+
       {/* Footer actions */}
-      <div className="sticky bottom-0 z-20 mt-8 flex gap-2 border-t border-border bg-card/95 px-4 py-3 backdrop-blur safe-bottom">
-        {step > 1 ? (
-          <button
-            onClick={() => setStep((s) => (s - 1) as 1 | 2 | 3)}
-            className="h-12 flex-1 rounded-xl bg-secondary text-sm font-bold transition active:scale-[0.98]"
-          >
-            Back
-          </button>
-        ) : null}
-        {step < 3 ? (
-          <button
-            onClick={() => canContinue && setStep((s) => (s + 1) as 1 | 2 | 3)}
-            disabled={!canContinue}
-            className="h-12 flex-[2] rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-sm shadow-primary/30 transition active:scale-[0.98] disabled:opacity-50"
-          >
-            Continue
-          </button>
-        ) : (
-          <button
-            onClick={send}
-            className="flex h-12 flex-[2] items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-sm shadow-primary/30 transition active:scale-[0.98]"
-          >
-            <MessageCircle className="h-4 w-4" />
-            Confirm & Send Request
-          </button>
-        )}
+      <div className="safe-bottom pointer-events-none fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-card via-card/95 to-card/0 px-4 pb-4 pt-10">
+        <div className="pointer-events-auto mx-auto flex w-full max-w-md gap-2">
+          {step > 1 ? (
+            <button
+              onClick={() => setStep((s) => (s - 1) as 1 | 2 | 3)}
+              className="flex h-13 flex-1 items-center justify-center rounded-2xl border border-border bg-card text-sm font-bold transition active:scale-[0.98]"
+              style={{ height: "3.25rem" }}
+            >
+              Back
+            </button>
+          ) : null}
+          {step < 3 ? (
+            <button
+              onClick={() => canContinue && setStep((s) => (s + 1) as 1 | 2 | 3)}
+              disabled={!canContinue}
+              className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98] disabled:opacity-50 disabled:shadow-none"
+              style={{ height: "3.25rem" }}
+            >
+              {step === 1 ? "Continue to Details" : "Continue to Confirm"}
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          ) : (
+            <button
+              onClick={send}
+              className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
+              style={{ height: "3.25rem" }}
+            >
+              <MessageCircle className="h-4 w-4" />
+              Confirm & Send Request
+            </button>
+          )}
+        </div>
       </div>
     </AppShell>
   );
