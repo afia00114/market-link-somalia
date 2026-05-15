@@ -57,7 +57,7 @@ function TravelHub() {
       <header className="grad-travel rounded-b-3xl px-4 pb-6 pt-5 text-white shadow-card">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Link to="/home" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+            <Link to="/home" aria-label="Go back" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <div>
@@ -79,6 +79,7 @@ function TravelHub() {
         <div className="mt-3 flex items-center gap-2 rounded-2xl bg-white/95 px-3 py-2.5 text-foreground">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
+            aria-label="Search travel services"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search flights, visas, tours, cars…"
@@ -94,6 +95,7 @@ function TravelHub() {
         <div className="mt-2 flex items-center gap-2 rounded-2xl bg-white/95 px-3 py-2 text-foreground">
           <MapPin className="h-4 w-4 text-muted-foreground" />
           <select
+            aria-label="Select city"
             value={city}
             onChange={(e) => setCity(e.target.value)}
             className="w-full bg-transparent text-sm outline-none"

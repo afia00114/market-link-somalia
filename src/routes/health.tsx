@@ -45,7 +45,7 @@ function HealthPage() {
       {/* HERO */}
       <header className="grad-hero rounded-b-3xl px-4 pb-5 pt-5 text-white shadow-card">
         <div className="flex items-center gap-3">
-          <Link to="/home" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+          <Link to="/home" aria-label="Go back" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="min-w-0">
@@ -78,6 +78,7 @@ function HealthPage() {
         <div className="mt-4 flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 shadow-soft">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
+            aria-label="Search hospitals, clinics, departments"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search hospitals, clinics, departments…"

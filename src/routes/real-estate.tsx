@@ -33,7 +33,7 @@ function RealEstatePage() {
     <AppShell>
       <header className="sticky top-0 z-30 border-b border-border bg-card/95 px-4 py-3 backdrop-blur">
         <div className="flex items-center gap-3">
-          <Link to="/home" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary">
+          <Link to="/home" aria-label="Go back" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="flex-1">

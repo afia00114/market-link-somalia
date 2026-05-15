@@ -24,10 +24,10 @@ function Explore() {
   return (
     <AppShell>
       <header className="border-b border-border bg-card px-4 py-4">
-        <h1 className="text-lg font-bold">Explore</h1>
+        <h1 className="text-lg font-bold">Explore Categories</h1>
         <div className="mt-3 flex items-center gap-2 rounded-2xl bg-secondary px-3 py-2.5">
           <Search className="h-4 w-4 text-muted-foreground" />
-          <input placeholder="Search categories, cities…" className="w-full bg-transparent text-sm outline-none" />
+          <input aria-label="Search categories" placeholder="Search categories, cities…" className="w-full bg-transparent text-sm outline-none" />
         </div>
       </header>
       <section className="px-4 py-4">
