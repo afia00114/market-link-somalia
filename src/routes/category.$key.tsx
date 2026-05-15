@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import {
   ArrowLeft, Search, PackageOpen, Wrench, Zap, Sparkles, Snowflake,
   PaintBucket, Hammer, Brush, Truck, Car as CarIcon, Wheat, Briefcase,
   Landmark, UtensilsCrossed, Stethoscope, Plane, Home as HomeIcon, MoreHorizontal,
-  type LucideIcon,
+  X, type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { CATEGORIES, type CategoryKey } from "@/data/categories";
@@ -62,8 +63,35 @@ export const Route = createFileRoute("/category/$key")({
 function CategoryPage() {
   const { key } = useParams({ from: "/category/$key" });
   const cat = CATEGORIES.find((c) => c.key === (key as CategoryKey));
-  const items = cat ? listingsByCategory(cat.key) : [];
+  const allItems = cat ? listingsByCategory(cat.key) : [];
   const popular = POPULAR[key as string];
+
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+
+  const items = useMemo(() => {
+    let list = allItems;
+    if (activeFilter && activeFilter !== "More") {
+      const f = activeFilter.toLowerCase();
+      list = list.filter(
+        (l) =>
+          l.subtitle.toLowerCase().includes(f) ||
+          l.title.toLowerCase().includes(f) ||
+          l.description.toLowerCase().includes(f),
+      );
+    }
+    const q = query.trim().toLowerCase();
+    if (q) {
+      list = list.filter(
+        (l) =>
+          l.title.toLowerCase().includes(q) ||
+          l.subtitle.toLowerCase().includes(q) ||
+          l.city.toLowerCase().includes(q) ||
+          (l.district ?? "").toLowerCase().includes(q),
+      );
+    }
+    return list;
+  }, [allItems, activeFilter, query]);
 
   return (
     <AppShell>
@@ -80,9 +108,16 @@ function CategoryPage() {
         <div className="mt-4 flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 shadow-soft">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder={`Search in ${cat?.label ?? "category"}…`}
             className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />
+          {query && (
+            <button onClick={() => setQuery("")} className="text-muted-foreground">
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </header>
 
@@ -90,24 +125,43 @@ function CategoryPage() {
         <section className="px-4 pt-4">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-bold text-foreground">Most popular</h2>
-            <span className="text-[11px] font-semibold text-muted-foreground">
-              Browse by type
-            </span>
+            {activeFilter ? (
+              <button
+                onClick={() => setActiveFilter(null)}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary"
+              >
+                <X className="h-3 w-3" /> Clear
+              </button>
+            ) : (
+              <span className="text-[11px] font-semibold text-muted-foreground">
+                Browse by type
+              </span>
+            )}
           </div>
           <div className="grid grid-cols-4 gap-3">
             {popular.map((p) => {
               const Icon = p.icon;
+              const isActive = activeFilter === p.label;
               return (
                 <button
                   key={p.label}
+                  onClick={() =>
+                    setActiveFilter((cur) => (cur === p.label ? null : p.label))
+                  }
                   className="group flex flex-col items-center gap-1.5 active:scale-95 transition"
                 >
                   <span
-                    className={`flex h-14 w-14 items-center justify-center rounded-2xl ${p.tone} shadow-soft ring-1 ring-border/40 group-hover:shadow-card transition`}
+                    className={`flex h-14 w-14 items-center justify-center rounded-2xl ${p.tone} shadow-soft ring-1 transition group-hover:shadow-card ${
+                      isActive ? "ring-2 ring-primary scale-105" : "ring-border/40"
+                    }`}
                   >
                     <Icon className="h-6 w-6" strokeWidth={2.2} />
                   </span>
-                  <span className="text-[11px] font-semibold leading-tight text-foreground text-center line-clamp-1">
+                  <span
+                    className={`text-[11px] font-semibold leading-tight text-center line-clamp-1 ${
+                      isActive ? "text-primary" : "text-foreground"
+                    }`}
+                  >
                     {p.label}
                   </span>
                 </button>
@@ -121,6 +175,11 @@ function CategoryPage() {
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-bold text-foreground">
             {items.length} {items.length === 1 ? "listing" : "listings"}
+            {activeFilter && activeFilter !== "More" && (
+              <span className="ml-1 font-normal text-muted-foreground">
+                · {activeFilter}
+              </span>
+            )}
           </h2>
           <span className="text-xs text-muted-foreground">Verified providers</span>
         </div>
@@ -128,10 +187,21 @@ function CategoryPage() {
         {items.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-12 text-center">
             <PackageOpen className="mb-3 h-10 w-10 text-muted-foreground" />
-            <h3 className="text-base font-bold">No listings yet</h3>
+            <h3 className="text-base font-bold">No matches</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Verified providers in this category will appear here soon.
+              Try a different filter or clear your search.
             </p>
+            {(activeFilter || query) && (
+              <button
+                onClick={() => {
+                  setActiveFilter(null);
+                  setQuery("");
+                }}
+                className="mt-3 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground"
+              >
+                Reset filters
+              </button>
+            )}
           </div>
         ) : (
           <div className="space-y-3">
