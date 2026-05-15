@@ -16,7 +16,14 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/travel/flights")({
-  head: () => ({ meta: [{ title: "Airline Tickets — MaalsoorHub" }] }),
+  head: () => ({
+    meta: [
+      { title: "Airline Tickets & Flights — MaalsoorHub" },
+      { name: "description", content: "Search and compare flights from verified Somali and East African travel agencies. Filter by airline, price, and direct routes — book directly via WhatsApp." },
+      { property: "og:title", content: "Airline Tickets & Flights — MaalsoorHub" },
+      { property: "og:description", content: "Compare flights from trusted agencies and contact via WhatsApp." },
+    ],
+  }),
   component: FlightsPage,
 });
 
