@@ -137,11 +137,21 @@ function BookListingPage() {
     []
   );
 
+  useEffect(() => {
+    setStep(search.step);
+  }, [search.step]);
+
+  useEffect(() => {
+    if (search.service && services.some((service) => service.id === search.service)) {
+      setSelected(search.service);
+    }
+  }, [search.service, services]);
+
   function goToStep(nextStep: 1 | 2 | 3) {
+    setStep(nextStep);
     navigate({
-      to: "/listing/$id/book",
-      params: { id: item.id },
-      search: { step: nextStep },
+      to: ".",
+      search: (prev) => ({ ...prev, step: nextStep, service: selected }),
       replace: true,
     });
   }
