@@ -1,4 +1,4 @@
-import { Plane, Building2, FileCheck, Star, Map, Car, type LucideIcon } from "lucide-react";
+import { Plane, Building2, FileCheck, Star, Map, Car, Bus, Package, type LucideIcon } from "lucide-react";
 
 export interface Country {
   code: string;
