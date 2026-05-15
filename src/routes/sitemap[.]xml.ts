@@ -5,6 +5,7 @@ import { PROPERTIES } from "@/data/properties";
 import { HOSPITALS } from "@/data/health";
 import { HOTELS } from "@/data/hotels";
 import { LISTINGS } from "@/data/listings";
+import { AGENCIES, FLIGHT_OFFERS } from "@/data/travel";
 
 const BASE_URL = "https://market-link-somalia.lovable.app";
 
