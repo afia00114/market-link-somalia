@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useParams, notFound } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   Check,
@@ -12,6 +12,11 @@ import {
   MessageCircle,
   MapPin,
   StickyNote,
+  Camera,
+  X,
+  User,
+  Phone,
+  Home,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { LISTINGS } from "@/data/listings";
@@ -87,9 +92,23 @@ function BookListingPage() {
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("10:00");
   const [notes, setNotes] = useState<string>("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [name, setName] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const service = services.find((s) => s.id === selected)!;
   const minDate = todayISO();
+
+  function onPickPhotos(files: FileList | null) {
+    if (!files) return;
+    const next: string[] = [];
+    Array.from(files).slice(0, 4 - photos.length).forEach((f) => {
+      next.push(URL.createObjectURL(f));
+    });
+    setPhotos((p) => [...p, ...next].slice(0, 4));
+  }
 
   function send() {
     const msg = [
@@ -98,7 +117,11 @@ function BookListingPage() {
       `Service: ${service.name} (${service.price})`,
       `Date: ${date || "Not specified"}`,
       `Time: ${time || "Not specified"}`,
+      `Customer: ${name}`,
+      `Phone: ${phone}`,
+      address ? `Address: ${address}` : "",
       notes ? `Notes: ${notes}` : "",
+      photos.length ? `Photos attached: ${photos.length}` : "",
     ].filter(Boolean).join("\n");
     window.open(whatsappLink(item.provider.whatsapp, msg), "_blank", "noopener,noreferrer");
     navigate({
@@ -108,7 +131,13 @@ function BookListingPage() {
     });
   }
 
-  const canContinue = step === 1 ? !!selected : step === 2 ? !!date && !!time : true;
+  const phoneOk = phone.replace(/\D/g, "").length >= 7;
+  const canContinue =
+    step === 1
+      ? !!selected
+      : step === 2
+        ? !!date && !!time && name.trim().length > 1 && phoneOk
+        : true;
 
   return (
     <AppShell hideNav>
@@ -295,6 +324,92 @@ function BookListingPage() {
             </div>
           </div>
 
+          {/* Customer contact */}
+          <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
+            <h2 className="text-sm font-bold">Your contact details</h2>
+            <label className="block">
+              <span className="mb-1 block text-[11px] font-semibold text-muted-foreground">Full name</span>
+              <div className="flex h-11 items-center rounded-xl border border-border bg-background px-3 focus-within:border-primary">
+                <User className="mr-2 h-4 w-4 text-muted-foreground" />
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. Amina Hassan"
+                  className="w-full bg-transparent text-sm outline-none"
+                />
+              </div>
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-[11px] font-semibold text-muted-foreground">Phone / WhatsApp</span>
+              <div className="flex h-11 items-center rounded-xl border border-border bg-background px-3 focus-within:border-primary">
+                <Phone className="mr-2 h-4 w-4 text-muted-foreground" />
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  inputMode="tel"
+                  placeholder="+252 61 234 5678"
+                  className="w-full bg-transparent text-sm outline-none"
+                />
+              </div>
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-[11px] font-semibold text-muted-foreground">
+                Address <span className="font-normal">(optional)</span>
+              </span>
+              <div className="flex h-11 items-center rounded-xl border border-border bg-background px-3 focus-within:border-primary">
+                <Home className="mr-2 h-4 w-4 text-muted-foreground" />
+                <input
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="District, street, building…"
+                  className="w-full bg-transparent text-sm outline-none"
+                />
+              </div>
+            </label>
+          </div>
+
+          {/* Photos */}
+          <div>
+            <h2 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
+              <Camera className="h-3.5 w-3.5" />
+              Add photos <span className="font-normal text-muted-foreground">(optional · up to 4)</span>
+            </h2>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              onChange={(e) => onPickPhotos(e.target.files)}
+            />
+            <div className="grid grid-cols-4 gap-2">
+              {photos.map((src, i) => (
+                <div key={i} className="relative aspect-square overflow-hidden rounded-xl border border-border">
+                  <img src={src} alt={`Upload ${i + 1}`} className="h-full w-full object-cover" />
+                  <button
+                    onClick={() => setPhotos((p) => p.filter((_, idx) => idx !== i))}
+                    className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-foreground/70 text-white"
+                    aria-label="Remove photo"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+              {photos.length < 4 && (
+                <button
+                  onClick={() => fileRef.current?.click()}
+                  className="flex aspect-square flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-border bg-card text-muted-foreground transition hover:border-primary hover:text-primary"
+                >
+                  <Camera className="h-5 w-5" />
+                  <span className="text-[10px] font-semibold">Add</span>
+                </button>
+              )}
+            </div>
+            <p className="mt-1.5 text-[10px] text-muted-foreground">
+              Photos help the provider give you a better quote.
+            </p>
+          </div>
+
           <div>
             <h2 className="mb-2 flex items-center gap-1.5 text-sm font-bold">
               <StickyNote className="h-3.5 w-3.5" />
@@ -325,9 +440,22 @@ function BookListingPage() {
               label="Date & Time"
               value={`${date || "—"}${date && time ? ` · ${time}` : ""}`}
             />
+            <SummaryRow label="Name" value={name || "—"} />
+            <SummaryRow label="Phone" value={phone || "—"} />
+            {address && <SummaryRow label="Address" value={address} />}
             {notes && <SummaryRow label="Notes" value={notes} />}
             <SummaryRow label="Estimated price" value={service.price} bold />
           </div>
+          {photos.length > 0 && (
+            <div className="rounded-2xl border border-border bg-card p-4">
+              <h3 className="mb-2 text-xs font-bold">Photos ({photos.length})</h3>
+              <div className="grid grid-cols-4 gap-2">
+                {photos.map((src, i) => (
+                  <img key={i} src={src} alt={`Attached ${i + 1}`} className="aspect-square w-full rounded-lg object-cover" />
+                ))}
+              </div>
+            </div>
+          )}
           <div className="flex items-start gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3 text-[11px] text-foreground">
             <MessageCircle className="mt-0.5 h-4 w-4 flex-none text-primary" />
             <p>
