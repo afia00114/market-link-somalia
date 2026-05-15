@@ -92,9 +92,23 @@ function BookListingPage() {
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("10:00");
   const [notes, setNotes] = useState<string>("");
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [name, setName] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const service = services.find((s) => s.id === selected)!;
   const minDate = todayISO();
+
+  function onPickPhotos(files: FileList | null) {
+    if (!files) return;
+    const next: string[] = [];
+    Array.from(files).slice(0, 4 - photos.length).forEach((f) => {
+      next.push(URL.createObjectURL(f));
+    });
+    setPhotos((p) => [...p, ...next].slice(0, 4));
+  }
 
   function send() {
     const msg = [
@@ -103,7 +117,11 @@ function BookListingPage() {
       `Service: ${service.name} (${service.price})`,
       `Date: ${date || "Not specified"}`,
       `Time: ${time || "Not specified"}`,
+      `Customer: ${name}`,
+      `Phone: ${phone}`,
+      address ? `Address: ${address}` : "",
       notes ? `Notes: ${notes}` : "",
+      photos.length ? `Photos attached: ${photos.length}` : "",
     ].filter(Boolean).join("\n");
     window.open(whatsappLink(item.provider.whatsapp, msg), "_blank", "noopener,noreferrer");
     navigate({
@@ -113,7 +131,13 @@ function BookListingPage() {
     });
   }
 
-  const canContinue = step === 1 ? !!selected : step === 2 ? !!date && !!time : true;
+  const phoneOk = phone.replace(/\D/g, "").length >= 7;
+  const canContinue =
+    step === 1
+      ? !!selected
+      : step === 2
+        ? !!date && !!time && name.trim().length > 1 && phoneOk
+        : true;
 
   return (
     <AppShell hideNav>
