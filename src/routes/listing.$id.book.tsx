@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, useParams, notFound } from "@tanstack/rea
 import { useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
+  ArrowRight,
   Check,
   Calendar,
   Clock,
@@ -141,46 +142,48 @@ function BookListingPage() {
 
   return (
     <AppShell hideNav>
-      <header className="sticky top-0 z-30 border-b border-border bg-card/95 px-4 py-3 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-border/50 bg-card/95 px-4 py-3 backdrop-blur">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate({ to: "/listing/$id", params: { id: item.id } })}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary transition hover:bg-secondary/80"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-secondary/60 transition hover:bg-secondary"
             aria-label="Back"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
           <div className="flex-1 text-center">
-            <h1 className="text-base font-bold leading-tight">Book / Request</h1>
-            <p className="text-[11px] text-muted-foreground">Step {step} of 3</p>
+            <h1 className="text-base font-extrabold leading-tight">Book / Request</h1>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+              Step {step} of 3
+            </p>
           </div>
-          <div className="w-9" />
+          <div className="w-10" />
         </div>
       </header>
 
       {/* Provider summary */}
       <section className="px-4 pt-4">
-        <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
+        <div className="flex items-center gap-3 rounded-3xl border border-border/70 bg-secondary/30 p-3.5">
           <img
             src={item.image}
             alt={item.provider.name}
-            className="h-14 w-14 flex-none rounded-xl object-cover"
+            className="h-14 w-14 flex-none rounded-2xl border border-border bg-card object-cover shadow-sm"
             loading="lazy"
           />
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
               <p className="truncate text-sm font-bold">{item.provider.name}</p>
-              <ShieldCheck className="h-3.5 w-3.5 flex-none text-primary" />
+              <ShieldCheck className="h-4 w-4 flex-none text-primary" />
             </div>
-            <div className="mt-0.5 flex items-center gap-2 text-[11px] text-muted-foreground">
+            <div className="mt-1 flex items-center gap-3 text-[11px] text-muted-foreground">
               <span className="inline-flex items-center gap-0.5">
-                <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                <span className="font-semibold text-foreground">{item.provider.rating}</span>
-                <span>({item.provider.reviews})</span>
+                <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                <span className="ml-0.5 font-bold text-foreground">{item.provider.rating}</span>
+                <span className="ml-0.5">({item.provider.reviews})</span>
               </span>
               {item.district && (
                 <span className="inline-flex items-center gap-0.5">
-                  <MapPin className="h-3 w-3" />
+                  <MapPin className="h-3.5 w-3.5" />
                   {item.district}
                 </span>
               )}
@@ -190,40 +193,34 @@ function BookListingPage() {
       </section>
 
       {/* Stepper */}
-      <div className="px-6 pt-5">
-        <div className="flex items-center justify-between">
-          {[1, 2, 3].map((n, i) => {
+      <div className="px-8 pt-8">
+        <div className="relative flex items-center justify-between">
+          <div className="absolute left-4 right-4 top-[18px] h-0.5 -z-10 bg-border" />
+          <div
+            className="absolute left-4 top-[18px] h-0.5 -z-10 bg-primary transition-all duration-500"
+            style={{ width: `calc(${((step - 1) / 2) * 100}% - ${((step - 1) / 2) * 32}px)` }}
+          />
+          {[1, 2, 3].map((n) => {
             const active = step >= (n as 1 | 2 | 3);
             const done = step > n;
             return (
-              <div key={n} className="flex flex-1 items-center">
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition ${
-                      active
-                        ? "bg-primary text-primary-foreground shadow-sm shadow-primary/30"
-                        : "bg-secondary text-muted-foreground"
-                    }`}
-                  >
-                    {done ? <Check className="h-4 w-4" /> : n}
-                  </div>
-                  <span
-                    className={`mt-1 text-[11px] font-semibold ${
-                      active ? "text-foreground" : "text-muted-foreground"
-                    }`}
-                  >
-                    {n === 1 ? "Service" : n === 2 ? "Details" : "Confirm"}
-                  </span>
+              <div key={n} className="relative flex flex-col items-center gap-2">
+                <div
+                  className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ring-4 ring-card transition ${
+                    active
+                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30"
+                      : "border-2 border-border bg-card text-muted-foreground/60"
+                  }`}
+                >
+                  {done ? <Check className="h-4 w-4" /> : n}
                 </div>
-                {i < 2 && (
-                  <div className="relative mx-2 h-0.5 flex-1 overflow-hidden rounded-full bg-border">
-                    <div
-                      className={`absolute inset-y-0 left-0 bg-primary transition-all duration-300 ${
-                        step > n ? "w-full" : "w-0"
-                      }`}
-                    />
-                  </div>
-                )}
+                <span
+                  className={`text-[10px] font-extrabold uppercase tracking-wider ${
+                    active ? "text-primary" : "text-muted-foreground/60"
+                  }`}
+                >
+                  {n === 1 ? "Service" : n === 2 ? "Details" : "Confirm"}
+                </span>
               </div>
             );
           })}
@@ -232,49 +229,71 @@ function BookListingPage() {
 
       {/* Step 1: Select service */}
       {step === 1 && (
-        <section className="px-4 pt-6">
-          <h2 className="mb-3 text-sm font-bold">Select a service</h2>
-          <div className="space-y-2">
+        <section className="px-4 pt-8">
+          <h2 className="mb-3 ml-1 text-[11px] font-extrabold uppercase tracking-widest text-muted-foreground">
+            Choose a package
+          </h2>
+          <div className="space-y-3">
             {services.map((s) => {
               const on = s.id === selected;
               return (
                 <button
                   key={s.id}
                   onClick={() => setSelected(s.id)}
-                  className={`group flex w-full items-center gap-3 rounded-2xl border bg-card p-3.5 text-left transition ${
+                  className={`group relative flex w-full items-center gap-4 rounded-3xl border-2 p-4 text-left transition-all ${
                     on
-                      ? "border-primary shadow-sm ring-2 ring-primary/15"
-                      : "border-border hover:border-primary/40"
+                      ? "scale-[1.02] border-primary bg-primary/5 shadow-[0_12px_32px_-12px_hsl(var(--primary)/0.35)] ring-4 ring-primary/10"
+                      : "border-border/70 bg-card hover:border-border"
                   }`}
                 >
                   <span
-                    className={`flex h-10 w-10 flex-none items-center justify-center rounded-xl transition ${
-                      on ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
+                    className={`flex h-12 w-12 flex-none items-center justify-center rounded-2xl transition ${
+                      on
+                        ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
+                        : "bg-secondary/70 text-muted-foreground"
                     }`}
                   >
                     <Wrench className="h-5 w-5" />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-1.5">
-                      <span className="truncate text-sm font-semibold">{s.name}</span>
+                    <span className="flex flex-wrap items-center gap-2">
+                      <span
+                        className={`truncate text-sm font-bold ${
+                          on ? "text-primary" : "text-foreground"
+                        }`}
+                      >
+                        {s.name}
+                      </span>
                       {s.popular && (
-                        <span className="inline-flex items-center gap-0.5 rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-amber-600">
+                        <span className="inline-flex items-center gap-0.5 rounded-full border border-amber-200 bg-amber-100 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-amber-700">
                           <Sparkles className="h-2.5 w-2.5" /> Popular
                         </span>
                       )}
                     </span>
-                    <span className="mt-0.5 block text-[11px] text-muted-foreground">
+                    <span
+                      className={`mt-0.5 block text-[11px] font-medium ${
+                        on ? "text-primary/70" : "text-muted-foreground"
+                      }`}
+                    >
                       Estimated price range
                     </span>
                   </span>
-                  <span className="flex flex-none items-center gap-2">
-                    <span className="text-xs font-bold text-foreground">{s.price}</span>
+                  <span className="flex flex-none flex-col items-end gap-1.5">
                     <span
-                      className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition ${
-                        on ? "border-primary bg-primary" : "border-border"
+                      className={`whitespace-nowrap font-extrabold ${
+                        on ? "text-base text-primary" : "text-sm text-foreground"
                       }`}
                     >
-                      {on && <Check className="h-3 w-3 text-primary-foreground" />}
+                      {s.price}
+                    </span>
+                    <span
+                      className={`flex items-center justify-center rounded-full transition ${
+                        on
+                          ? "h-6 w-6 bg-primary shadow-md shadow-primary/30"
+                          : "h-5 w-5 border-2 border-border"
+                      }`}
+                    >
+                      {on && <Check className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />}
                     </span>
                   </span>
                 </button>
@@ -467,33 +486,41 @@ function BookListingPage() {
         </section>
       )}
 
+      <div className="h-32" />
+
       {/* Footer actions */}
-      <div className="sticky bottom-0 z-20 mt-8 flex gap-2 border-t border-border bg-card/95 px-4 py-3 backdrop-blur safe-bottom">
-        {step > 1 ? (
-          <button
-            onClick={() => setStep((s) => (s - 1) as 1 | 2 | 3)}
-            className="h-12 flex-1 rounded-xl bg-secondary text-sm font-bold transition active:scale-[0.98]"
-          >
-            Back
-          </button>
-        ) : null}
-        {step < 3 ? (
-          <button
-            onClick={() => canContinue && setStep((s) => (s + 1) as 1 | 2 | 3)}
-            disabled={!canContinue}
-            className="h-12 flex-[2] rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-sm shadow-primary/30 transition active:scale-[0.98] disabled:opacity-50"
-          >
-            Continue
-          </button>
-        ) : (
-          <button
-            onClick={send}
-            className="flex h-12 flex-[2] items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-sm shadow-primary/30 transition active:scale-[0.98]"
-          >
-            <MessageCircle className="h-4 w-4" />
-            Confirm & Send Request
-          </button>
-        )}
+      <div className="safe-bottom pointer-events-none fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-card via-card/95 to-card/0 px-4 pb-4 pt-10">
+        <div className="pointer-events-auto mx-auto flex w-full max-w-md gap-2">
+          {step > 1 ? (
+            <button
+              onClick={() => setStep((s) => (s - 1) as 1 | 2 | 3)}
+              className="flex h-13 flex-1 items-center justify-center rounded-2xl border border-border bg-card text-sm font-bold transition active:scale-[0.98]"
+              style={{ height: "3.25rem" }}
+            >
+              Back
+            </button>
+          ) : null}
+          {step < 3 ? (
+            <button
+              onClick={() => canContinue && setStep((s) => (s + 1) as 1 | 2 | 3)}
+              disabled={!canContinue}
+              className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98] disabled:opacity-50 disabled:shadow-none"
+              style={{ height: "3.25rem" }}
+            >
+              {step === 1 ? "Continue to Details" : "Continue to Confirm"}
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          ) : (
+            <button
+              onClick={send}
+              className="flex flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-extrabold tracking-wide text-primary-foreground shadow-2xl shadow-primary/40 transition active:scale-[0.98]"
+              style={{ height: "3.25rem" }}
+            >
+              <MessageCircle className="h-4 w-4" />
+              Confirm & Send Request
+            </button>
+          )}
+        </div>
       </div>
     </AppShell>
   );
