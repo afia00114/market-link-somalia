@@ -7,7 +7,7 @@ import { AppShell } from "@/components/AppShell";
 import { LISTINGS } from "@/data/listings";
 import { whatsappLink, telLink } from "@/lib/contact";
 
-export const Route = createFileRoute("/listing/$id")({
+export const Route = createFileRoute("/listing/$id/")({
   component: ListingDetailPage,
   loader: ({ params }) => {
     const item = LISTINGS.find((l) => l.id === params.id);
