@@ -870,3 +870,84 @@ export const CAR_OFFERS: CarOffer[] = [
   { id: "c5", name: "Dubai Falcon Luxury", logo: u("1591604129939-f1efa4d9f7fa"), rating: 4.9, reviews: 220, city: "Dubai", countryCode: "AE", whatsapp: "971501234567", phone: "+971 50 123 4567", verified: true, model: "Mercedes S-Class 2024", carType: "Luxury", transmission: "Automatic", dailyRate: 380, mileageLimit: "200 km/day", deposit: 1500, features: ["A/C", "Leather", "Premium sound", "Chauffeur opt.", "Insurance"] },
 ];
 
+
+// BUS OPERATORS
+export interface BusOperator extends Provider {
+  routes: { from: string; to: string; price: number; durationHrs: number; departTimes: string[]; classes: string[] }[];
+  yearsInBusiness?: number;
+}
+
+export const BUS_OPERATORS: BusOperator[] = [
+  {
+    id: "bus1", name: "Banadir Bus", logo: u("1570125909232-eb263c188f7e"), rating: 4.6, reviews: 312,
+    city: "Mogadishu", countryCode: "SO", whatsapp: "252615550101", phone: "+252 61 555 0101", verified: true, yearsInBusiness: 11,
+    routes: [
+      { from: "Mogadishu", to: "Kismayo", price: 18, durationHrs: 8, departTimes: ["06:00", "14:00"], classes: ["Standard", "VIP"] },
+      { from: "Mogadishu", to: "Baidoa", price: 14, durationHrs: 5, departTimes: ["07:30"], classes: ["Standard"] },
+    ],
+  },
+  {
+    id: "bus2", name: "Somali Express Coach", logo: u("1544620347-c4fd4a3d5957"), rating: 4.4, reviews: 198,
+    city: "Hargeisa", countryCode: "SO", whatsapp: "252634440202", phone: "+252 63 444 0202", verified: true, yearsInBusiness: 8,
+    routes: [
+      { from: "Hargeisa", to: "Berbera", price: 9, durationHrs: 2.5, departTimes: ["08:00", "12:00", "16:00"], classes: ["Standard"] },
+      { from: "Hargeisa", to: "Borama", price: 11, durationHrs: 3, departTimes: ["07:00", "15:00"], classes: ["Standard", "Semi-VIP"] },
+    ],
+  },
+  {
+    id: "bus3", name: "East Africa Coachline", logo: u("1556122071-e404cb6f31c0"), rating: 4.7, reviews: 540,
+    city: "Nairobi", countryCode: "KE", whatsapp: "254712880303", phone: "+254 712 880 303", verified: true, yearsInBusiness: 16,
+    routes: [
+      { from: "Nairobi", to: "Mombasa", price: 22, durationHrs: 9, departTimes: ["21:00", "22:30"], classes: ["VIP", "Business"] },
+      { from: "Nairobi", to: "Kampala", price: 35, durationHrs: 12, departTimes: ["18:00"], classes: ["VIP"] },
+    ],
+  },
+  {
+    id: "bus4", name: "Selam Bus", logo: u("1570125909517-53cb21c89ff2"), rating: 4.5, reviews: 410,
+    city: "Addis Ababa", countryCode: "ET", whatsapp: "251911550404", phone: "+251 911 55 0404", verified: true, yearsInBusiness: 18,
+    routes: [
+      { from: "Addis Ababa", to: "Dire Dawa", price: 16, durationHrs: 8, departTimes: ["05:30"], classes: ["Standard", "VIP"] },
+      { from: "Addis Ababa", to: "Hawassa", price: 12, durationHrs: 4.5, departTimes: ["06:00", "13:00"], classes: ["Standard"] },
+    ],
+  },
+];
+
+// CARGO PROVIDERS
+export type CargoMode = "Air" | "Sea" | "Road";
+export interface CargoProvider extends Provider {
+  modes: CargoMode[];
+  rateFromPerKg?: number;
+  rateFromPerCbm?: number;
+  doorToDoor: boolean;
+  customsSupport: boolean;
+  trackingAvailable: boolean;
+  routes: string[];
+  yearsInBusiness?: number;
+}
+
+export const CARGO_PROVIDERS: CargoProvider[] = [
+  {
+    id: "cg1", name: "Banadir Cargo", logo: u("1601000938259-9e92002320b2"), rating: 4.7, reviews: 256,
+    city: "Mogadishu", countryCode: "SO", whatsapp: "252615557788", phone: "+252 61 555 7788", verified: true, yearsInBusiness: 12,
+    modes: ["Air", "Sea"], rateFromPerKg: 4.5, rateFromPerCbm: 220, doorToDoor: true, customsSupport: true, trackingAvailable: true,
+    routes: ["Mogadishu → Dubai", "Mogadishu → Istanbul", "Mogadishu → Nairobi"],
+  },
+  {
+    id: "cg2", name: "Horn Logistics", logo: u("1586528116311-ad8dd3c8310d"), rating: 4.5, reviews: 188,
+    city: "Hargeisa", countryCode: "SO", whatsapp: "252634441122", phone: "+252 63 444 1122", verified: true, yearsInBusiness: 9,
+    modes: ["Sea", "Road"], rateFromPerKg: 2.8, rateFromPerCbm: 160, doorToDoor: true, customsSupport: true, trackingAvailable: false,
+    routes: ["Berbera → Addis Ababa", "Hargeisa → Djibouti"],
+  },
+  {
+    id: "cg3", name: "Dubai Express Freight", logo: u("1586528116493-9e8b9d65e5f2"), rating: 4.8, reviews: 612,
+    city: "Dubai", countryCode: "AE", whatsapp: "971501239988", phone: "+971 50 123 9988", verified: true, yearsInBusiness: 17,
+    modes: ["Air", "Sea"], rateFromPerKg: 5.2, rateFromPerCbm: 250, doorToDoor: true, customsSupport: true, trackingAvailable: true,
+    routes: ["Dubai → Mogadishu", "Dubai → Hargeisa", "Dubai → Nairobi"],
+  },
+  {
+    id: "cg4", name: "Nile Cargo", logo: u("1542319630-79f37cba9c3a"), rating: 4.4, reviews: 142,
+    city: "Nairobi", countryCode: "KE", whatsapp: "254712441199", phone: "+254 712 441 199", verified: true, yearsInBusiness: 10,
+    modes: ["Air", "Road"], rateFromPerKg: 3.6, rateFromPerCbm: 190, doorToDoor: true, customsSupport: false, trackingAvailable: true,
+    routes: ["Nairobi → Mogadishu", "Nairobi → Kampala", "Nairobi → Addis Ababa"],
+  },
+];
