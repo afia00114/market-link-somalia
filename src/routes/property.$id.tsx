@@ -16,17 +16,23 @@ export const Route = createFileRoute("/property/$id")({
     if (!property) throw notFound();
     return property;
   },
-  head: ({ loaderData }) => {
-    if (!loaderData) return { meta: [{ title: "Property — MaalsoorHub" }] };
+  head: ({ loaderData, params }) => {
+    const url = `https://market-link-somalia.lovable.app/property/${params.id}`;
+    if (!loaderData) return { meta: [{ title: "Property — MaalsoorHub" }], links: [{ rel: "canonical", href: url }] };
+    const title = `${loaderData.title} — MaalsoorHub`.slice(0, 60);
     return {
       meta: [
-        { title: `${loaderData.title} — MaalsoorHub` },
+        { title },
         { name: "description", content: loaderData.description },
         { property: "og:title", content: loaderData.title },
         { property: "og:description", content: loaderData.description },
         { property: "og:image", content: loaderData.image },
         { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
         { name: "twitter:image", content: loaderData.image },
+      ],
+      links: [
+        { rel: "canonical", href: url },
       ],
       scripts: [
         {
@@ -37,7 +43,7 @@ export const Route = createFileRoute("/property/$id")({
             name: loaderData.title,
             description: loaderData.description,
             image: loaderData.image,
-            url: `https://market-link-somalia.lovable.app/property/${loaderData.id}`,
+            url,
           }),
         },
       ],
