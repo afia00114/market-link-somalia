@@ -44,6 +44,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           ...HOTELS.map((h) => ({ path: `/hotels/${h.id}/book`, changefreq: "monthly" as const, priority: "0.4" })),
           ...LISTINGS.map((l) => ({ path: `/listing/${l.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...LISTINGS.map((l) => ({ path: `/listing/${l.id}/book`, changefreq: "monthly" as const, priority: "0.4" })),
+          ...AGENCIES.map((a) => ({ path: `/travel/agencies/${a.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...FLIGHT_OFFERS.map((f) => ({ path: `/travel/book/${f.id}`, changefreq: "monthly" as const, priority: "0.4" })),
         ];
 
         const urls = entries.map((e) =>
