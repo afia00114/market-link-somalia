@@ -168,6 +168,52 @@ export const TRAVEL_SUBS: TravelSub[] = [
       { label: "Driver", value: "Optional" },
     ],
   },
+  {
+    key: "bus",
+    label: "Bus Tickets",
+    emoji: "🚌",
+    short: "Intercity & cross-border",
+    icon: Bus,
+    href: "/travel/bus",
+    description:
+      "Book intercity and cross-border bus tickets with verified operators across Somalia and East Africa.",
+    offers: [
+      "Intercity & cross-border routes",
+      "Daily departures & schedules",
+      "VIP, semi-VIP & standard classes",
+      "Seat selection on request",
+      "Luggage allowance details",
+      "Confirm via WhatsApp or Call",
+    ],
+    highlights: [
+      { label: "Operators", value: "15+ verified" },
+      { label: "Routes", value: "Local + Regional" },
+      { label: "Classes", value: "Standard → VIP" },
+    ],
+  },
+  {
+    key: "cargo",
+    label: "Cargo & Shipping",
+    emoji: "📦",
+    short: "Air, sea & road freight",
+    icon: Package,
+    href: "/travel/cargo",
+    description:
+      "Send parcels, documents and freight by air, sea or road with trusted cargo agents and clear rates.",
+    offers: [
+      "Air, sea & road freight",
+      "Door-to-door pickup & delivery",
+      "Per-kg & per-CBM rate options",
+      "Customs clearance support",
+      "Tracking & status updates",
+      "Quote & confirm via WhatsApp",
+    ],
+    highlights: [
+      { label: "Modes", value: "Air / Sea / Road" },
+      { label: "Coverage", value: "Local + Intl." },
+      { label: "Rates", value: "Per kg or CBM" },
+    ],
+  },
 ];
 
 export interface Provider {
