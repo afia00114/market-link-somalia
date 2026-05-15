@@ -130,22 +130,31 @@ function BookListingPage() {
   );
 
   useEffect(() => {
-    setStep(search.step);
-  }, [search.step]);
+    if (typeof window === "undefined") return;
+    try {
+      const saved = window.sessionStorage.getItem(storageKey);
+      if (!saved) return;
+      const parsed = JSON.parse(saved) as { step?: number; selected?: string };
+      if (parsed.step === 2 || parsed.step === 3) setStep(parsed.step);
+      if (parsed.selected && services.some((service) => service.id === parsed.selected)) {
+        setSelected(parsed.selected);
+      }
+    } catch {
+      /* ignore */
+    }
+  }, [storageKey, services]);
 
   useEffect(() => {
-    if (search.service && services.some((service) => service.id === search.service)) {
-      setSelected(search.service);
+    if (typeof window === "undefined") return;
+    try {
+      window.sessionStorage.setItem(storageKey, JSON.stringify({ step, selected }));
+    } catch {
+      /* ignore */
     }
-  }, [search.service, services]);
+  }, [storageKey, step, selected]);
 
   function goToStep(nextStep: 1 | 2 | 3) {
     setStep(nextStep);
-    navigate({
-      to: ".",
-      search: { step: nextStep, service: selected },
-      replace: true,
-    });
   }
 
   function onPickPhotos(files: FileList | null) {
