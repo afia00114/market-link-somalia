@@ -8,14 +8,43 @@ type Tab = "All" | "Near me" | "Top Rated" | "Featured";
 const TABS: Tab[] = ["All", "Near me", "Top Rated", "Featured"];
 
 export const Route = createFileRoute("/hotels/")({
-  head: () => ({
-    meta: [
-      { title: "Hotels in Somalia — MaalsoorHub" },
-      { name: "description", content: "Discover verified hotels across Somalia and East Africa. Compare nightly rates, ratings, and rooms — book directly via WhatsApp or call." },
-      { property: "og:title", content: "Hotels in Somalia — MaalsoorHub" },
-      { property: "og:description", content: "Verified hotels — compare rates and book directly via WhatsApp." },
-    ],
-  }),
+  head: () => {
+    const url = "https://market-link-somalia.lovable.app/hotels";
+    const title = "Hotels in Somalia — MaalsoorHub";
+    const description = "Discover verified hotels across Somalia and East Africa. Compare nightly rates, ratings, and rooms — book directly via WhatsApp or call.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: HOTELS.length,
+              itemListElement: HOTELS.slice(0, 20).map((h, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: h.name,
+                url: `https://market-link-somalia.lovable.app/hotels/${h.id}`,
+              })),
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: HotelsPage,
 });
 

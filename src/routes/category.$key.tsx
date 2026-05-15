@@ -58,6 +58,49 @@ const POPULAR: Record<string, PopularItem[]> = {
 
 export const Route = createFileRoute("/category/$key")({
   component: CategoryPage,
+  head: ({ params }) => {
+    const cat = CATEGORIES.find((c) => c.key === (params.key as CategoryKey));
+    const label = cat?.label ?? "Category";
+    const url = `https://market-link-somalia.lovable.app/category/${params.key}`;
+    const title = `${label} in Somalia — MaalsoorHub`;
+    const description = cat
+      ? `Browse verified ${label.toLowerCase()} providers across Somalia and East Africa. ${cat.short}. Connect directly via WhatsApp or call.`
+      : `Browse verified providers on MaalsoorHub.`;
+    const items = listingsByCategory((params.key as CategoryKey));
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "website" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: items.length,
+              itemListElement: items.slice(0, 20).map((l, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                url: `https://market-link-somalia.lovable.app/listing/${l.id}`,
+                name: l.title,
+              })),
+            },
+          }),
+        },
+      ],
+    };
+  },
 });
 
 function CategoryPage() {
