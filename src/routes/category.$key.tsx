@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import {
   ArrowLeft, Search, PackageOpen, Wrench, Zap, Sparkles, Snowflake,
   PaintBucket, Hammer, Brush, Truck, Car as CarIcon, Wheat, Briefcase,
   Landmark, UtensilsCrossed, Stethoscope, Plane, Home as HomeIcon, MoreHorizontal,
-  type LucideIcon,
+  X, type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { CATEGORIES, type CategoryKey } from "@/data/categories";
