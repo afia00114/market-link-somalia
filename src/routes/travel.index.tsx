@@ -54,6 +54,8 @@ type Cat = "all" | TravelSubKey;
 const CATS: { key: Cat; label: string }[] = [
   { key: "all", label: "All" },
   { key: "flights", label: "Flights" },
+  { key: "bus", label: "Bus" },
+  { key: "cargo", label: "Cargo" },
   { key: "visa", label: "Visa" },
   { key: "tours", label: "Tours" },
   { key: "car-rental", label: "Cars" },
