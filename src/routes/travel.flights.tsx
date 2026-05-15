@@ -198,7 +198,9 @@ function FlightsPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <NumberStepper label="Passengers" min={1} max={9} value={passengers} onChange={setPassengers} />
+            <div className={tripType === "round" ? "" : "col-span-2"}>
+              <NumberStepper label="Passengers" min={1} max={9} value={passengers} onChange={setPassengers} />
+            </div>
             {tripType === "round" && (
               <Field label="Class">
                 <Select value={travelClass} onChange={(e) => setTravelClass(e.target.value)}>
