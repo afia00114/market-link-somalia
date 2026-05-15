@@ -275,6 +275,7 @@ function BookListingPage() {
               const on = s.id === selected;
               return (
                 <button
+                  type="button"
                   key={s.id}
                   onClick={() => setSelected(s.id)}
                   className={`group relative flex w-full items-center gap-4 rounded-3xl border-2 p-4 text-left transition-all ${
@@ -396,8 +397,12 @@ function BookListingPage() {
                 const on = t === time;
                 return (
                   <button
+                    type="button"
                     key={t}
-                    onClick={() => setTime(t)}
+                    onClick={() => {
+                      setTime(t);
+                      setShowValidation(false);
+                    }}
                     className={`flex h-11 items-center justify-center gap-1 rounded-xl border text-sm font-semibold transition ${
                       on
                         ? "border-primary bg-primary text-primary-foreground"
