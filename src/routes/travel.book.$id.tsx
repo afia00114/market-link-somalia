@@ -114,12 +114,16 @@ function BookFlightPage() {
     setStep("review");
   }
 
-  function confirmAndSave(channel: "whatsapp" | "call") {
+  const createBookingFn = useServerFn(createBooking);
+
+  function confirmAndSave(channel: "whatsapp" | "call" | "email") {
     const booking = saveBooking({
       service: "flight",
       offerId: offer.id,
       providerName: offer.name,
       providerPhone: offer.phone,
+      providerWhatsapp: offer.whatsapp,
+      title: `${offer.name} — ${route}`,
       route,
       departDate,
       returnDate,
@@ -133,9 +137,31 @@ function BookFlightPage() {
       total,
       currency: "USD",
       channel,
+      details: { route, departDate, returnDate, travelClass, passengers },
     });
     setSaved(booking);
     setStep("done");
+    // Fire-and-forget cloud persistence
+    createBookingFn({
+      data: {
+        ref: booking.ref,
+        service: "flight",
+        offerId: offer.id,
+        providerName: offer.name,
+        providerPhone: offer.phone,
+        providerWhatsapp: offer.whatsapp,
+        title: `${offer.name} — ${route}`,
+        details: { route, departDate, returnDate: returnDate ?? null, travelClass, passengers },
+        passengerName,
+        passengerEmail,
+        passengerPhone,
+        notes: notes || undefined,
+        unitPrice,
+        total,
+        currency: "USD",
+        channel,
+      },
+    }).catch((err) => console.warn("Cloud booking save failed:", err));
   }
 
   return (
