@@ -1,11 +1,12 @@
 import { BadgeCheck, MapPin, Phone, MessageCircle, Star } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import type { Listing } from "@/data/listings";
 import { whatsappLink, telLink } from "@/lib/contact";
 
 export function ListingCard({ l }: { l: Listing }) {
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
-      <div className="flex gap-3 p-3">
+      <Link to="/listing/$id" params={{ id: l.id }} className="flex gap-3 p-3 active:scale-[0.99]">
         <img
           src={l.image}
           alt={l.title}
