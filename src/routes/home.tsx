@@ -5,6 +5,8 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { PropertyCard } from "@/components/PropertyCard";
 import { CATEGORIES } from "@/data/categories";
 import { PROPERTIES } from "@/data/properties";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 export const Route = createFileRoute("/home")({
   head: () => ({
@@ -24,6 +26,7 @@ export const Route = createFileRoute("/home")({
 
 function HomePage() {
   const featured = PROPERTIES.slice(0, 3);
+  const { t } = useI18n();
   return (
     <AppShell>
       <header className="grad-hero px-4 pb-6 pt-5 text-white rounded-b-3xl shadow-card">
@@ -31,18 +34,21 @@ function HomePage() {
           <button className="flex items-center gap-1 text-sm font-medium">
             <MapPin className="h-4 w-4" /> Mogadishu <ChevronDown className="h-4 w-4" />
           </button>
-          <button aria-label="Notifications" className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/15 backdrop-blur">
-            <Bell className="h-5 w-5" />
-            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-accent" />
-          </button>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher variant="light" />
+            <button aria-label="Notifications" className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/15 backdrop-blur">
+              <Bell className="h-5 w-5" />
+              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-accent" />
+            </button>
+          </div>
         </div>
-        <h1 className="mt-4 text-xl font-bold leading-tight">Find. Connect. WhatsApp.</h1>
-        <p className="mt-1 text-xs text-white/80">Connect with trusted providers near you.</p>
+        <h1 className="mt-4 text-xl font-bold leading-tight">{t("home.title")}</h1>
+        <p className="mt-1 text-xs text-white/80">{t("home.subtitle")}</p>
         <div className="mt-4 flex items-center gap-2 rounded-2xl bg-white px-3 py-2.5 shadow-soft">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
-            aria-label="Search properties, services, jobs"
-            placeholder="Search properties, services, jobs…"
+            aria-label={t("home.search")}
+            placeholder={t("home.search")}
             className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />
         </div>
@@ -50,8 +56,8 @@ function HomePage() {
 
       <section className="px-4 pt-5">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-base font-bold text-foreground">Browse Categories</h2>
-          <Link to="/explore" className="text-xs font-semibold text-primary">See all</Link>
+          <h2 className="text-base font-bold text-foreground">{t("home.browseCategories")}</h2>
+          <Link to="/explore" className="text-xs font-semibold text-primary">{t("common.seeAll")}</Link>
         </div>
         <div className="grid grid-cols-4 gap-2.5">
           {CATEGORIES.map((c) => <CategoryCard key={c.key} category={c} />)}
@@ -60,8 +66,8 @@ function HomePage() {
 
       <section className="px-4 pt-6">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-base font-bold text-foreground">Featured Listings</h2>
-          <Link to="/real-estate" className="text-xs font-semibold text-primary">See all</Link>
+          <h2 className="text-base font-bold text-foreground">{t("home.featuredListings")}</h2>
+          <Link to="/real-estate" className="text-xs font-semibold text-primary">{t("common.seeAll")}</Link>
         </div>
         <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {featured.map((p) => (
@@ -74,7 +80,7 @@ function HomePage() {
 
       <section className="px-4 pt-6">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-base font-bold text-foreground">Verified Businesses</h2>
+          <h2 className="text-base font-bold text-foreground">{t("home.verifiedBusinesses")}</h2>
         </div>
         <div className="space-y-2">
           {[
