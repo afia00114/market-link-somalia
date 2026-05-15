@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { CATEGORIES } from "@/data/categories";
+import { PROPERTIES } from "@/data/properties";
+import { HOSPITALS } from "@/data/health";
+import { HOTELS } from "@/data/hotels";
+import { LISTINGS } from "@/data/listings";
 
 const BASE_URL = "https://market-link-somalia.lovable.app";
 
@@ -31,6 +36,11 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/messages", changefreq: "weekly", priority: "0.5" },
           { path: "/profile", changefreq: "weekly", priority: "0.5" },
           { path: "/post", changefreq: "monthly", priority: "0.5" },
+          ...CATEGORIES.map((c) => ({ path: `/category/${c.key}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...PROPERTIES.map((p) => ({ path: `/property/${p.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...HOSPITALS.map((h) => ({ path: `/health/${h.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...HOTELS.map((h) => ({ path: `/hotels/${h.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...LISTINGS.map((l) => ({ path: `/listing/${l.id}`, changefreq: "weekly" as const, priority: "0.6" })),
         ];
 
         const urls = entries.map((e) =>
