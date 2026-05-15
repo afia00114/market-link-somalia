@@ -46,6 +46,55 @@ export const LISTINGS: Listing[] = [
     description: "Trusted home and office cleaning teams.",
     provider: { name: "ShineHome", badge: "Verified Business", rating: 4.9, reviews: 98, whatsapp: "252614445566", phone: "+252 61 444 5566" },
   },
+  {
+    id: "s4", category: "services", title: "CoolBreeze AC Repair", subtitle: "AC Repair · Install & service",
+    price: "From $35/visit", city: "Mogadishu", district: "Hodan",
+    image: u("1581094794329-c8112a89af12"),
+    description: "Split & central AC installation, gas refill, and maintenance.",
+    provider: { name: "CoolBreeze", badge: "Verified Business", rating: 4.7, reviews: 76, whatsapp: "252614445577", phone: "+252 61 444 5577" },
+  },
+  {
+    id: "s5", category: "services", title: "ColorPro Painting Co.", subtitle: "Painting · Interior & exterior",
+    price: "From $2/sqm", city: "Mogadishu", district: "Wadajir",
+    image: u("1562259949-e8e7689d7828"),
+    description: "Professional painters for homes, offices and shops.",
+    provider: { name: "ColorPro", badge: "Verified Business", rating: 4.6, reviews: 54, whatsapp: "252614445588", phone: "+252 61 444 5588" },
+  },
+  {
+    id: "s6", category: "services", title: "Master Carpentry Works", subtitle: "Carpentry · Furniture & doors",
+    price: "From $50", city: "Mogadishu", district: "Karaan",
+    image: u("1504148455328-c376907d081c"),
+    description: "Custom furniture, doors, kitchens and wood repairs.",
+    provider: { name: "Master Wood", badge: "Verified Business", rating: 4.8, reviews: 89, whatsapp: "252614445599", phone: "+252 61 444 5599" },
+  },
+  {
+    id: "s7", category: "services", title: "BuildRight Masonry", subtitle: "Masonry · Tiling & plaster",
+    price: "From $5/sqm", city: "Mogadishu", district: "Yaaqshid",
+    image: u("1503387762-592deb58ef4e"),
+    description: "Skilled masons for tiling, plastering and small construction.",
+    provider: { name: "BuildRight", badge: "Verified Business", rating: 4.7, reviews: 41, whatsapp: "252614445510", phone: "+252 61 444 5510" },
+  },
+  {
+    id: "s8", category: "services", title: "QuickFix Plumbing 24h", subtitle: "Plumbing · Emergency",
+    price: "From $20/hr", city: "Mogadishu", district: "Wadajir",
+    image: u("1607472586893-edb57bdc0e39"),
+    description: "Emergency leak repair, pipe replacement, water tank install.",
+    provider: { name: "QuickFix", badge: "Verified Business", rating: 4.6, reviews: 132, whatsapp: "252614445521", phone: "+252 61 444 5521" },
+  },
+  {
+    id: "s9", category: "services", title: "PowerLine Electrical", subtitle: "Electrical · Solar & wiring",
+    price: "From $40/visit", city: "Mogadishu", district: "Hodan",
+    image: u("1521224616346-91bbb3d0138b"),
+    description: "Solar installation, generator wiring and electrical safety checks.",
+    provider: { name: "PowerLine", badge: "Verified Business", rating: 4.8, reviews: 67, whatsapp: "252614445532", phone: "+252 61 444 5532" },
+  },
+  {
+    id: "s10", category: "services", title: "Sparkle Office Cleaning", subtitle: "Cleaning · Office contracts",
+    price: "From $80/wk", city: "Mogadishu", district: "Hamarweyne",
+    image: u("1527515637462-cff94eecc1ac"),
+    description: "Recurring office cleaning contracts with trained staff.",
+    provider: { name: "Sparkle", badge: "Verified Business", rating: 4.7, reviews: 58, whatsapp: "252614445543", phone: "+252 61 444 5543" },
+  },
 
   // TRAVEL
   {
