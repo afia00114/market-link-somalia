@@ -5,7 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { TRAVEL_SUBS, type TravelSub, type TravelSubKey } from "@/data/travel";
 
-export const Route = createFileRoute("/travel")({
+export const Route = createFileRoute("/travel/")({
   head: () => ({
     meta: [
       { title: "Travel & Tourism — MaalsoorHub" },
