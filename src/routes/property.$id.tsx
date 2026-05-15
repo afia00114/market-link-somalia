@@ -16,17 +16,33 @@ export const Route = createFileRoute("/property/$id")({
     if (!property) throw notFound();
     return property;
   },
-  head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.title} — MaalsoorHub` },
-          { name: "description", content: loaderData.description },
-          { property: "og:title", content: loaderData.title },
-          { property: "og:description", content: loaderData.description },
-          { property: "og:image", content: loaderData.image },
-        ]
-      : [{ title: "Property — MaalsoorHub" }],
-  }),
+  head: ({ loaderData }) => {
+    if (!loaderData) return { meta: [{ title: "Property — MaalsoorHub" }] };
+    return {
+      meta: [
+        { title: `${loaderData.title} — MaalsoorHub` },
+        { name: "description", content: loaderData.description },
+        { property: "og:title", content: loaderData.title },
+        { property: "og:description", content: loaderData.description },
+        { property: "og:image", content: loaderData.image },
+        { property: "og:type", content: "website" },
+        { name: "twitter:image", content: loaderData.image },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "RealEstateListing",
+            name: loaderData.title,
+            description: loaderData.description,
+            image: loaderData.image,
+            url: `https://market-link-somalia.lovable.app/property/${loaderData.id}`,
+          }),
+        },
+      ],
+    };
+  },
   notFoundComponent: () => (
     <div className="flex min-h-screen items-center justify-center p-6 text-center">
       <div>
