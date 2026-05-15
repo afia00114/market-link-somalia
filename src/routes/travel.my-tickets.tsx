@@ -112,7 +112,7 @@ function BookingCard({ booking: b }: { booking: Booking }) {
       <div className="mt-3 flex items-end justify-between">
         <div>
           <div className="text-[10px] text-muted-foreground">Estimated total</div>
-          <div className="text-base font-extrabold text-flights">${b.total.toLocaleString()}</div>
+          <div className="text-base font-extrabold text-flights">${(b.total ?? 0).toLocaleString()}</div>
         </div>
         <div className="flex items-center gap-1.5">
           <a
