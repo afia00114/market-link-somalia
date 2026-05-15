@@ -31,6 +31,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/travel/hajj-umrah", changefreq: "weekly", priority: "0.7" },
           { path: "/travel/tours", changefreq: "weekly", priority: "0.7" },
           { path: "/travel/car-rental", changefreq: "weekly", priority: "0.7" },
+          { path: "/travel/bus", changefreq: "weekly", priority: "0.7" },
+          { path: "/travel/cargo", changefreq: "weekly", priority: "0.7" },
           { path: "/travel/my-tickets", changefreq: "weekly", priority: "0.5" },
           { path: "/hotels", changefreq: "weekly", priority: "0.8" },
           { path: "/health", changefreq: "weekly", priority: "0.8" },
