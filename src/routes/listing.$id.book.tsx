@@ -115,6 +115,8 @@ function BookListingPage() {
   const [showValidation, setShowValidation] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const normalizedName = name.trim();
+  const normalizedPhone = phone.replace(/\D/g, "");
   const service = services.find((s) => s.id === selected)!;
   const minDate = todayISO();
   const datePresets = useMemo(
@@ -136,6 +138,12 @@ function BookListingPage() {
   }
 
   function send() {
+    if (!canContinue) {
+      setShowValidation(true);
+      if (step !== 2) setStep(2);
+      return;
+    }
+
     navigate({
       to: "/listing/$id/booked",
       params: { id: item.id },
@@ -144,25 +152,29 @@ function BookListingPage() {
         price: service.price,
         date,
         time,
-        notes: notes || undefined,
-        name: name || undefined,
-        phone: phone || undefined,
-        address: address || undefined,
+        notes: notes.trim() || undefined,
+        name: normalizedName || undefined,
+        phone: phone.trim() || undefined,
+        address: address.trim() || undefined,
       },
     });
   }
 
-  const phoneOk = phone.replace(/\D/g, "").length >= 7;
+  const phoneOk = normalizedPhone.length >= 7;
+  const dateOk = Boolean(date);
+  const timeOk = Boolean(time);
+  const nameOk = normalizedName.length >= 2;
   const canContinue =
     step === 1
-      ? !!selected
+      ? Boolean(selected)
       : step === 2
-        ? !!date && !!time && name.trim().length > 1 && phoneOk
+        ? dateOk && timeOk && nameOk && phoneOk
         : true;
   const missingStep2 = [
-    !date ? "choose a date" : null,
-    name.trim().length <= 1 ? "enter your name" : null,
-    !phoneOk ? "add a valid phone number" : null,
+    !dateOk ? "choose a date" : null,
+    !timeOk ? "pick a time" : null,
+    !nameOk ? "enter your full name" : null,
+    !phoneOk ? "add a valid phone or WhatsApp number" : null,
   ].filter(Boolean) as string[];
 
   return (
