@@ -13,6 +13,7 @@ import { FLIGHT_OFFERS, AIRPORTS, INTL_DESTINATIONS, type FlightOffer } from "@/
 import {
   Plane, BadgeCheck, ArrowLeft, Search, MessagesSquare, ShieldCheck,
   BadgePercent, Headphones, Wallet, AlertTriangle, ArrowRight, Globe, ArrowLeftRight,
+  Smartphone, Ticket,
 } from "lucide-react";
 
 export const Route = createFileRoute("/travel/flights")({
