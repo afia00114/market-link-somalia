@@ -532,17 +532,6 @@ function FlightsPage() {
               <MessagesSquare className="h-4 w-4" /> Chat on WhatsApp
             </div>
           </a>
-
-          <div className="flex items-start gap-2.5 rounded-2xl border border-amber-200 bg-amber-50 p-3 dark:border-amber-900/40 dark:bg-amber-950/30">
-            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
-            <div>
-              <div className="text-xs font-bold text-amber-900 dark:text-amber-200">Important Reminder</div>
-              <p className="mt-0.5 text-[11px] leading-relaxed text-amber-900/80 dark:text-amber-200/80">
-                Payments are handled directly between you and the travel agency through WhatsApp, bank transfer,
-                mobile money or office payment. MaalsoorHub does not process any payments.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
     </AppShell>
