@@ -467,10 +467,11 @@ function FlightsPage() {
             <p className="text-[11px] text-muted-foreground">Simple steps to book your flight</p>
             <ol className="mt-3 space-y-2.5">
               {[
-                { t: "Search", s: "Pick route and date" },
-                { t: "Choose Agency", s: "Compare offers" },
-                { t: "Get Contacted", s: "Via WhatsApp, call or email" },
-                { t: "Pay Directly", s: "Discuss price with the agency" },
+                { t: "Search Flights", s: "Enter your route, travel date and class" },
+                { t: "Choose an Agency", s: "Compare offers from verified travel agencies" },
+                { t: "Contact Agency", s: "Reach the agency via WhatsApp, call or email to confirm seat availability and final price" },
+                { t: "Pay via Mobile Money", s: "Pay the agency directly using EVC Plus, Zaad, Sahal or eDahab. Bank transfer and office payment also accepted" },
+                { t: "Receive Your Ticket", s: "Agency sends your official e-ticket (PDF) to your email or WhatsApp" },
               ].map((s, i) => (
                 <li key={s.t} className="flex items-start gap-2.5">
                   <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-flights text-[11px] font-bold text-white">
@@ -483,6 +484,37 @@ function FlightsPage() {
                 </li>
               ))}
             </ol>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+            <div className="flex items-center gap-2">
+              <Smartphone className="h-4 w-4 text-flights" />
+              <h3 className="text-sm font-bold">Mobile Payment Methods</h3>
+            </div>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              After confirming with the agency, pay directly using any of these mobile money services:
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {[
+                { name: "EVC Plus", op: "Hormuud" },
+                { name: "Zaad", op: "Telesom" },
+                { name: "Sahal", op: "Golis" },
+                { name: "eDahab", op: "Somtel" },
+              ].map((p) => (
+                <div key={p.name} className="rounded-xl border border-border bg-secondary/40 px-3 py-2">
+                  <div className="text-xs font-bold">{p.name}</div>
+                  <div className="text-[10px] text-muted-foreground">{p.op}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 rounded-xl bg-primary-soft p-2.5">
+              <div className="flex items-start gap-2">
+                <Ticket className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
+                <p className="text-[11px] leading-relaxed text-primary">
+                  Always request the agency's official merchant number and confirm the name before sending money. Keep the transaction SMS as your receipt until your ticket is issued.
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
