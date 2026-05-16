@@ -12,7 +12,7 @@ import { SummaryShare } from "@/components/travel/SummaryShare";
 import { FLIGHT_OFFERS, AIRPORTS, INTL_DESTINATIONS, type FlightOffer } from "@/data/travel";
 import {
   Plane, BadgeCheck, ArrowLeft, Search, MessagesSquare, ShieldCheck,
-  BadgePercent, Headphones, Wallet, AlertTriangle, ArrowRight, Globe, ArrowLeftRight,
+  BadgePercent, Headphones, Wallet, ArrowRight, Globe, ArrowLeftRight,
   Smartphone, Ticket,
 } from "lucide-react";
 
