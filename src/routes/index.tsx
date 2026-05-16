@@ -7,8 +7,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "MaalsoorHub — Search. Connect. WhatsApp." },
       { name: "description", content: "Somalia's smart marketplace. Discover trusted businesses, real estate, and services. Connect directly via WhatsApp." },
-      { property: "og:title", content: "MaalsoorHub" },
-      { property: "og:description", content: "Search. Connect. WhatsApp." },
+      { property: "og:title", content: "MaalsoorHub — Somalia's Smart Marketplace" },
+      { property: "og:description", content: "Discover verified businesses, real estate, hotels, travel agencies, and services across Somalia and East Africa. Search, compare, and connect directly via WhatsApp." },
       { property: "og:url", content: "https://market-link-somalia.lovable.app/" },
     ],
     links: [

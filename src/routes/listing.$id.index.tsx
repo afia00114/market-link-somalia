@@ -20,7 +20,7 @@ export const Route = createFileRoute("/listing/$id/")({
     const item = loaderData?.item;
     const url = `https://market-link-somalia.lovable.app/listing/${params.id}`;
     const name = item?.provider.name ?? "Provider";
-    const title = `${name} — ${item?.title ?? "Service"} | MaalsoorHub`.slice(0, 70);
+    const title = `${name} — ${item?.title ?? "Service"} | MaalsoorHub`.slice(0, 60);
     const description = (item?.description ?? `Connect with ${name} on MaalsoorHub via WhatsApp or call.`).slice(0, 160);
     return {
       meta: [

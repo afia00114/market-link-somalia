@@ -11,14 +11,43 @@ import {
 import { whatsappLink, telLink } from "@/lib/contact";
 
 export const Route = createFileRoute("/health")({
-  head: () => ({
-    meta: [
-      { title: "Health & Medical — MaalsoorHub" },
-      { name: "description", content: "Find verified hospitals, clinics and health services across Somalia. Connect via WhatsApp, call or email." },
-      { property: "og:title", content: "Health & Medical — MaalsoorHub" },
-      { property: "og:description", content: "Verified hospitals, clinics and health services across Somalia." },
-    ],
-  }),
+  head: () => {
+    const url = "https://market-link-somalia.lovable.app/health";
+    const title = "Health & Medical — MaalsoorHub";
+    const description = "Find verified hospitals, clinics and health services across Somalia. Connect via WhatsApp, call or email.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: HOSPITALS.length,
+              itemListElement: HOSPITALS.slice(0, 20).map((h, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: h.name,
+                url: `https://market-link-somalia.lovable.app/health/${h.id}`,
+              })),
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: HealthPage,
 });
 
