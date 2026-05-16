@@ -6,18 +6,43 @@ import { PropertyCard } from "@/components/PropertyCard";
 import { PROPERTIES, REAL_ESTATE_SUBS, type Deal, type PropertySub } from "@/data/properties";
 
 export const Route = createFileRoute("/real-estate")({
-  head: () => ({
-    meta: [
-      { title: "Real Estate — MaalsoorHub" },
-      { name: "description", content: "Buy, rent, or lease houses, apartments, villas, land, and commercial property from verified agents in Somalia." },
-      { property: "og:title", content: "Real Estate — MaalsoorHub" },
-      { property: "og:description", content: "Verified houses, apartments, villas, land, and commercial property in Somalia." },
-      { property: "og:url", content: "https://market-link-somalia.lovable.app/real-estate" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://market-link-somalia.lovable.app/real-estate" },
-    ],
-  }),
+  head: () => {
+    const url = "https://market-link-somalia.lovable.app/real-estate";
+    const title = "Real Estate — MaalsoorHub";
+    const description = "Buy, rent, or lease houses, apartments, villas, land, and commercial property from verified agents in Somalia.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: PROPERTIES.length,
+              itemListElement: PROPERTIES.slice(0, 20).map((p, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: p.title,
+                url: `https://market-link-somalia.lovable.app/property/${p.id}`,
+              })),
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: RealEstatePage,
 });
 

@@ -15,15 +15,49 @@ export const Route = createFileRoute("/health_/$id")({
     if (!hospital) throw notFound();
     return { hospital };
   },
-  head: ({ loaderData }) => ({
-    meta: [
-      { title: `${loaderData?.hospital.name ?? "Hospital"} — MaalsoorHub` },
-      { name: "description", content: loaderData?.hospital.about ?? "Hospital details" },
-      { property: "og:title", content: loaderData?.hospital.name ?? "Hospital" },
-      { property: "og:description", content: loaderData?.hospital.about ?? "" },
-      { property: "og:image", content: loaderData?.hospital.image ?? "" },
-    ],
-  }),
+  head: ({ params, loaderData }) => {
+    const h = loaderData?.hospital;
+    const url = `https://market-link-somalia.lovable.app/health/${params.id}`;
+    const title = `${h?.name ?? "Hospital"} — MaalsoorHub`.slice(0, 60);
+    const description = (h?.about ?? "Hospital details").slice(0, 160);
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+        ...(h?.image ? [{ property: "og:image", content: h.image }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: h ? [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Hospital",
+            name: h.name,
+            description: h.about,
+            image: h.image,
+            url,
+            telephone: h.phone,
+            email: h.email,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: h.city,
+              addressRegion: h.district,
+              addressCountry: "SO",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: h.rating,
+              reviewCount: h.reviews,
+            },
+          }),
+        },
+      ] : [],
+    };
+  },
   component: HospitalDetail,
   notFoundComponent: () => (
     <AppShell><div className="p-8 text-center text-sm">Hospital not found.</div></AppShell>

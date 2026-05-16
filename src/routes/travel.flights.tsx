@@ -17,18 +17,43 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/travel/flights")({
-  head: () => ({
-    meta: [
-      { title: "Airline Tickets & Flights — MaalsoorHub" },
-      { name: "description", content: "Search and compare flights from verified Somali and East African travel agencies. Filter by airline, price, and direct routes — book directly via WhatsApp." },
-      { property: "og:title", content: "Airline Tickets & Flights — MaalsoorHub" },
-      { property: "og:description", content: "Compare flights from trusted agencies and contact via WhatsApp." },
-      { property: "og:url", content: "https://market-link-somalia.lovable.app/travel/flights" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://market-link-somalia.lovable.app/travel/flights" },
-    ],
-  }),
+  head: () => {
+    const url = "https://market-link-somalia.lovable.app/travel/flights";
+    const title = "Airline Tickets & Flights — MaalsoorHub";
+    const description = "Search and compare flights from verified Somali and East African travel agencies. Filter by airline, price, and direct routes — book directly via WhatsApp.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: FLIGHT_OFFERS.length,
+              itemListElement: FLIGHT_OFFERS.slice(0, 20).map((f, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: `${f.from} → ${f.to} · ${f.airline}`,
+                url: `https://market-link-somalia.lovable.app/travel/flights/${f.id}`,
+              })),
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: FlightsPage,
 });
 
