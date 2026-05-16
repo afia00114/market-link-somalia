@@ -12,7 +12,7 @@ import { SummaryShare } from "@/components/travel/SummaryShare";
 import { FLIGHT_OFFERS, AIRPORTS, INTL_DESTINATIONS, type FlightOffer } from "@/data/travel";
 import {
   Plane, BadgeCheck, ArrowLeft, Search, MessagesSquare, ShieldCheck,
-  BadgePercent, Headphones, Wallet, AlertTriangle, ArrowRight, Globe, ArrowLeftRight,
+  BadgePercent, Headphones, Wallet, ArrowRight, Globe, ArrowLeftRight,
   Smartphone, Ticket,
 } from "lucide-react";
 
@@ -414,20 +414,6 @@ function FlightsPage() {
 
         {/* Always-visible info sections */}
         <div className="space-y-5 pt-2">
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { icon: Wallet, t: "No In-App Pay", s: "Pay agency directly" },
-              { icon: MessagesSquare, t: "WhatsApp First", s: "Easy chat" },
-              { icon: ShieldCheck, t: "Trusted", s: "Verified agencies" },
-            ].map(({ icon: Ic, t, s }) => (
-              <div key={t} className="rounded-xl border border-border bg-card p-2.5 text-center shadow-soft">
-                <Ic className="mx-auto h-4 w-4 text-flights" />
-                <div className="mt-1 text-[11px] font-bold">{t}</div>
-                <div className="text-[10px] text-muted-foreground leading-tight">{s}</div>
-              </div>
-            ))}
-          </div>
-
           <div>
             <h3 className="mb-2 text-sm font-bold">Popular Routes</h3>
             <div className="grid grid-cols-2 gap-2">
@@ -447,17 +433,6 @@ function FlightsPage() {
                   </div>
                   <div className="mt-0.5 text-[11px] text-muted-foreground">From ${r.price}</div>
                 </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="mb-2 text-sm font-bold">Featured Airlines</h3>
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {["Turkish", "Qatar", "Ethiopian", "flydubai", "Daallo", "Somali"].map((a) => (
-                <div key={a} className="flex-shrink-0 rounded-xl border border-border bg-card px-3 py-2 text-[11px] font-semibold shadow-soft">
-                  {a} Airlines
-                </div>
               ))}
             </div>
           </div>
@@ -557,17 +532,6 @@ function FlightsPage() {
               <MessagesSquare className="h-4 w-4" /> Chat on WhatsApp
             </div>
           </a>
-
-          <div className="flex items-start gap-2.5 rounded-2xl border border-amber-200 bg-amber-50 p-3 dark:border-amber-900/40 dark:bg-amber-950/30">
-            <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
-            <div>
-              <div className="text-xs font-bold text-amber-900 dark:text-amber-200">Important Reminder</div>
-              <p className="mt-0.5 text-[11px] leading-relaxed text-amber-900/80 dark:text-amber-200/80">
-                Payments are handled directly between you and the travel agency through WhatsApp, bank transfer,
-                mobile money or office payment. MaalsoorHub does not process any payments.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
     </AppShell>
