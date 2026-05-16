@@ -414,20 +414,6 @@ function FlightsPage() {
 
         {/* Always-visible info sections */}
         <div className="space-y-5 pt-2">
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { icon: Wallet, t: "No In-App Pay", s: "Pay agency directly" },
-              { icon: MessagesSquare, t: "WhatsApp First", s: "Easy chat" },
-              { icon: ShieldCheck, t: "Trusted", s: "Verified agencies" },
-            ].map(({ icon: Ic, t, s }) => (
-              <div key={t} className="rounded-xl border border-border bg-card p-2.5 text-center shadow-soft">
-                <Ic className="mx-auto h-4 w-4 text-flights" />
-                <div className="mt-1 text-[11px] font-bold">{t}</div>
-                <div className="text-[10px] text-muted-foreground leading-tight">{s}</div>
-              </div>
-            ))}
-          </div>
-
           <div>
             <h3 className="mb-2 text-sm font-bold">Popular Routes</h3>
             <div className="grid grid-cols-2 gap-2">
