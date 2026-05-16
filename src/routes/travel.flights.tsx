@@ -437,17 +437,6 @@ function FlightsPage() {
             </div>
           </div>
 
-          <div>
-            <h3 className="mb-2 text-sm font-bold">Featured Airlines</h3>
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {["Turkish", "Qatar", "Ethiopian", "flydubai", "Daallo", "Somali"].map((a) => (
-                <div key={a} className="flex-shrink-0 rounded-xl border border-border bg-card px-3 py-2 text-[11px] font-semibold shadow-soft">
-                  {a} Airlines
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
             <h3 className="text-sm font-bold">How It Works</h3>
             <p className="text-[11px] text-muted-foreground">Simple steps to book your flight</p>
