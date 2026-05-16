@@ -45,7 +45,7 @@ export const Route = createFileRoute("/travel/flights")({
               itemListElement: FLIGHT_OFFERS.slice(0, 20).map((f, i) => ({
                 "@type": "ListItem",
                 position: i + 1,
-                name: `${f.from} → ${f.to} · ${f.airline}`,
+                name: `${f.from} → ${f.to} · ${f.name}`,
                 url: `https://market-link-somalia.lovable.app/travel/flights/${f.id}`,
               })),
             },
