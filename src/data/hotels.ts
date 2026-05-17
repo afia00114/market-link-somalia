@@ -104,8 +104,8 @@ export const HOTELS: Hotel[] = [
     tags: ["business"],
   },
   {
-    id: "jazeera-palace",
-    name: "Jazeera Palace Hotel",
+    id: "jazeera-beach-resort",
+    name: "Jazeera Beach Resort",
     city: "Mogadishu",
     region: "Banaadir",
     rating: 4.7,
