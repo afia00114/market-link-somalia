@@ -12,9 +12,47 @@ export const Route = createFileRoute("/travel/tours/$id")({
     if (!t) throw notFound();
     return { t };
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.t.tourType} Tour — ${loaderData?.t.name}` }],
-  }),
+  head: ({ loaderData, params }) => {
+    const t = loaderData?.t;
+    const url = `https://market-link-somalia.lovable.app/travel/tours/${params.id}`;
+    const title = t ? `${t.tourType} Tour — ${t.name}` : "Tour package";
+    const desc = t
+      ? `${t.tourType} tour by ${t.name}: ${t.days} days, ${t.private ? "private" : "shared"}, from $${t.pricePerPerson}/person. Itinerary: ${t.itinerary.join(" → ")}.`.slice(0, 300)
+      : "Tour package on MaalsoorHub.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        ...(t?.logo ? [{ property: "og:image", content: t.logo }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: t
+        ? [{
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "TouristTrip",
+              name: `${t.tourType} Tour — ${t.name}`,
+              description: desc,
+              image: t.logo,
+              itinerary: t.itinerary,
+              touristType: t.private ? "Private" : "Group",
+              offers: {
+                "@type": "Offer",
+                price: t.pricePerPerson,
+                priceCurrency: "USD",
+                url,
+              },
+              provider: { "@type": "TravelAgency", name: t.name },
+            }),
+          }]
+        : [],
+    };
+  },
   notFoundComponent: () => (
     <AppShell>
       <div className="p-8 text-center text-sm">Tour not found. <Link to="/travel/tours" className="text-primary">Back</Link></div>
