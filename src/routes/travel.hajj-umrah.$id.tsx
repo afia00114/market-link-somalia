@@ -17,7 +17,7 @@ export const Route = createFileRoute("/travel/hajj-umrah/$id")({
     const url = `https://market-link-somalia.lovable.app/travel/hajj-umrah/${params.id}`;
     const title = p ? `${p.name} — ${p.type} Package` : "Hajj/Umrah package";
     const desc = p
-      ? `${p.type} package by ${p.name}: ${p.durationDays} days, from $${p.pricePerPerson}/person. Includes flights, hotel, transport and guidance.`.slice(0, 300)
+      ? `${p.type} package by ${p.name}: ${p.durationDays} days, from $${p.price}/person. Includes flights, hotel, transport and guidance.`.slice(0, 300)
       : "Hajj and Umrah package on MaalsoorHub.";
     return {
       meta: [
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/travel/hajj-umrah/$id")({
               description: desc,
               image: p.logo,
               brand: { "@type": "TravelAgency", name: p.name },
-              offers: { "@type": "Offer", price: p.pricePerPerson, priceCurrency: "USD", url },
+              offers: { "@type": "Offer", price: p.price, priceCurrency: "USD", url },
             }),
           }]
         : [],
