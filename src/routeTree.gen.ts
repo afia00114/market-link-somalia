@@ -19,6 +19,7 @@ import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as ExploreRouteImport } from './routes/explore'
+import { Route as EmployeeDashboardRouteImport } from './routes/employee-dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelIndexRouteImport } from './routes/travel.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
@@ -95,6 +96,11 @@ const HealthRoute = HealthRouteImport.update({
 const ExploreRoute = ExploreRouteImport.update({
   id: '/explore',
   path: '/explore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeDashboardRoute = EmployeeDashboardRouteImport.update({
+  id: '/employee-dashboard',
+  path: '/employee-dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -235,6 +241,7 @@ const HotelsIdBookRoute = HotelsIdBookRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
@@ -274,6 +281,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
@@ -312,6 +320,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
@@ -353,6 +362,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/employee-dashboard'
     | '/explore'
     | '/health'
     | '/home'
@@ -392,6 +402,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/employee-dashboard'
     | '/explore'
     | '/health'
     | '/home'
@@ -429,6 +440,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/employee-dashboard'
     | '/explore'
     | '/health'
     | '/home'
@@ -469,6 +481,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EmployeeDashboardRoute: typeof EmployeeDashboardRoute
   ExploreRoute: typeof ExploreRoute
   HealthRoute: typeof HealthRoute
   HomeRoute: typeof HomeRoute
@@ -557,6 +570,13 @@ declare module '@tanstack/react-router' {
       path: '/explore'
       fullPath: '/explore'
       preLoaderRoute: typeof ExploreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee-dashboard': {
+      id: '/employee-dashboard'
+      path: '/employee-dashboard'
+      fullPath: '/employee-dashboard'
+      preLoaderRoute: typeof EmployeeDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -881,6 +901,7 @@ const TravelRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EmployeeDashboardRoute: EmployeeDashboardRoute,
   ExploreRoute: ExploreRoute,
   HealthRoute: HealthRoute,
   HomeRoute: HomeRoute,
@@ -901,13 +922,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
