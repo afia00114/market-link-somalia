@@ -12,9 +12,40 @@ export const Route = createFileRoute("/travel/hajj-umrah/$id")({
     if (!p) throw notFound();
     return { p };
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.p.name} — ${loaderData?.p.type} Package` }],
-  }),
+  head: ({ loaderData, params }) => {
+    const p = loaderData?.p;
+    const url = `https://market-link-somalia.lovable.app/travel/hajj-umrah/${params.id}`;
+    const title = p ? `${p.name} — ${p.type} Package` : "Hajj/Umrah package";
+    const desc = p
+      ? `${p.type} package by ${p.name}: ${p.durationDays} days, from $${p.price}/person. Includes flights, hotel, transport and guidance.`.slice(0, 300)
+      : "Hajj and Umrah package on MaalsoorHub.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        ...(p?.logo ? [{ property: "og:image", content: p.logo }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: p
+        ? [{
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name: `${p.type} Package — ${p.name}`,
+              description: desc,
+              image: p.logo,
+              brand: { "@type": "TravelAgency", name: p.name },
+              offers: { "@type": "Offer", price: p.price, priceCurrency: "USD", url },
+            }),
+          }]
+        : [],
+    };
+  },
   notFoundComponent: () => (
     <AppShell>
       <div className="p-8 text-center text-sm">Package not found. <Link to="/travel/hajj-umrah" className="text-primary">Back</Link></div>

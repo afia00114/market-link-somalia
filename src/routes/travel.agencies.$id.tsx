@@ -12,9 +12,48 @@ export const Route = createFileRoute("/travel/agencies/$id")({
     if (!a) throw notFound();
     return { a };
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.a.name} — Agency` }],
-  }),
+  head: ({ loaderData, params }) => {
+    const a = loaderData?.a;
+    const url = `https://market-link-somalia.lovable.app/travel/agencies/${params.id}`;
+    const title = a ? `${a.name} — Travel Agency in ${a.city}` : "Travel agency";
+    const desc = a
+      ? `${a.name} is a ${a.verified ? "verified " : ""}travel agency in ${a.city}. Services: ${a.services.join(", ")}. Rated ${a.rating}/5 from ${a.reviews} reviews.`.slice(0, 300)
+      : "Travel agency on MaalsoorHub.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "profile" },
+        { property: "og:url", content: url },
+        ...(a?.logo ? [{ property: "og:image", content: a.logo }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: a
+        ? [{
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "TravelAgency",
+              name: a.name,
+              description: a.description,
+              image: a.logo,
+              address: { "@type": "PostalAddress", addressLocality: a.city },
+              telephone: a.phone,
+              email: a.email,
+              url,
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: a.rating,
+                reviewCount: a.reviews,
+              },
+              openingHours: a.hours,
+            }),
+          }]
+        : [],
+    };
+  },
   notFoundComponent: () => (
     <AppShell>
       <div className="p-8 text-center text-sm">Agency not found. <Link to="/travel/agencies" className="text-primary">Back</Link></div>

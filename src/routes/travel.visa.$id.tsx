@@ -12,9 +12,42 @@ export const Route = createFileRoute("/travel/visa/$id")({
     if (!v) throw notFound();
     return { v };
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.v.name} — Visa Detail` }],
-  }),
+  head: ({ loaderData, params }) => {
+    const v = loaderData?.v;
+    const url = `https://market-link-somalia.lovable.app/travel/visa/${params.id}`;
+    const dest = v ? COUNTRIES.find((c) => c.code === v.destination)?.name ?? v.destination : "";
+    const title = v ? `${v.name} — ${dest} Visa Service` : "Visa service";
+    const desc = v
+      ? `${v.name} handles ${dest} visa applications. Processing, document review and embassy submission via WhatsApp.`.slice(0, 300)
+      : "Visa service on MaalsoorHub.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        ...(v?.logo ? [{ property: "og:image", content: v.logo }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: v
+        ? [{
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              serviceType: "Visa application",
+              name: title,
+              description: desc,
+              areaServed: dest,
+              provider: { "@type": "Organization", name: v.name, telephone: v.phone },
+              url,
+            }),
+          }]
+        : [],
+    };
+  },
   notFoundComponent: () => (
     <AppShell>
       <div className="p-8 text-center text-sm">Visa service not found. <Link to="/travel/visa" className="text-primary">Back</Link></div>
