@@ -12,9 +12,40 @@ export const Route = createFileRoute("/travel/car-rental/$id")({
     if (!c) throw notFound();
     return { c };
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.c.model} — Car Rental` }],
-  }),
+  head: ({ loaderData, params }) => {
+    const c = loaderData?.c;
+    const url = `https://market-link-somalia.lovable.app/travel/car-rental/${params.id}`;
+    const title = c ? `${c.model} — Car Rental from $${c.dailyRate}/day` : "Car rental";
+    const desc = c
+      ? `Rent ${c.model} (${c.carType}, ${c.transmission}) from ${c.name} for $${c.dailyRate}/day. Insurance and mileage included.`.slice(0, 300)
+      : "Car rental on MaalsoorHub.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+        ...(c?.logo ? [{ property: "og:image", content: c.logo }] : []),
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: c
+        ? [{
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name: c.model,
+              description: desc,
+              image: c.logo,
+              brand: { "@type": "Organization", name: c.name },
+              offers: { "@type": "Offer", price: c.dailyRate, priceCurrency: "USD", url, priceSpecification: { "@type": "UnitPriceSpecification", price: c.dailyRate, priceCurrency: "USD", unitText: "DAY" } },
+            }),
+          }]
+        : [],
+    };
+  },
   notFoundComponent: () => (
     <AppShell>
       <div className="p-8 text-center text-sm">Car not found. <Link to="/travel/car-rental" className="text-primary">Back</Link></div>
