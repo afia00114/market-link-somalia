@@ -81,6 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "MaalsoorHub" },
       { property: "og:description", content: "Search. Connect. WhatsApp. Discover trusted businesses, real estate, and services across Somalia and East Africa." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "MaalsoorHub — Somalia's Smart Marketplace" },
       { name: "twitter:description", content: "Search. Connect. WhatsApp. Discover trusted businesses, real estate, and services across Somalia and East Africa." },
