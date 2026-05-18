@@ -19,9 +19,39 @@ export const Route = createFileRoute("/travel/flights/$id")({
     if (!offer) throw notFound();
     return { offer };
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.offer.name} — Flight Detail` }],
-  }),
+  head: ({ loaderData, params }) => {
+    const o = loaderData?.offer;
+    const url = `https://market-link-somalia.lovable.app/travel/flights/${params.id}`;
+    const title = o ? `${o.name}: ${o.from} → ${o.to} from $${o.price}` : "Flight";
+    const desc = o
+      ? `${o.name} ${o.direct ? "direct flight" : `flight via ${o.via}`} from ${o.from} to ${o.to}. ${o.durationHrs}h, from $${o.price}. Book on WhatsApp.`.slice(0, 300)
+      : "Flight on MaalsoorHub.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: o
+        ? [{
+            type: "application/ld+json",
+            children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Flight",
+              flightNumber: o.id,
+              provider: { "@type": "Airline", name: o.name },
+              departureAirport: { "@type": "Airport", iataCode: o.from },
+              arrivalAirport: { "@type": "Airport", iataCode: o.to },
+              offers: { "@type": "Offer", price: o.price, priceCurrency: "USD", url },
+            }),
+          }]
+        : [],
+    };
+  },
   notFoundComponent: () => (
     <AppShell>
       <div className="p-8 text-center text-sm">
