@@ -2,11 +2,13 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   ArrowLeft, Plane, MessageCircle, Phone, Trash2, CheckCircle2,
-  Clock3, XCircle, Ticket,
+  Clock3, XCircle, Ticket, Star,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { listBookings, removeBooking, updateBookingStatus, type Booking } from "@/lib/bookings";
 import { whatsappLink, telLink } from "@/lib/contact";
+import { ReviewModal } from "@/components/ReviewModal";
+import { hasReviewed, subscribeReviews, type ReviewService } from "@/lib/reviews";
 
 export const Route = createFileRoute("/travel/my-tickets")({
   head: () => ({
