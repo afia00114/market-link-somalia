@@ -80,6 +80,48 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          booking_ref: string | null
+          comment: string | null
+          created_at: string
+          id: string
+          offer_id: string
+          provider_name: string
+          rating_communication: number
+          rating_quality: number
+          rating_timeliness: number
+          reviewer_name: string
+          service: string
+        }
+        Insert: {
+          booking_ref?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          offer_id: string
+          provider_name: string
+          rating_communication: number
+          rating_quality: number
+          rating_timeliness: number
+          reviewer_name: string
+          service: string
+        }
+        Update: {
+          booking_ref?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          offer_id?: string
+          provider_name?: string
+          rating_communication?: number
+          rating_quality?: number
+          rating_timeliness?: number
+          reviewer_name?: string
+          service?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

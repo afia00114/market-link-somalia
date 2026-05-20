@@ -2,11 +2,13 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   ArrowLeft, Plane, MessageCircle, Phone, Trash2, CheckCircle2,
-  Clock3, XCircle, Ticket,
+  Clock3, XCircle, Ticket, Star,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { listBookings, removeBooking, updateBookingStatus, type Booking } from "@/lib/bookings";
 import { whatsappLink, telLink } from "@/lib/contact";
+import { ReviewModal } from "@/components/ReviewModal";
+import { hasReviewed, subscribeReviews, type ReviewService } from "@/lib/reviews";
 
 export const Route = createFileRoute("/travel/my-tickets")({
   head: () => ({
@@ -82,14 +84,25 @@ function MyTicketsPage() {
 }
 
 function BookingCard({ booking: b }: { booking: Booking }) {
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewed, setReviewed] = useState(false);
+
+  useEffect(() => {
+    const sync = () => setReviewed(hasReviewed(b.ref));
+    sync();
+    return subscribeReviews(sync);
+  }, [b.ref]);
+
   const statusColor =
     b.status === "confirmed" ? "bg-emerald-500/10 text-emerald-700 border-emerald-500/30"
     : b.status === "cancelled" ? "bg-destructive/10 text-destructive border-destructive/30"
     : "bg-amber-500/10 text-amber-700 border-amber-500/40";
   const StatusIcon = b.status === "confirmed" ? CheckCircle2 : b.status === "cancelled" ? XCircle : Clock3;
 
-  const waMsg = `Hello ${b.providerName}, following up on my booking ref ${b.ref} — ${b.route} on ${b.departDate}, ${b.travelClass}, ${b.passengers} pax.`;
+  const summary = b.title || b.route || "Booking";
+  const waMsg = `Hello ${b.providerName}, following up on my booking ref ${b.ref} — ${summary}.`;
   const phoneDigits = b.providerPhone?.replace(/\D/g, "") || "252610000000";
+  const canReview = b.status !== "cancelled";
 
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
@@ -99,10 +112,14 @@ function BookingCard({ booking: b }: { booking: Booking }) {
             <Plane className="h-3.5 w-3.5 text-flights" /> {b.providerName}
             <span>· Ref {b.ref}</span>
           </div>
-          <div className="mt-1 truncate text-sm font-bold">{b.route}</div>
-          <div className="mt-0.5 text-[11px] text-muted-foreground">
-            {b.departDate}{b.returnDate ? ` · Return ${b.returnDate}` : ""} · {b.travelClass} · {b.passengers} pax
-          </div>
+          <div className="mt-1 truncate text-sm font-bold">{summary}</div>
+          {(b.departDate || b.travelClass || b.passengers) && (
+            <div className="mt-0.5 text-[11px] text-muted-foreground">
+              {b.departDate}{b.returnDate ? ` · Return ${b.returnDate}` : ""}
+              {b.travelClass ? ` · ${b.travelClass}` : ""}
+              {b.passengers ? ` · ${b.passengers} pax` : ""}
+            </div>
+          )}
         </div>
         <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${statusColor}`}>
           <StatusIcon className="h-3 w-3" /> {b.status}
@@ -136,7 +153,7 @@ function BookingCard({ booking: b }: { booking: Booking }) {
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-border pt-3 text-[11px]">
+      <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-border pt-3 text-[11px]">
         {b.status === "pending" && (
           <button
             onClick={() => updateBookingStatus(b.id, "confirmed")}
@@ -153,6 +170,20 @@ function BookingCard({ booking: b }: { booking: Booking }) {
             Cancel
           </button>
         )}
+        {canReview && (
+          reviewed ? (
+            <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
+              <CheckCircle2 className="h-3.5 w-3.5" /> Reviewed
+            </span>
+          ) : (
+            <button
+              onClick={() => setReviewOpen(true)}
+              className="inline-flex items-center gap-1 rounded-full bg-amber-400/15 px-2.5 py-1 font-bold text-amber-700"
+            >
+              <Star className="h-3.5 w-3.5" /> Rate provider
+            </button>
+          )
+        )}
         <button
           onClick={() => { if (confirm("Remove this booking?")) removeBooking(b.id); }}
           className="ml-auto inline-flex items-center gap-1 font-semibold text-destructive"
@@ -161,6 +192,16 @@ function BookingCard({ booking: b }: { booking: Booking }) {
           <Trash2 className="h-3.5 w-3.5" /> Remove
         </button>
       </div>
+
+      <ReviewModal
+        open={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        bookingRef={b.ref}
+        service={(b.service as ReviewService) ?? "flight"}
+        offerId={b.offerId}
+        providerName={b.providerName}
+        defaultReviewerName={b.passengerName}
+      />
     </div>
   );
 }
