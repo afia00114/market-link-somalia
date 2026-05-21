@@ -23,6 +23,8 @@ import {
   subscribeFavorites,
   type Favorite,
 } from "@/lib/favorites";
+import { useAuth } from "@/hooks/use-auth";
+import { LogOut } from "lucide-react";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
