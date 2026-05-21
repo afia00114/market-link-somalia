@@ -122,6 +122,51 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_requests: {
+        Row: {
+          amount: number | null
+          created_at: string
+          currency: string | null
+          id: string
+          method: string
+          notes: string | null
+          payer_email: string | null
+          payer_name: string
+          payer_phone: string
+          plan: string
+          ref: string
+          status: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          method: string
+          notes?: string | null
+          payer_email?: string | null
+          payer_name: string
+          payer_phone: string
+          plan: string
+          ref: string
+          status?: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          method?: string
+          notes?: string | null
+          payer_email?: string | null
+          payer_name?: string
+          payer_phone?: string
+          plan?: string
+          ref?: string
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

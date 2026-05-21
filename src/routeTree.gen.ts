@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TravelRouteImport } from './routes/travel'
+import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RealEstateRouteImport } from './routes/real-estate'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -51,6 +52,11 @@ import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 const TravelRoute = TravelRouteImport.update({
   id: '/travel',
   path: '/travel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscribeRoute = SubscribeRouteImport.update({
+  id: '/subscribe',
+  path: '/subscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -251,6 +257,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
@@ -290,6 +297,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/subscribe': typeof SubscribeRoute
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
   '/category/$key': typeof CategoryKeyRoute
   '/health_/$id': typeof HealthIdRoute
@@ -372,6 +381,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/real-estate'
     | '/sitemap.xml'
+    | '/subscribe'
     | '/travel'
     | '/category/$key'
     | '/health/$id'
@@ -411,6 +421,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/real-estate'
     | '/sitemap.xml'
+    | '/subscribe'
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
@@ -450,6 +461,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/real-estate'
     | '/sitemap.xml'
+    | '/subscribe'
     | '/travel'
     | '/category/$key'
     | '/health_/$id'
@@ -491,6 +503,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   RealEstateRoute: typeof RealEstateRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SubscribeRoute: typeof SubscribeRoute
   TravelRoute: typeof TravelRouteWithChildren
   CategoryKeyRoute: typeof CategoryKeyRoute
   HealthIdRoute: typeof HealthIdRoute
@@ -507,6 +520,13 @@ declare module '@tanstack/react-router' {
       path: '/travel'
       fullPath: '/travel'
       preLoaderRoute: typeof TravelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subscribe': {
+      id: '/subscribe'
+      path: '/subscribe'
+      fullPath: '/subscribe'
+      preLoaderRoute: typeof SubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -911,6 +931,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   RealEstateRoute: RealEstateRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SubscribeRoute: SubscribeRoute,
   TravelRoute: TravelRouteWithChildren,
   CategoryKeyRoute: CategoryKeyRoute,
   HealthIdRoute: HealthIdRoute,
@@ -922,13 +943,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
