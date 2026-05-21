@@ -297,10 +297,9 @@ function sheetTitle(s: Exclude<SheetKind, null>) {
     ? "My Reviews"
     : s === "verify"
     ? "Verification"
-    : s === "settings"
-    ? "Settings"
-    : "Sign in";
+    : "Settings";
 }
+
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
