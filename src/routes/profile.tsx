@@ -41,10 +41,11 @@ export const Route = createFileRoute("/profile")({
   component: Profile,
 });
 
-type SheetKind = null | "saved" | "reviews" | "verify" | "settings" | "signin";
+type SheetKind = null | "saved" | "reviews" | "verify" | "settings";
 
 function Profile() {
   const navigate = useNavigate();
+  const { user, profile, isAuthenticated, signOut } = useAuth();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [favs, setFavs] = useState<Favorite[]>([]);
   const [sheet, setSheet] = useState<SheetKind>(null);
