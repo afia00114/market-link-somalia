@@ -129,20 +129,44 @@ function Profile() {
           <LanguageSwitcher variant="light" />
         </div>
         <div className="mt-4 flex items-center gap-3">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-            <User className="h-8 w-8" />
+          <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-white/20 backdrop-blur">
+            {profile?.avatar_url ? (
+              <img src={profile.avatar_url} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <User className="h-8 w-8" />
+            )}
           </div>
-          <div>
-            <div className="text-base font-bold">Guest User</div>
-            <button
-              onClick={() => setSheet("signin")}
-              className="mt-1 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-primary active:scale-95"
-            >
-              <LogIn className="h-3.5 w-3.5" />
-              Sign in / Register
-            </button>
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-base font-bold">
+              {isAuthenticated ? (profile?.display_name ?? user?.email ?? "Member") : "Guest User"}
+            </div>
+            {isAuthenticated ? (
+              <div className="mt-1 flex items-center gap-2">
+                {user?.email && (
+                  <span className="truncate text-[11px] opacity-80">{user.email}</span>
+                )}
+                <button
+                  onClick={async () => {
+                    await signOut();
+                    setNotice("Signed out");
+                  }}
+                  className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-semibold text-white active:scale-95"
+                >
+                  <LogOut className="h-3 w-3" /> Sign out
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate({ to: "/auth" })}
+                className="mt-1 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-primary active:scale-95"
+              >
+                <LogIn className="h-3.5 w-3.5" />
+                Sign in / Register
+              </button>
+            )}
           </div>
         </div>
+
 
         <div className="mt-5 grid grid-cols-3 gap-2 text-center">
           <Stat label="Saved" value={favs.length} />
