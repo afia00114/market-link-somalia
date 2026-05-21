@@ -21,6 +21,7 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as EmployeeDashboardRouteImport } from './routes/employee-dashboard'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelIndexRouteImport } from './routes/travel.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
@@ -107,6 +108,11 @@ const ExploreRoute = ExploreRouteImport.update({
 const EmployeeDashboardRoute = EmployeeDashboardRouteImport.update({
   id: '/employee-dashboard',
   path: '/employee-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -247,6 +253,7 @@ const HotelsIdBookRoute = HotelsIdBookRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/health': typeof HealthRoute
@@ -288,6 +295,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/health': typeof HealthRoute
@@ -328,6 +336,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/health': typeof HealthRoute
@@ -371,6 +380,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/employee-dashboard'
     | '/explore'
     | '/health'
@@ -412,6 +422,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/employee-dashboard'
     | '/explore'
     | '/health'
@@ -451,6 +462,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/employee-dashboard'
     | '/explore'
     | '/health'
@@ -493,6 +505,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   EmployeeDashboardRoute: typeof EmployeeDashboardRoute
   ExploreRoute: typeof ExploreRoute
   HealthRoute: typeof HealthRoute
@@ -597,6 +610,13 @@ declare module '@tanstack/react-router' {
       path: '/employee-dashboard'
       fullPath: '/employee-dashboard'
       preLoaderRoute: typeof EmployeeDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -921,6 +941,7 @@ const TravelRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   EmployeeDashboardRoute: EmployeeDashboardRoute,
   ExploreRoute: ExploreRoute,
   HealthRoute: HealthRoute,
