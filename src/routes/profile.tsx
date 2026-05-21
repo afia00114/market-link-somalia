@@ -284,12 +284,6 @@ function Profile() {
               </button>
             </div>
           )}
-          {sheet === "signin" && (
-            <EmptyState
-              title="Accounts coming soon"
-              text="For now you can browse, save and book as a guest — your data stays on this device."
-            />
-          )}
         </Sheet>
       )}
     </AppShell>
