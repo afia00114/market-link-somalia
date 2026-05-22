@@ -4,7 +4,8 @@ import {
 } from "lucide-react";
 
 export type CategoryKey =
-  | "real-estate" | "services" | "travel" | "hotels" | "health";
+  | "real-estate" | "services" | "travel" | "hotels" | "health"
+  | "food" | "vehicles" | "livestock" | "jobs" | "banking";
 
 export interface Category {
   key: CategoryKey;
