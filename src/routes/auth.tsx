@@ -69,7 +69,7 @@ function AuthPage() {
           email: emailRes.data,
           password: passRes.data,
           options: {
-            emailRedirectTo: `${window.location.origin}/profile`,
+            emailRedirectTo: `${window.location.origin}${nextPath}`,
             data: { display_name: nameRes.data, full_name: nameRes.data },
           },
         });
@@ -96,7 +96,7 @@ function AuthPage() {
           );
           return;
         }
-        navigate({ to: "/profile" });
+        navigate({ to: nextPath });
       }
     } finally {
       setBusy(false);
@@ -108,7 +108,7 @@ function AuthPage() {
     setBusy(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/profile`,
+        redirect_uri: `${window.location.origin}${nextPath}`,
       });
       if (result.error) {
         setError(result.error.message ?? "Google sign-in failed");
@@ -116,7 +116,7 @@ function AuthPage() {
         return;
       }
       if (result.redirected) return;
-      navigate({ to: "/profile" });
+      navigate({ to: nextPath });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Google sign-in failed");
       setBusy(false);
