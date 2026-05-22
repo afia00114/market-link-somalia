@@ -1,20 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, MapPin, Phone } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatStartButton } from "@/components/ChatStartButton";
 import { PayButton } from "@/components/PayButton";
-
-export const Route = createFileRoute("/vendors/$id")({
-  head: () => ({
-    meta: [
-      { title: "Vendor — MaalsoorHub" },
-      { name: "description", content: "Browse vendor services and message them directly in-app." },
-    ],
-  }),
-  component: VendorPublic,
-});
 
 interface VP {
   id: string;
@@ -39,9 +29,76 @@ interface Post {
   location: string | null;
 }
 
+const SITE_URL = "https://market-link-somalia.lovable.app";
+
+function truncate(s: string, max: number) {
+  if (s.length <= max) return s;
+  return s.slice(0, max - 1).trimEnd() + "…";
+}
+
+export const Route = createFileRoute("/vendors/$id")({
+  loader: async ({ params }) => {
+    const { data } = await supabase
+      .from("vendor_profiles")
+      .select("id,business_name,category_key,description,location,avatar_url")
+      .eq("id", params.id)
+      .maybeSingle();
+    if (!data) throw notFound();
+    return { vendor: data as Pick<VP, "id" | "business_name" | "category_key" | "description" | "location" | "avatar_url"> };
+  },
+  head: ({ params, loaderData }) => {
+    const v = loaderData?.vendor;
+    const url = `${SITE_URL}/vendors/${params.id}`;
+    if (!v) {
+      return {
+        meta: [
+          { title: "Vendor — MaalsoorHub" },
+          { name: "description", content: "Browse vendor services and message them directly in-app." },
+        ],
+      };
+    }
+    const category = v.category_key.replace(/-/g, " ");
+    const rawTitle = `${v.business_name} — ${category} on MaalsoorHub`;
+    const title = truncate(rawTitle, 60);
+    const baseDesc = v.description?.trim()
+      ? v.description.trim()
+      : `${v.business_name} offers ${category} services${v.location ? ` in ${v.location}` : ""} on MaalsoorHub. Message or call directly in-app.`;
+    const description = baseDesc.length < 50
+      ? truncate(`${baseDesc} Connect with ${v.business_name} on MaalsoorHub for ${category} services${v.location ? ` in ${v.location}` : ""}.`, 160)
+      : truncate(baseDesc, 160);
+
+    const meta: { title?: string; name?: string; property?: string; content?: string }[] = [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url", content: url },
+      { property: "og:type", content: "profile" },
+      { property: "twitter:title", content: title },
+      { property: "twitter:description", content: description },
+    ];
+    if (v.avatar_url) {
+      meta.push({ property: "og:image", content: v.avatar_url });
+      meta.push({ property: "twitter:image", content: v.avatar_url });
+    }
+    return {
+      meta,
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
+  notFoundComponent: () => (
+    <AppShell><div className="p-6 text-sm">Vendor not found.</div></AppShell>
+  ),
+  errorComponent: () => (
+    <AppShell><div className="p-6 text-sm">Something went wrong loading this vendor.</div></AppShell>
+  ),
+  component: VendorPublic,
+});
+
 function VendorPublic() {
   const { id } = Route.useParams();
-  const [vendor, setVendor] = useState<VP | null>(null);
+  const { vendor: initialVendor } = Route.useLoaderData();
+  const [vendor, setVendor] = useState<VP | null>(initialVendor as VP);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -57,7 +114,6 @@ function VendorPublic() {
     })();
   }, [id]);
 
-  if (loading) return <AppShell><div className="p-6 text-sm">Loading…</div></AppShell>;
   if (!vendor) return <AppShell><div className="p-6 text-sm">Vendor not found.</div></AppShell>;
 
   return (
@@ -95,7 +151,9 @@ function VendorPublic() {
 
       <section className="px-4 py-4">
         <h2 className="mb-2 text-sm font-bold">Listings</h2>
-        {posts.length === 0 ? (
+        {loading ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>
+        ) : posts.length === 0 ? (
           <p className="py-8 text-center text-sm text-muted-foreground">No listings yet.</p>
         ) : (
           <ul className="space-y-2">
