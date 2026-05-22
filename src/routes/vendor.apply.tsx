@@ -17,6 +17,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useVendor } from "@/hooks/use-vendor";
 import { CATEGORIES } from "@/data/categories";
+import {
+  getAboutFields,
+  getContactFields,
+  serializeAnswers,
+  validateFields,
+  type CategoryAnswers,
+} from "@/data/vendor-application-schemas";
+import { CategoryFields } from "@/components/vendor/CategoryFields";
 
 export const Route = createFileRoute("/vendor/apply")({
   head: () => ({
