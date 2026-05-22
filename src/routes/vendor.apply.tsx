@@ -326,32 +326,67 @@ function ApplicationStatus({
 }) {
   const isApproved = app.status === "approved";
   const isRejected = app.status === "rejected";
-  const icon = isApproved ? <CheckCircle2 className="h-7 w-7 text-green-600" />
-    : isRejected ? <XCircle className="h-7 w-7 text-destructive" />
-    : <Clock className="h-7 w-7 text-amber-600" />;
-  const title = isApproved ? "Approved" : isRejected ? "Application rejected" : "Application pending review";
-  const text = isApproved
-    ? "Set up your vendor profile to start posting listings."
+
+  const category = CATEGORIES.find((c) => c.key === app.category_key)?.label ?? app.category_key;
+
+  const tone = isApproved
+    ? { iconBg: "bg-green-50", iconColor: "text-green-600", dot: "bg-green-500", ping: "bg-green-400", label: "Approved", labelColor: "text-green-700" }
     : isRejected
-    ? "See the admin notes below and feel free to reapply."
-    : "We'll notify you as soon as an admin reviews your application.";
+    ? { iconBg: "bg-destructive/10", iconColor: "text-destructive", dot: "bg-destructive", ping: "bg-destructive/60", label: "Action needed", labelColor: "text-destructive" }
+    : { iconBg: "bg-amber-50", iconColor: "text-amber-600", dot: "bg-amber-500", ping: "bg-amber-400", label: "Review in progress", labelColor: "text-primary" };
+
+  const Icon = isApproved ? CheckCircle2 : isRejected ? XCircle : Clock;
+  const title = isApproved ? "You're approved!" : isRejected ? "Application not approved" : "Application pending review";
+  const text = isApproved
+    ? "Welcome aboard. Set up your vendor profile to start posting listings."
+    : isRejected
+    ? "Please see the admin notes below. You're welcome to reapply with updated details."
+    : "We've received your application! Our team typically reviews new vendor requests within 24–48 hours.";
+
+  const steps = [
+    { n: "01", title: "Administrative verification", desc: "An admin reviews your business documents and details.", state: isApproved ? "done" : "active" },
+    { n: "02", title: "Dashboard activation", desc: "Once approved, you'll gain full access to your vendor tools.", state: isApproved ? "active" : "upcoming" },
+    { n: "03", title: "Start selling", desc: "Complete your profile and publish your first business listings.", state: "upcoming" },
+  ] as const;
 
   return (
-    <div className="space-y-3">
-      <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
-        <div className="flex items-center gap-3">
-          {icon}
+    <div className="space-y-6">
+      {/* Main Status Card */}
+      <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
+        <div className="mb-6 flex items-start gap-4">
+          <div className={`relative rounded-2xl p-3 ${tone.iconBg}`}>
+            <Icon className={`h-7 w-7 ${tone.iconColor}`} />
+            {!isApproved && !isRejected && (
+              <span className="absolute -right-1 -top-1 flex h-3 w-3">
+                <span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${tone.ping} opacity-75`} />
+                <span className={`relative inline-flex h-3 w-3 rounded-full ${tone.dot}`} />
+              </span>
+            )}
+          </div>
           <div>
-            <div className="text-sm font-semibold">{title}</div>
-            <div className="text-xs text-muted-foreground">{app.business_name} · {app.category_key}</div>
+            <h2 className="text-lg font-bold text-foreground">{title}</h2>
+            <p className="text-sm font-medium text-muted-foreground">
+              {app.business_name} · {category}
+            </p>
           </div>
         </div>
-        <p className="mt-3 text-xs text-muted-foreground">{text}</p>
+
+        <p className="mb-6 text-sm leading-relaxed text-muted-foreground">{text}</p>
+
         {app.admin_notes && (
-          <p className="mt-3 rounded-xl bg-secondary p-3 text-xs">{app.admin_notes}</p>
+          <p className="mb-6 rounded-xl border border-border bg-secondary p-3 text-xs text-foreground">
+            <span className="font-semibold">Admin notes: </span>{app.admin_notes}
+          </p>
         )}
+
+        <div className="flex items-center gap-3 rounded-xl border border-border bg-secondary/50 px-4 py-3">
+          <div className={`h-2 w-2 rounded-full ${tone.dot}`} />
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Status</span>
+          <span className={`ml-auto text-sm font-semibold ${tone.labelColor}`}>{tone.label}</span>
+        </div>
+
         {isApproved && (
-          <div className="mt-4 flex gap-2">
+          <div className="mt-5 flex gap-2">
             <button onClick={onEditProfile} className="flex-1 rounded-xl border border-border bg-card py-2.5 text-sm font-semibold">
               Edit profile
             </button>
@@ -361,16 +396,46 @@ function ApplicationStatus({
           </div>
         )}
       </div>
-      {!isApproved && (
-        <div className="rounded-2xl border border-dashed border-border bg-card/60 p-4 text-xs text-muted-foreground">
-          <p className="font-semibold text-foreground">What happens next?</p>
-          <ol className="mt-2 list-decimal space-y-1 pl-4">
-            <li>An admin reviews your business details.</li>
-            <li>Once approved, you'll unlock your vendor dashboard.</li>
-            <li>Complete your vendor profile and start posting listings.</li>
-          </ol>
+
+      {/* Timeline */}
+      {!isRejected && (
+        <div className="space-y-4">
+          <h3 className="px-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">What happens next?</h3>
+          <div className="relative">
+            <div className="absolute bottom-6 left-[19px] top-6 w-[2px] bg-border" />
+            {steps.map((s, i) => {
+              const active = s.state === "active";
+              const done = s.state === "done";
+              const dim = s.state === "upcoming";
+              return (
+                <div key={s.n} className={`relative flex items-start gap-4 ${i < steps.length - 1 ? "pb-8" : ""}`}>
+                  <div
+                    className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-4 border-background shadow-sm ${
+                      done ? "bg-green-50" : active ? "bg-primary-soft" : "bg-secondary"
+                    }`}
+                  >
+                    {done ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-600" />
+                    ) : (
+                      <span className={`text-sm font-bold ${active ? "text-primary" : "text-muted-foreground"}`}>{s.n}</span>
+                    )}
+                  </div>
+                  <div className="pt-2">
+                    <p className={`text-[15px] font-semibold ${dim ? "text-muted-foreground" : "text-foreground"}`}>{s.title}</p>
+                    <p className={`text-sm ${dim ? "text-muted-foreground/70" : "text-muted-foreground"}`}>{s.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
+
+      {/* Reassurance footer */}
+      <div className="flex items-center gap-3 rounded-2xl border border-primary/15 bg-primary-soft/50 p-4">
+        <Phone className="h-5 w-5 text-primary" />
+        <p className="text-xs font-medium text-primary">Need help? Contact our support team any time.</p>
+      </div>
     </div>
   );
 }
