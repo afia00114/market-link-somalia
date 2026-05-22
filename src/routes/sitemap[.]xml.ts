@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES } from "@/data/categories";
 import { PROPERTIES } from "@/data/properties";
 import { HOSPITALS } from "@/data/health";
