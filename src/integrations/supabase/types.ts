@@ -492,49 +492,85 @@ export type Database = {
       }
       vendor_posts: {
         Row: {
+          amenities: string[]
+          badges: string[]
+          booking_enabled: boolean
+          booking_note: string | null
           category_key: string
+          contact: Json
           created_at: string
           currency: string | null
+          departments: Json
           description: string | null
+          experience_years: number | null
+          gallery_urls: string[]
           id: string
           image_url: string | null
           is_published: boolean
+          languages: string[]
           location: string | null
           price: number | null
           price_unit: string | null
+          response_time_minutes: number | null
+          services: Json
           title: string
           updated_at: string
           vendor_id: string
+          working_hours: Json
         }
         Insert: {
+          amenities?: string[]
+          badges?: string[]
+          booking_enabled?: boolean
+          booking_note?: string | null
           category_key: string
+          contact?: Json
           created_at?: string
           currency?: string | null
+          departments?: Json
           description?: string | null
+          experience_years?: number | null
+          gallery_urls?: string[]
           id?: string
           image_url?: string | null
           is_published?: boolean
+          languages?: string[]
           location?: string | null
           price?: number | null
           price_unit?: string | null
+          response_time_minutes?: number | null
+          services?: Json
           title: string
           updated_at?: string
           vendor_id: string
+          working_hours?: Json
         }
         Update: {
+          amenities?: string[]
+          badges?: string[]
+          booking_enabled?: boolean
+          booking_note?: string | null
           category_key?: string
+          contact?: Json
           created_at?: string
           currency?: string | null
+          departments?: Json
           description?: string | null
+          experience_years?: number | null
+          gallery_urls?: string[]
           id?: string
           image_url?: string | null
           is_published?: boolean
+          languages?: string[]
           location?: string | null
           price?: number | null
           price_unit?: string | null
+          response_time_minutes?: number | null
+          services?: Json
           title?: string
           updated_at?: string
           vendor_id?: string
+          working_hours?: Json
         }
         Relationships: [
           {

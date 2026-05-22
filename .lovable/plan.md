@@ -1,70 +1,79 @@
 ## Goal
 
-Make the "Become a Vendor" application form adapt to the category the user picks. A Real Estate agent should see real-estate fields; a Hotel owner should see hotel fields, etc. Today every applicant sees the same generic 4 fields (name, phone, location, description), which loses critical info admins need to verify the business.
+Today a vendor post is just `title / description / price / image_url / location`. The two reference screens (Mogadishu Turkish Hospital, Fast Plumbing) need a lot more: cover + gallery, verified / 24-7 / open-now badges, rating, services menu with prices, departments, working hours, languages, response time, recent work, and a "Request appointment / Book" CTA.
 
-## UX flow
+This pass extends `vendor_posts` so a vendor can capture all of that from the dashboard, then renders it on the public post page using the same visual language as the screenshots.
 
-Keep the 5-step wizard, but reshape it:
+## Scope
 
-1. **Welcome** — unchanged.
-2. **Business** — name + category picker. As soon as a category is picked, the wizard knows which extra fields to ask in step 3.
-3. **Contact** — phone, WhatsApp, location (unchanged base) **+ category-specific fields injected here**.
-4. **About** — description (unchanged) + 1–2 category-specific qualitative fields (e.g. "Specialties", "Years in business").
-5. **Review** — show all answered fields, including the category-specific ones, with proper labels.
+In:
+- DB: add structured + flexible columns to `vendor_posts`.
+- Editor: rebuild `PostEditor` in `vendor.dashboard.tsx` as a tabbed sheet (Basics / Media / Services / Hours & Contact / Extras) with category-aware sections (e.g. Hospitals get "Departments", Services get "Recent work").
+- Public detail: new route `src/routes/posts.$id.tsx` rendering the rich layout. Keep `vendors/$id` listing thumbnails linking to it.
+- Reuse existing `ChatStartButton`, `PayButton`, `ContactBar`, `RatingSummary`, booking flow.
 
-The category-specific schema is defined per category; switching category resets only the category-specific answers so the user doesn't lose generic data.
+Out:
+- Real-time "Open now" (computed from hours only).
+- Review collection (uses existing `RatingSummary`).
+- Image upload pipeline — keep URL inputs for this pass (storage bucket can come later).
 
-## Category-specific fields
+## DB changes (single migration)
 
-| Category | Extra fields |
-|---|---|
-| Real Estate | License/registration #, agency name (if different), areas served (multi-chip: Mogadishu/Hargeisa/…), property types handled (Houses, Apartments, Land, Commercial), years of experience |
-| Services | Service type (Plumbing, Electrical, Cleaning, Repairs, Other-text), service area (city/neighborhood), call-out fee (optional), available hours |
-| Travel | Sub-type (Agency, Flights, Visa, Tours, Cars, Cargo, Hajj/Umrah — multi), IATA #/license (optional), countries covered |
-| Hotels | Hotel name (if different), star rating, number of rooms, check-in/out times, amenities chips (WiFi, Parking, Restaurant, AC, Pool) |
-| Health & Medical | Facility type (Hospital, Clinic, Pharmacy, Doctor), specialties (multi-chip from departments list), 24/7 availability toggle, license # |
-| Food | Cuisine type, delivery available (yes/no), opening hours |
-| Vehicles | Dealer type (New, Used, Both), brands handled, showroom address |
-| Livestock | Animal types (Camels, Goats, Cattle, Sheep), market location |
-| Jobs | Employer industry, company size |
-| Banking | Institution type (Bank, Mobile money, Forex), license # |
+Add to `public.vendor_posts`:
+- `gallery_urls text[]` — additional photos beyond `image_url`.
+- `services jsonb` — `[{ name, price, price_unit, badge?, description? }]` for the "What we offer" list.
+- `departments jsonb` — `[{ name, icon? }]` (hospitals, hotels with sections, etc.).
+- `working_hours jsonb` — `{ mon:{open,close,closed}, tue:{...}, ..., note }`.
+- `languages text[]`.
+- `amenities text[]` — generic chips (24/7, Pharmacy, Lab, Pool, Wifi…).
+- `badges text[]` — display chips ("Verified", "24/7 Open", "Popular").
+- `response_time_minutes int` — for "Responds in under 1 hr".
+- `experience_years int`.
+- `contact jsonb` — `{ phone, whatsapp, email, address }` (overrides vendor defaults per-post).
+- `booking_enabled boolean default true`, `booking_note text`.
 
-(MVP build covers the first 5 categories in the table; the remaining ones get a sensible default of base fields only and can be extended later.)
+All nullable / default `'{}'` so existing rows keep working. No RLS changes — current "vendor manages own posts" policy still applies.
 
-## Technical plan
+## Editor changes — `src/routes/vendor.dashboard.tsx`
 
-- **Schema-driven forms.** Create `src/data/vendor-application-schemas.ts` exporting a map `CategoryKey → FieldSpec[]`. Each `FieldSpec` is one of: `text`, `tel`, `number`, `select`, `multiselect-chip`, `toggle`, `textarea`. This keeps the wizard code generic — adding a new field later is a one-line data change.
-- **Reusable inputs.** Add a small `CategoryFields` component in `src/components/vendor/CategoryFields.tsx` that renders any `FieldSpec[]` and returns its values. Reuse styling from existing `Field`/inputs in `vendor.apply.tsx`.
-- **State.** Replace the flat `useState` setup in `vendor.apply.tsx` with a `categoryAnswers: Record<string, string | string[] | boolean>` object alongside the existing generic fields. Reset it when `categoryKey` changes.
-- **Validation.** Per-field `required` flag in the schema; step 3 validates required category fields in addition to phone. Errors display inline using the existing red error banner.
-- **Persistence.** The `vendor_applications` table only has `description` for free text. To avoid a migration in this iteration, **serialize category-specific answers into the `description` column** as a human-readable block appended to the user's about text, e.g.:
+Replace the small `PostEditor` modal with a taller sheet split into tabs:
 
-  ```
-  [Real Estate details]
-  License #: 12345
-  Areas: Mogadishu, Hargeisa
-  Property types: Houses, Land
-  Years of experience: 5
+```text
+Basics:    title, category, short description, location, price + unit, badges chips
+Media:     cover image URL + gallery URLs (add/remove rows)
+Services:  repeating rows { name, price, unit, badge } — "What we offer"
+Sections:  category-dependent — Departments grid (health/hotels) OR Recent work gallery (services/trades)
+Hours:     7-day grid (open/close/closed toggle) + note, languages chips, response-time select, experience years
+Contact:   phone, whatsapp, email, address (prefilled from vendor profile), booking_enabled toggle + note
+```
 
-  [About]
-  …user's description…
-  ```
+Each tab is a small sub-component; state lives in a single `form` object. Save serializes the structured fields straight into the new columns. Category drives which tabs/sections appear (reuse the same `CategoryKey` map from `src/data/vendor-application-schemas.ts` style).
 
-  This keeps admins able to read everything in the existing admin view with zero schema changes. (A future migration can add a `details jsonb` column; called out below.)
-- **Review step.** Render the generic fields + a grouped list of category-specific answers from the schema (so labels stay consistent).
-- **Stepper labels.** Unchanged (Welcome / Business / Contact / About / Review). Step 3 visibly grows when a category with extra contact-side fields is picked — that's intentional and signals to the user "this category needs more info".
+## Public detail — `src/routes/posts.$id.tsx` (new)
 
-### Files touched
+Loader fetches the post + parent `vendor_profiles`. Layout mirrors the screenshots:
 
-- `src/data/vendor-application-schemas.ts` *(new)* — field specs per category.
-- `src/components/vendor/CategoryFields.tsx` *(new)* — renders a `FieldSpec[]` + manages local controlled values via props.
-- `src/routes/vendor.apply.tsx` *(edit)* — wire category schema into steps 3/4/5, update validation, update submit to serialize details into `description`.
+1. Hero: cover image with floating badges (Verified, 24/7), back + share buttons.
+2. Title block: title, category, rating (existing `RatingSummary`), location.
+3. Gallery strip: thumbnails from `gallery_urls`.
+4. Action row: Call / WhatsApp / Email / Copy (icon buttons, semantic tokens).
+5. About: `description`.
+6. "What we offer": `services[]` rendered as tappable rows with price; clicking opens booking sheet pre-filled with that service.
+7. Sections: Departments grid (icon tiles) OR Recent work gallery, based on `departments` / extra gallery.
+8. Contact card: phone / whatsapp / email / address rows with copy buttons.
+9. Sticky bottom CTA: "Request Appointment" → existing booking flow (`/listing/$id/book` equivalent — wire to `createBooking` server fn with `post_id`).
 
-### Out of scope (called out for transparency)
+`vendors/$id` list items already link by post id — point them at `/posts/$id`.
 
-- No DB migration in this pass. If you'd prefer structured storage (recommended long-term), I can add a `details jsonb` column to `vendor_applications` and store answers as JSON instead of appending to `description`. Say the word and I'll fold that into the build.
-- Admin UI changes are not required — admins will see the formatted block inside the existing "description" field in `admin.vendors`.
+## Technical notes
+
+- All new columns are JSON/array; no enums to keep flexible.
+- Reuse `src/components/ChatStartButton`, `PayButton`, `ContactBar`, `RatingSummary`, `ReviewModal`, and the booking helpers in `src/lib/booking/`.
+- "Open now" derived client-side from `working_hours` + device time; no cron.
+- Icons via existing `lucide-react` imports (Stethoscope, Hospital, Wrench, etc.) chosen from category map.
+- Strict design tokens — no hardcoded colors. Reuse `grad-hero`, `shadow-card`, `bg-card`, `text-primary`, `bg-secondary` already in the project.
+- Types: `src/integrations/supabase/types.ts` regenerates after migration approval.
 
 ## Open question
 
-Do you want me to also add the **`details jsonb` column** now (cleaner, future-proof), or keep this iteration zero-migration and serialize into `description`?
+Image hosting: keep "paste URL" for this pass, or add a Supabase storage bucket + uploader now? Adding it later is cheap (single new bucket + a small `<ImageUploader>` component), so I'd defer unless you say otherwise.
