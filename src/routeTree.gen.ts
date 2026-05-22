@@ -20,6 +20,7 @@ import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as HealthRouteImport } from './routes/health'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as EmployeeDashboardRouteImport } from './routes/employee-dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -109,6 +110,11 @@ const HomeRoute = HomeRouteImport.update({
 const HealthRoute = HealthRouteImport.update({
   id: '/health',
   path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -292,6 +298,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
@@ -340,6 +347,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/messages': typeof MessagesRouteWithChildren
@@ -387,6 +395,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
@@ -437,6 +446,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/employee-dashboard'
     | '/explore'
+    | '/forgot-password'
     | '/health'
     | '/home'
     | '/hotels'
@@ -485,6 +495,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/employee-dashboard'
     | '/explore'
+    | '/forgot-password'
     | '/health'
     | '/home'
     | '/messages'
@@ -531,6 +542,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/employee-dashboard'
     | '/explore'
+    | '/forgot-password'
     | '/health'
     | '/home'
     | '/hotels'
@@ -580,6 +592,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   EmployeeDashboardRoute: typeof EmployeeDashboardRoute
   ExploreRoute: typeof ExploreRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   HealthRoute: typeof HealthRoute
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
@@ -680,6 +693,13 @@ declare module '@tanstack/react-router' {
       path: '/health'
       fullPath: '/health'
       preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -1075,6 +1095,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   EmployeeDashboardRoute: EmployeeDashboardRoute,
   ExploreRoute: ExploreRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   HealthRoute: HealthRoute,
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
