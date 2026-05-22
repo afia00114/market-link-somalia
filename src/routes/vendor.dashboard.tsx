@@ -36,7 +36,7 @@ function VendorDashboard() {
   const { user, loading: authLoading } = useAuth();
   const { isVendor, vendorProfile, loading, refresh } = useVendor();
   const [posts, setPosts] = useState<VendorPost[]>([]);
-  const [tab, setTab] = useState<"posts" | "profile">("posts");
+  const [tab, setTab] = useState<"posts" | "payments" | "profile">("posts");
   const [editing, setEditing] = useState<VendorPost | null>(null);
   const [creating, setCreating] = useState(false);
 
