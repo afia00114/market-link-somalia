@@ -54,6 +54,7 @@ function VendorApply() {
   const [description, setDescription] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [categoryAnswers, setCategoryAnswers] = useState<CategoryAnswers>({});
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -66,12 +67,31 @@ function VendorApply() {
     [categoryKey],
   );
 
+  const contactFields = useMemo(() => getContactFields(categoryKey), [categoryKey]);
+  const aboutFields = useMemo(() => getAboutFields(categoryKey), [categoryKey]);
+
+  // Reset category-specific answers when category changes.
+  const changeCategory = (k: typeof categoryKey) => {
+    setCategoryKey(k);
+    setCategoryAnswers({});
+  };
+
+  const updateAnswer = (key: string, value: string | string[] | boolean) => {
+    setCategoryAnswers((prev) => ({ ...prev, [key]: value }));
+  };
+
   const validateStep = (s: Step): string | null => {
     if (s === 1) {
       if (businessName.trim().length < 2) return "Enter your business name";
     }
     if (s === 2) {
       if (phone.trim().length < 5) return "Phone is required";
+      const err = validateFields(contactFields, categoryAnswers);
+      if (err) return err;
+    }
+    if (s === 3) {
+      const err = validateFields(aboutFields, categoryAnswers);
+      if (err) return err;
     }
     return null;
   };
@@ -87,10 +107,24 @@ function VendorApply() {
     setStep((s) => Math.max(0, s - 1) as Step);
   };
 
+  const buildDescription = () => {
+    const sections: string[] = [];
+    const detailLines = [
+      ...serializeAnswers(contactFields, categoryAnswers),
+      ...serializeAnswers(aboutFields, categoryAnswers),
+    ];
+    if (detailLines.length > 0) {
+      sections.push(`[${selectedCategory.label} details]\n${detailLines.join("\n")}`);
+    }
+    const about = description.trim();
+    if (about) sections.push(`[About]\n${about}`);
+    return sections.join("\n\n") || null;
+  };
+
   const submit = async () => {
     setError(null);
     if (!user) return;
-    for (const s of [1, 2] as Step[]) {
+    for (const s of [1, 2, 3] as Step[]) {
       const err = validateStep(s);
       if (err) { setStep(s); return setError(err); }
     }
@@ -102,7 +136,7 @@ function VendorApply() {
       phone: phone.trim(),
       whatsapp: whatsapp.trim() || null,
       location: location.trim() || null,
-      description: description.trim() || null,
+      description: buildDescription(),
     });
     setSubmitting(false);
     if (insErr) return setError(insErr.message);
