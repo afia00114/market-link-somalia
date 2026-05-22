@@ -25,6 +25,8 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelIndexRouteImport } from './routes/travel.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
+import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
+import { Route as VendorApplyRouteImport } from './routes/vendor.apply'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
 import { Route as TravelToursRouteImport } from './routes/travel.tours'
 import { Route as TravelMyTicketsRouteImport } from './routes/travel.my-tickets'
@@ -38,6 +40,7 @@ import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health_.$id'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
+import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
 import { Route as ListingIdIndexRouteImport } from './routes/listing.$id.index'
 import { Route as TravelVisaIdRouteImport } from './routes/travel.visa.$id'
 import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
@@ -130,6 +133,16 @@ const HotelsIndexRoute = HotelsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => HotelsRoute,
 } as any)
+const VendorDashboardRoute = VendorDashboardRouteImport.update({
+  id: '/vendor/dashboard',
+  path: '/vendor/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VendorApplyRoute = VendorApplyRouteImport.update({
+  id: '/vendor/apply',
+  path: '/vendor/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TravelVisaRoute = TravelVisaRouteImport.update({
   id: '/visa',
   path: '/visa',
@@ -193,6 +206,11 @@ const HealthIdRoute = HealthIdRouteImport.update({
 const CategoryKeyRoute = CategoryKeyRouteImport.update({
   id: '/category/$key',
   path: '/category/$key',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminVendorsRoute = AdminVendorsRouteImport.update({
+  id: '/admin/vendors',
+  path: '/admin/vendors',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ListingIdIndexRoute = ListingIdIndexRouteImport.update({
@@ -266,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
+  '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -279,6 +298,8 @@ export interface FileRoutesByFullPath {
   '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
+  '/vendor/apply': typeof VendorApplyRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
   '/hotels/': typeof HotelsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -306,6 +327,7 @@ export interface FileRoutesByTo {
   '/real-estate': typeof RealEstateRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
+  '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -319,6 +341,8 @@ export interface FileRoutesByTo {
   '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
+  '/vendor/apply': typeof VendorApplyRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
   '/hotels': typeof HotelsIndexRoute
   '/travel': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -349,6 +373,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
+  '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
   '/health_/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -362,6 +387,8 @@ export interface FileRoutesById {
   '/travel/my-tickets': typeof TravelMyTicketsRoute
   '/travel/tours': typeof TravelToursRouteWithChildren
   '/travel/visa': typeof TravelVisaRouteWithChildren
+  '/vendor/apply': typeof VendorApplyRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
   '/hotels/': typeof HotelsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -393,6 +420,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subscribe'
     | '/travel'
+    | '/admin/vendors'
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
@@ -406,6 +434,8 @@ export interface FileRouteTypes {
     | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
+    | '/vendor/apply'
+    | '/vendor/dashboard'
     | '/hotels/'
     | '/travel/'
     | '/hotels/$id/book'
@@ -433,6 +463,7 @@ export interface FileRouteTypes {
     | '/real-estate'
     | '/sitemap.xml'
     | '/subscribe'
+    | '/admin/vendors'
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
@@ -446,6 +477,8 @@ export interface FileRouteTypes {
     | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
+    | '/vendor/apply'
+    | '/vendor/dashboard'
     | '/hotels'
     | '/travel'
     | '/hotels/$id/book'
@@ -475,6 +508,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subscribe'
     | '/travel'
+    | '/admin/vendors'
     | '/category/$key'
     | '/health_/$id'
     | '/hotels/$id'
@@ -488,6 +522,8 @@ export interface FileRouteTypes {
     | '/travel/my-tickets'
     | '/travel/tours'
     | '/travel/visa'
+    | '/vendor/apply'
+    | '/vendor/dashboard'
     | '/hotels/'
     | '/travel/'
     | '/hotels/$id/book'
@@ -518,9 +554,12 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubscribeRoute: typeof SubscribeRoute
   TravelRoute: typeof TravelRouteWithChildren
+  AdminVendorsRoute: typeof AdminVendorsRoute
   CategoryKeyRoute: typeof CategoryKeyRoute
   HealthIdRoute: typeof HealthIdRoute
   PropertyIdRoute: typeof PropertyIdRoute
+  VendorApplyRoute: typeof VendorApplyRoute
+  VendorDashboardRoute: typeof VendorDashboardRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
   ListingIdIndexRoute: typeof ListingIdIndexRoute
@@ -640,6 +679,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotelsIndexRouteImport
       parentRoute: typeof HotelsRoute
     }
+    '/vendor/dashboard': {
+      id: '/vendor/dashboard'
+      path: '/vendor/dashboard'
+      fullPath: '/vendor/dashboard'
+      preLoaderRoute: typeof VendorDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vendor/apply': {
+      id: '/vendor/apply'
+      path: '/vendor/apply'
+      fullPath: '/vendor/apply'
+      preLoaderRoute: typeof VendorApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/travel/visa': {
       id: '/travel/visa'
       path: '/visa'
@@ -729,6 +782,13 @@ declare module '@tanstack/react-router' {
       path: '/category/$key'
       fullPath: '/category/$key'
       preLoaderRoute: typeof CategoryKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/vendors': {
+      id: '/admin/vendors'
+      path: '/admin/vendors'
+      fullPath: '/admin/vendors'
+      preLoaderRoute: typeof AdminVendorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/listing/$id/': {
@@ -954,9 +1014,12 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubscribeRoute: SubscribeRoute,
   TravelRoute: TravelRouteWithChildren,
+  AdminVendorsRoute: AdminVendorsRoute,
   CategoryKeyRoute: CategoryKeyRoute,
   HealthIdRoute: HealthIdRoute,
   PropertyIdRoute: PropertyIdRoute,
+  VendorApplyRoute: VendorApplyRoute,
+  VendorDashboardRoute: VendorDashboardRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
   ListingIdIndexRoute: ListingIdIndexRoute,
@@ -964,13 +1027,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

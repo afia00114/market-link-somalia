@@ -218,11 +218,161 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_applications: {
+        Row: {
+          admin_notes: string | null
+          business_name: string
+          category_key: string
+          created_at: string
+          description: string | null
+          id: string
+          location: string | null
+          phone: string
+          status: string
+          updated_at: string
+          user_id: string
+          whatsapp: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          business_name: string
+          category_key: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          phone: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          whatsapp?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          business_name?: string
+          category_key?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          phone?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      vendor_posts: {
+        Row: {
+          category_key: string
+          created_at: string
+          currency: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          is_published: boolean
+          location: string | null
+          price: number | null
+          price_unit: string | null
+          title: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          category_key: string
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          location?: string | null
+          price?: number | null
+          price_unit?: string | null
+          title: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          category_key?: string
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          location?: string | null
+          price?: number | null
+          price_unit?: string | null
+          title?: string
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_posts_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendor_profiles: {
+        Row: {
+          avatar_url: string | null
+          business_name: string
+          category_key: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          location: string | null
+          phone: string
+          updated_at: string
+          user_id: string
+          whatsapp: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          business_name: string
+          category_key: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          phone: string
+          updated_at?: string
+          user_id: string
+          whatsapp?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          business_name?: string
+          category_key?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          phone?: string
+          updated_at?: string
+          user_id?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      approve_vendor_application: {
+        Args: { _application_id: string }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -232,7 +382,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "vendor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -360,7 +510,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "user", "vendor"],
     },
   },
 } as const
