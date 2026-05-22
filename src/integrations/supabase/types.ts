@@ -157,6 +157,69 @@ export type Database = {
           },
         ]
       }
+      payments: {
+        Row: {
+          amount: number
+          booking_ref: string | null
+          created_at: string
+          currency: string
+          customer_id: string
+          id: string
+          method: string
+          note: string | null
+          post_id: string | null
+          reference: string
+          status: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          amount: number
+          booking_ref?: string | null
+          created_at?: string
+          currency?: string
+          customer_id: string
+          id?: string
+          method: string
+          note?: string | null
+          post_id?: string | null
+          reference: string
+          status?: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          amount?: number
+          booking_ref?: string | null
+          created_at?: string
+          currency?: string
+          customer_id?: string
+          id?: string
+          method?: string
+          note?: string | null
+          post_id?: string | null
+          reference?: string
+          status?: string
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -403,6 +466,8 @@ export type Database = {
           category_key: string
           created_at: string
           description: string | null
+          edahab_number: string | null
+          evc_number: string | null
           id: string
           is_active: boolean
           location: string | null
@@ -417,6 +482,8 @@ export type Database = {
           category_key: string
           created_at?: string
           description?: string | null
+          edahab_number?: string | null
+          evc_number?: string | null
           id?: string
           is_active?: boolean
           location?: string | null
@@ -431,6 +498,8 @@ export type Database = {
           category_key?: string
           created_at?: string
           description?: string | null
+          edahab_number?: string | null
+          evc_number?: string | null
           id?: string
           is_active?: boolean
           location?: string | null

@@ -310,6 +310,14 @@ function Profile() {
                 <span className="font-medium">Messages</span>
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </Link>
+              <Link
+                to="/my-payments"
+                onClick={() => setSheet(null)}
+                className="flex items-center justify-between rounded-xl bg-secondary p-3 text-sm"
+              >
+                <span className="font-medium">My Payments</span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </Link>
               <button
                 onClick={() => {
                   if (!confirm("Clear all saved items and local bookings?")) return;

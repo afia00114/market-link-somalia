@@ -36,7 +36,7 @@ function VendorDashboard() {
   const { user, loading: authLoading } = useAuth();
   const { isVendor, vendorProfile, loading, refresh } = useVendor();
   const [posts, setPosts] = useState<VendorPost[]>([]);
-  const [tab, setTab] = useState<"posts" | "profile">("posts");
+  const [tab, setTab] = useState<"posts" | "payments" | "profile">("posts");
   const [editing, setEditing] = useState<VendorPost | null>(null);
   const [creating, setCreating] = useState(false);
 
@@ -99,6 +99,7 @@ function VendorDashboard() {
 
       <div className="sticky top-0 z-10 flex gap-2 border-b border-border bg-card px-4 py-2">
         <TabBtn active={tab === "posts"} onClick={() => setTab("posts")}>Posts</TabBtn>
+        <TabBtn active={tab === "payments"} onClick={() => setTab("payments")}>Payments</TabBtn>
         <TabBtn active={tab === "profile"} onClick={() => setTab("profile")}>Profile</TabBtn>
       </div>
 
@@ -161,6 +162,10 @@ function VendorDashboard() {
         </section>
       )}
 
+      {tab === "payments" && (
+        <VendorPayments vendorId={vendorProfile.id} />
+      )}
+
       {tab === "profile" && (
         <ProfileEditor profile={vendorProfile} onSaved={refresh} />
       )}
@@ -198,6 +203,8 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
   const [location, setLocation] = useState(profile.location ?? "");
   const [phone, setPhone] = useState(profile.phone);
   const [whatsapp, setWhatsapp] = useState(profile.whatsapp ?? "");
+  const [evcNumber, setEvcNumber] = useState(profile.evc_number ?? "");
+  const [edahabNumber, setEdahabNumber] = useState(profile.edahab_number ?? "");
   const [isActive, setIsActive] = useState(profile.is_active);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -211,6 +218,8 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
       location: location.trim() || null,
       phone: phone.trim(),
       whatsapp: whatsapp.trim() || null,
+      evc_number: evcNumber.trim() || null,
+      edahab_number: edahabNumber.trim() || null,
       is_active: isActive,
     }).eq("id", profile.id);
     setSaving(false);
@@ -228,6 +237,14 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
       <Input label="Location" value={location} onChange={setLocation} />
       <Input label="Phone" value={phone} onChange={setPhone} required inputMode="tel" />
       <Input label="WhatsApp" value={whatsapp} onChange={setWhatsapp} inputMode="tel" />
+      <div className="rounded-xl border border-border bg-background p-3">
+        <p className="mb-2 text-xs font-semibold">Mobile money — where customers send you payments</p>
+        <div className="space-y-2">
+          <Input label="EVC Plus number" value={evcNumber} onChange={setEvcNumber} inputMode="tel" placeholder="e.g. 615xxxxxx" />
+          <Input label="eDahab number" value={edahabNumber} onChange={setEdahabNumber} inputMode="tel" placeholder="e.g. 657xxxxxx" />
+        </div>
+        <p className="mt-2 text-[11px] text-muted-foreground">Leave a field blank to hide that option from customers.</p>
+      </div>
       <label className="flex items-center justify-between rounded-xl bg-secondary p-3 text-sm">
         <span>Show my profile publicly</span>
         <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
@@ -318,4 +335,107 @@ function Input({ label, value, onChange, required, inputMode, placeholder }: {
         className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm" />
     </div>
   );
+}
+
+interface PaymentRow {
+  id: string;
+  customer_id: string;
+  amount: number;
+  currency: string;
+  method: string;
+  reference: string;
+  status: "pending" | "confirmed" | "rejected";
+  note: string | null;
+  booking_ref: string | null;
+  created_at: string;
+}
+
+function VendorPayments({ vendorId }: { vendorId: string }) {
+  const [rows, setRows] = useState<PaymentRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<"pending" | "all">("pending");
+
+  const load = async () => {
+    setLoading(true);
+    const { data } = await supabase
+      .from("payments")
+      .select("id,customer_id,amount,currency,method,reference,status,note,booking_ref,created_at")
+      .eq("vendor_id", vendorId)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    setRows((data as PaymentRow[]) ?? []);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    load();
+    const channel = supabase
+      .channel(`payments:${vendorId}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `vendor_id=eq.${vendorId}` }, () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [vendorId]);
+
+  const updateStatus = async (id: string, status: "confirmed" | "rejected") => {
+    let note: string | null = null;
+    if (status === "rejected") {
+      note = prompt("Reason for rejecting?") ?? null;
+    }
+    await supabase.from("payments").update({ status, note }).eq("id", id);
+    load();
+  };
+
+  const visible = filter === "pending" ? rows.filter((r) => r.status === "pending") : rows;
+
+  return (
+    <section className="px-4 py-4">
+      <div className="mb-3 flex gap-2">
+        <button onClick={() => setFilter("pending")} className={`rounded-full px-3 py-1.5 text-xs font-medium ${filter === "pending" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}>
+          Pending ({rows.filter((r) => r.status === "pending").length})
+        </button>
+        <button onClick={() => setFilter("all")} className={`rounded-full px-3 py-1.5 text-xs font-medium ${filter === "all" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}>
+          All
+        </button>
+      </div>
+      {loading ? (
+        <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>
+      ) : visible.length === 0 ? (
+        <p className="py-10 text-center text-sm text-muted-foreground">No payments {filter === "pending" ? "pending" : "yet"}.</p>
+      ) : (
+        <ul className="space-y-2">
+          {visible.map((p) => (
+            <li key={p.id} className="rounded-2xl border border-border bg-card p-3">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <div className="text-base font-bold">{p.currency} {p.amount}</div>
+                  <div className="text-[11px] uppercase tracking-wide text-muted-foreground">{p.method === "evc" ? "EVC Plus" : "eDahab"} · {new Date(p.created_at).toLocaleString()}</div>
+                </div>
+                <StatusBadge status={p.status} />
+              </div>
+              <div className="mt-2 rounded-lg bg-secondary px-2 py-1.5 text-xs">
+                <span className="text-muted-foreground">Ref:</span> <span className="font-mono font-semibold">{p.reference}</span>
+              </div>
+              {p.booking_ref && <p className="mt-1 text-[11px] text-muted-foreground">Booking: {p.booking_ref}</p>}
+              {p.note && <p className="mt-1 text-[11px] text-muted-foreground">Note: {p.note}</p>}
+              {p.status === "pending" && (
+                <div className="mt-2 flex gap-2">
+                  <button onClick={() => updateStatus(p.id, "confirmed")} className="flex-1 rounded-lg bg-primary py-1.5 text-xs font-semibold text-primary-foreground">Confirm</button>
+                  <button onClick={() => updateStatus(p.id, "rejected")} className="flex-1 rounded-lg bg-secondary py-1.5 text-xs font-semibold text-destructive">Reject</button>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function StatusBadge({ status }: { status: "pending" | "confirmed" | "rejected" }) {
+  const map = {
+    pending: "bg-amber-100 text-amber-800",
+    confirmed: "bg-emerald-100 text-emerald-800",
+    rejected: "bg-red-100 text-red-800",
+  } as const;
+  return <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${map[status]}`}>{status}</span>;
 }

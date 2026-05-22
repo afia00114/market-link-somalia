@@ -4,6 +4,7 @@ import { ArrowLeft, MapPin, Phone } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatStartButton } from "@/components/ChatStartButton";
+import { PayButton } from "@/components/PayButton";
 
 export const Route = createFileRoute("/vendors/$id")({
   head: () => ({
@@ -24,6 +25,8 @@ interface VP {
   phone: string;
   avatar_url: string | null;
   is_active: boolean;
+  evc_number: string | null;
+  edahab_number: string | null;
 }
 interface Post {
   id: string;
@@ -121,8 +124,9 @@ function VendorPublic() {
                     )}
                   </div>
                 </div>
-                <div className="mt-2">
-                  <ChatStartButton vendorId={vendor.id} postId={p.id} label="Message about this" className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary py-2 text-xs font-semibold text-primary-foreground" />
+                <div className="mt-2 flex gap-2">
+                  <ChatStartButton vendorId={vendor.id} postId={p.id} label="Message" className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-secondary py-2 text-xs font-semibold" />
+                  <PayButton vendorId={vendor.id} postId={p.id} defaultAmount={p.price ?? undefined} defaultCurrency={(p.currency as "USD" | "SOS") ?? "USD"} className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2 text-xs font-semibold text-primary-foreground" label="Pay now" />
                 </div>
               </li>
             ))}
