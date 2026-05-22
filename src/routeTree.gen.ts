@@ -15,6 +15,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RealEstateRouteImport } from './routes/real-estate'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
+import { Route as MyPaymentsRouteImport } from './routes/my-payments'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
@@ -83,6 +84,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const PostRoute = PostRouteImport.update({
   id: '/post',
   path: '/post',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyPaymentsRoute = MyPaymentsRouteImport.update({
+  id: '/my-payments',
+  path: '/my-payments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MessagesRoute = MessagesRouteImport.update({
@@ -290,6 +296,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
+  '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
@@ -336,6 +343,7 @@ export interface FileRoutesByTo {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/messages': typeof MessagesRouteWithChildren
+  '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
@@ -383,6 +391,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
+  '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
@@ -432,6 +441,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/hotels'
     | '/messages'
+    | '/my-payments'
     | '/post'
     | '/profile'
     | '/real-estate'
@@ -478,6 +488,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/messages'
+    | '/my-payments'
     | '/post'
     | '/profile'
     | '/real-estate'
@@ -524,6 +535,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/hotels'
     | '/messages'
+    | '/my-payments'
     | '/post'
     | '/profile'
     | '/real-estate'
@@ -572,6 +584,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
   MessagesRoute: typeof MessagesRouteWithChildren
+  MyPaymentsRoute: typeof MyPaymentsRoute
   PostRoute: typeof PostRoute
   ProfileRoute: typeof ProfileRoute
   RealEstateRoute: typeof RealEstateRoute
@@ -632,6 +645,13 @@ declare module '@tanstack/react-router' {
       path: '/post'
       fullPath: '/post'
       preLoaderRoute: typeof PostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-payments': {
+      id: '/my-payments'
+      path: '/my-payments'
+      fullPath: '/my-payments'
+      preLoaderRoute: typeof MyPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/messages': {
@@ -1059,6 +1079,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
   MessagesRoute: MessagesRouteWithChildren,
+  MyPaymentsRoute: MyPaymentsRoute,
   PostRoute: PostRoute,
   ProfileRoute: ProfileRoute,
   RealEstateRoute: RealEstateRoute,
