@@ -136,15 +136,16 @@ function VendorDashboard() {
                     </div>
                   </div>
                   <div className="mt-2 flex gap-2">
+                    <Link to="/posts/$id" params={{ id: p.id }} className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-secondary py-1.5 text-xs"><Eye className="h-3 w-3" /> View</Link>
                     <button onClick={() => setEditing(p)} className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-secondary py-1.5 text-xs"><Pencil className="h-3 w-3" /> Edit</button>
                     <button
                       onClick={async () => {
                         await supabase.from("vendor_posts").update({ is_published: !p.is_published }).eq("id", p.id);
                         reloadPosts();
                       }}
-                      className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-secondary py-1.5 text-xs"
+                      className="flex items-center justify-center gap-1 rounded-lg bg-secondary px-2 py-1.5 text-xs"
                     >
-                      {p.is_published ? <><EyeOff className="h-3 w-3" /> Hide</> : <><Eye className="h-3 w-3" /> Show</>}
+                      {p.is_published ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
                     </button>
                     <button
                       onClick={async () => {
@@ -157,6 +158,7 @@ function VendorDashboard() {
                       <Trash2 className="h-3 w-3" />
                     </button>
                   </div>
+
                 </li>
               ))}
             </ul>
