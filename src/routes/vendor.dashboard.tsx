@@ -162,6 +162,10 @@ function VendorDashboard() {
         </section>
       )}
 
+      {tab === "payments" && (
+        <VendorPayments vendorId={vendorProfile.id} />
+      )}
+
       {tab === "profile" && (
         <ProfileEditor profile={vendorProfile} onSaved={refresh} />
       )}
