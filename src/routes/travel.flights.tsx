@@ -20,7 +20,7 @@ export const Route = createFileRoute("/travel/flights")({
   head: () => {
     const url = "https://market-link-somalia.lovable.app/travel/flights";
     const title = "Airline Tickets & Flights — MaalsoorHub";
-    const description = "Search and compare flights from verified Somali and East African travel agencies. Filter by airline, price, and direct routes — book directly via WhatsApp.";
+    const description = "Search and compare flights from verified Somali and East African agencies. Filter by airline, price, and direct routes — book via WhatsApp.";
     return {
       meta: [
         { title },
