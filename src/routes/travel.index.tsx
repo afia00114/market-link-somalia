@@ -69,6 +69,7 @@ function TravelHub() {
   const items = useMemo(() => {
     const term = q.trim().toLowerCase();
     return TRAVEL_SUBS.filter((s) => {
+      if (!VISIBLE_KEYS.includes(s.key)) return false;
       if (cat !== "all" && s.key !== cat) return false;
       if (term && !(s.label + " " + s.short + " " + s.description).toLowerCase().includes(term)) return false;
       return true;
