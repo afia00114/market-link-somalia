@@ -156,7 +156,7 @@ export function PostEditor({ vendorId, defaultCategory, post, onClose, onSaved }
     setErr(null);
     if (form.title.trim().length < 2) { setTab("basics"); return setErr("Title is required"); }
     setSaving(true);
-    const payload = {
+    const payload: any = {
       vendor_id: vendorId,
       title: form.title.trim(),
       description: form.description.trim() || null,
@@ -182,6 +182,7 @@ export function PostEditor({ vendorId, defaultCategory, post, onClose, onSaved }
     const { error } = post
       ? await supabase.from("vendor_posts").update(payload).eq("id", post.id)
       : await supabase.from("vendor_posts").insert(payload);
+
     setSaving(false);
     if (error) return setErr(error.message);
     onSaved();

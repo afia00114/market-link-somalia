@@ -42,6 +42,7 @@ import { Route as TravelBusRouteImport } from './routes/travel.bus'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
+import { Route as PostsIdRouteImport } from './routes/posts.$id'
 import { Route as MessagesIdRouteImport } from './routes/messages.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health_.$id'
@@ -225,6 +226,11 @@ const ProfileSecurityRoute = ProfileSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => ProfileRoute,
 } as any)
+const PostsIdRoute = PostsIdRouteImport.update({
+  id: '/posts/$id',
+  path: '/posts/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MessagesIdRoute = MessagesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -335,6 +341,7 @@ export interface FileRoutesByFullPath {
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
@@ -385,6 +392,7 @@ export interface FileRoutesByTo {
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
@@ -438,6 +446,7 @@ export interface FileRoutesById {
   '/health_/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
@@ -492,6 +501,7 @@ export interface FileRouteTypes {
     | '/health/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
@@ -542,6 +552,7 @@ export interface FileRouteTypes {
     | '/health/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
@@ -594,6 +605,7 @@ export interface FileRouteTypes {
     | '/health_/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
@@ -644,6 +656,7 @@ export interface RootRouteChildren {
   AdminVendorsRoute: typeof AdminVendorsRoute
   CategoryKeyRoute: typeof CategoryKeyRoute
   HealthIdRoute: typeof HealthIdRoute
+  PostsIdRoute: typeof PostsIdRoute
   PropertyIdRoute: typeof PropertyIdRoute
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
@@ -885,6 +898,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/profile/security'
       preLoaderRoute: typeof ProfileSecurityRouteImport
       parentRoute: typeof ProfileRoute
+    }
+    '/posts/$id': {
+      id: '/posts/$id'
+      path: '/posts/$id'
+      fullPath: '/posts/$id'
+      preLoaderRoute: typeof PostsIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/messages/$id': {
       id: '/messages/$id'
@@ -1191,6 +1211,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminVendorsRoute: AdminVendorsRoute,
   CategoryKeyRoute: CategoryKeyRoute,
   HealthIdRoute: HealthIdRoute,
+  PostsIdRoute: PostsIdRoute,
   PropertyIdRoute: PropertyIdRoute,
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,

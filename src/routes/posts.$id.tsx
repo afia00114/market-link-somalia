@@ -148,7 +148,7 @@ function PostDetail() {
           {openNow !== null && (
             <Badge tone={openNow ? "success" : "muted"} icon={<Clock className="h-3 w-3" />}>{openNow ? "Open now" : "Closed"}</Badge>
           )}
-          {(post.badges ?? []).map((b) => (
+          {(post.badges ?? []).map((b: string) => (
             <Badge key={b} tone={b.toLowerCase().includes("verified") ? "primary" : "neutral"} icon={b.toLowerCase().includes("verified") ? <ShieldCheck className="h-3 w-3" /> : undefined}>{b}</Badge>
           ))}
         </div>
@@ -158,9 +158,10 @@ function PostDetail() {
       <section className="px-4 pt-4">
         <h1 className="flex items-start gap-2 text-lg font-bold leading-tight">
           {post.title}
-          {(post.badges ?? []).some((b) => b.toLowerCase().includes("verified")) && (
+          {(post.badges ?? []).some((b: string) => b.toLowerCase().includes("verified")) && (
             <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
           )}
+
         </h1>
         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
           <span className="capitalize">{post.category_key.replace(/-/g, " ")}</span>
@@ -212,7 +213,7 @@ function PostDetail() {
         <section className="mt-5 px-4">
           <h2 className="mb-2 flex items-center gap-1.5 text-sm font-bold"><Star className="h-3.5 w-3.5 text-primary" /> What we offer</h2>
           <div className="grid grid-cols-2 gap-2">
-            {(post.amenities ?? []).map((a) => (
+            {(post.amenities ?? []).map((a: string) => (
               <div key={a} className="flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-2 text-xs font-medium">
                 <ShieldCheck className="h-3.5 w-3.5 text-primary" /> {a}
               </div>
@@ -300,7 +301,7 @@ function PostDetail() {
         <section className="mt-5 px-4">
           <h2 className="mb-2 flex items-center gap-1.5 text-sm font-bold"><Languages className="h-3.5 w-3.5" /> Languages</h2>
           <div className="flex flex-wrap gap-1.5">
-            {(post.languages ?? []).map((l) => (
+            {(post.languages ?? []).map((l: string) => (
               <span key={l} className="rounded-full border border-border bg-card px-3 py-1 text-xs">{l}</span>
             ))}
           </div>
