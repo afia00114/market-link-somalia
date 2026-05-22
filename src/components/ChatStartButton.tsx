@@ -31,7 +31,8 @@ export function ChatStartButton({ vendorId, postId, className, label = "Message"
       alert(error.message);
       return;
     }
-    navigate({ to: "/messages/$id", params: { id: data as string } });
+    if (!data) return;
+    navigate({ to: "/messages/$id", params: { id: String(data) } });
   };
 
   return (
