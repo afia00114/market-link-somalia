@@ -203,6 +203,8 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
   const [location, setLocation] = useState(profile.location ?? "");
   const [phone, setPhone] = useState(profile.phone);
   const [whatsapp, setWhatsapp] = useState(profile.whatsapp ?? "");
+  const [evcNumber, setEvcNumber] = useState(profile.evc_number ?? "");
+  const [edahabNumber, setEdahabNumber] = useState(profile.edahab_number ?? "");
   const [isActive, setIsActive] = useState(profile.is_active);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -216,6 +218,8 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
       location: location.trim() || null,
       phone: phone.trim(),
       whatsapp: whatsapp.trim() || null,
+      evc_number: evcNumber.trim() || null,
+      edahab_number: edahabNumber.trim() || null,
       is_active: isActive,
     }).eq("id", profile.id);
     setSaving(false);
