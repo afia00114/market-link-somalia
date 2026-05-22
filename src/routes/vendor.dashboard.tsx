@@ -99,6 +99,7 @@ function VendorDashboard() {
 
       <div className="sticky top-0 z-10 flex gap-2 border-b border-border bg-card px-4 py-2">
         <TabBtn active={tab === "posts"} onClick={() => setTab("posts")}>Posts</TabBtn>
+        <TabBtn active={tab === "payments"} onClick={() => setTab("payments")}>Payments</TabBtn>
         <TabBtn active={tab === "profile"} onClick={() => setTab("profile")}>Profile</TabBtn>
       </div>
 
