@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES } from "@/data/categories";
 import { PROPERTIES } from "@/data/properties";
 import { HOSPITALS } from "@/data/health";
@@ -19,10 +20,18 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+        const { data: vendors } = await supabase
+          .from("vendor_profiles")
+          .select("id")
+          .eq("is_active", true);
+
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/home", changefreq: "weekly", priority: "0.9" },
           { path: "/explore", changefreq: "weekly", priority: "0.8" },
+          { path: "/auth", changefreq: "monthly", priority: "0.4" },
+          { path: "/subscribe", changefreq: "monthly", priority: "0.5" },
+          { path: "/vendor/apply", changefreq: "monthly", priority: "0.6" },
           { path: "/real-estate", changefreq: "weekly", priority: "0.8" },
           { path: "/travel", changefreq: "weekly", priority: "0.8" },
           { path: "/travel/agencies", changefreq: "weekly", priority: "0.7" },
@@ -55,6 +64,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           ...TOUR_PACKAGES.map((t) => ({ path: `/travel/tours/${t.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...CAR_OFFERS.map((c) => ({ path: `/travel/car-rental/${c.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...VISA_SERVICES.map((v) => ({ path: `/travel/visa/${v.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...(vendors ?? []).map((v: { id: string }) => ({ path: `/vendors/${v.id}`, changefreq: "weekly" as const, priority: "0.6" })),
         ];
 
         const urls = entries.map((e) =>
