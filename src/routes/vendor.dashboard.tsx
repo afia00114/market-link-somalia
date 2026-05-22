@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useVendor, type VendorProfile } from "@/hooks/use-vendor";
 import { CATEGORIES } from "@/data/categories";
+import { PostEditor } from "@/components/vendor/PostEditor";
+
 
 export const Route = createFileRoute("/vendor/dashboard")({
   head: () => ({
