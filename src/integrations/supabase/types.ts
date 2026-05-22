@@ -122,6 +122,93 @@ export type Database = {
           },
         ]
       }
+      hospitals: {
+        Row: {
+          about: string | null
+          address: string | null
+          city: string
+          country: string
+          created_at: string
+          departments: string[] | null
+          district: string | null
+          email: string | null
+          gallery: string[] | null
+          id: string
+          image_url: string | null
+          is_24_7: boolean
+          is_published: boolean
+          is_verified: boolean
+          name: string
+          phone: string | null
+          rating: number | null
+          region: string | null
+          reviews_count: number
+          services: string[] | null
+          slug: string | null
+          sort_order: number
+          type: string | null
+          updated_at: string
+          website: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          about?: string | null
+          address?: string | null
+          city: string
+          country?: string
+          created_at?: string
+          departments?: string[] | null
+          district?: string | null
+          email?: string | null
+          gallery?: string[] | null
+          id?: string
+          image_url?: string | null
+          is_24_7?: boolean
+          is_published?: boolean
+          is_verified?: boolean
+          name: string
+          phone?: string | null
+          rating?: number | null
+          region?: string | null
+          reviews_count?: number
+          services?: string[] | null
+          slug?: string | null
+          sort_order?: number
+          type?: string | null
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          about?: string | null
+          address?: string | null
+          city?: string
+          country?: string
+          created_at?: string
+          departments?: string[] | null
+          district?: string | null
+          email?: string | null
+          gallery?: string[] | null
+          id?: string
+          image_url?: string | null
+          is_24_7?: boolean
+          is_published?: boolean
+          is_verified?: boolean
+          name?: string
+          phone?: string | null
+          rating?: number | null
+          region?: string | null
+          reviews_count?: number
+          services?: string[] | null
+          slug?: string | null
+          sort_order?: number
+          type?: string | null
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           body: string

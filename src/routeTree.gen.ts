@@ -45,6 +45,7 @@ import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
 import { Route as MessagesIdRouteImport } from './routes/messages.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health_.$id'
+import { Route as HealthDirectoryRouteImport } from './routes/health.directory'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
 import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
 import { Route as ListingIdIndexRouteImport } from './routes/listing.$id.index'
@@ -239,6 +240,11 @@ const HealthIdRoute = HealthIdRouteImport.update({
   path: '/health/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HealthDirectoryRoute = HealthDirectoryRouteImport.update({
+  id: '/directory',
+  path: '/directory',
+  getParentRoute: () => HealthRoute,
+} as any)
 const CategoryKeyRoute = CategoryKeyRouteImport.update({
   id: '/category/$key',
   path: '/category/$key',
@@ -311,7 +317,7 @@ export interface FileRoutesByFullPath {
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/health': typeof HealthRoute
+  '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
@@ -325,6 +331,7 @@ export interface FileRoutesByFullPath {
   '/travel': typeof TravelRouteWithChildren
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/health/directory': typeof HealthDirectoryRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
@@ -362,7 +369,7 @@ export interface FileRoutesByTo {
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/health': typeof HealthRoute
+  '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
@@ -374,6 +381,7 @@ export interface FileRoutesByTo {
   '/subscribe': typeof SubscribeRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/health/directory': typeof HealthDirectoryRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
@@ -412,7 +420,7 @@ export interface FileRoutesById {
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/health': typeof HealthRoute
+  '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
@@ -426,6 +434,7 @@ export interface FileRoutesById {
   '/travel': typeof TravelRouteWithChildren
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/health/directory': typeof HealthDirectoryRoute
   '/health_/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
@@ -479,6 +488,7 @@ export interface FileRouteTypes {
     | '/travel'
     | '/admin/vendors'
     | '/category/$key'
+    | '/health/directory'
     | '/health/$id'
     | '/hotels/$id'
     | '/messages/$id'
@@ -528,6 +538,7 @@ export interface FileRouteTypes {
     | '/subscribe'
     | '/admin/vendors'
     | '/category/$key'
+    | '/health/directory'
     | '/health/$id'
     | '/hotels/$id'
     | '/messages/$id'
@@ -579,6 +590,7 @@ export interface FileRouteTypes {
     | '/travel'
     | '/admin/vendors'
     | '/category/$key'
+    | '/health/directory'
     | '/health_/$id'
     | '/hotels/$id'
     | '/messages/$id'
@@ -617,7 +629,7 @@ export interface RootRouteChildren {
   EmployeeDashboardRoute: typeof EmployeeDashboardRoute
   ExploreRoute: typeof ExploreRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
-  HealthRoute: typeof HealthRoute
+  HealthRoute: typeof HealthRouteWithChildren
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
   MessagesRoute: typeof MessagesRouteWithChildren
@@ -895,6 +907,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HealthIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/health/directory': {
+      id: '/health/directory'
+      path: '/directory'
+      fullPath: '/health/directory'
+      preLoaderRoute: typeof HealthDirectoryRouteImport
+      parentRoute: typeof HealthRoute
+    }
     '/category/$key': {
       id: '/category/$key'
       path: '/category/$key'
@@ -988,6 +1007,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface HealthRouteChildren {
+  HealthDirectoryRoute: typeof HealthDirectoryRoute
+}
+
+const HealthRouteChildren: HealthRouteChildren = {
+  HealthDirectoryRoute: HealthDirectoryRoute,
+}
+
+const HealthRouteWithChildren =
+  HealthRoute._addFileChildren(HealthRouteChildren)
 
 interface HotelsIdRouteChildren {
   HotelsIdBookRoute: typeof HotelsIdBookRoute
@@ -1146,7 +1176,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmployeeDashboardRoute: EmployeeDashboardRoute,
   ExploreRoute: ExploreRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
-  HealthRoute: HealthRoute,
+  HealthRoute: HealthRouteWithChildren,
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
   MessagesRoute: MessagesRouteWithChildren,
