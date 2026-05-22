@@ -1,30 +1,91 @@
-## Goal
-After the user finishes the 3 onboarding slides on the splash route (`/`), show a choice screen with two paths: **Register as Customer** or **Register as Vendor** — instead of the single "Get Started" button that currently dumps everyone on `/home`.
+All four areas you picked are real chunks of work — too much for one safe pass. I'll ship them in 4 phases. Each phase is self-contained and testable before moving on. Approve and I'll start with Phase 1.
 
-## Changes
+## Phase 1 — Auth upgrades
 
-### `src/routes/index.tsx`
-- Add a 4th stage `"choose"` after the last onboarding slide.
-- On the final slide, replace "Get Started" with **Continue** → moves to the choose stage.
-- Choose stage shows:
-  - Heading: "How will you use MaalsoorHub?"
-  - Two large cards/buttons:
-    - **I'm a Customer** — "Browse listings, book services, chat with vendors." → navigates to `/auth` (signup mode).
-    - **I'm a Vendor** — "List your business, get bookings, receive payments." → navigates to `/auth?next=/vendor/apply` (after signup, lands on the vendor application form).
-  - Small text below: "Already have an account? **Sign in**" → `/auth`.
+**Phone (SMS OTP) sign-in**
+- Add a "Phone" tab on `/auth` next to Email and Google.
+- Flow: enter phone → request OTP → enter 6-digit code → signed in.
+- Backend: enable Phone provider in Lovable Cloud Auth. SMS sending requires a provider — I'll connect **Twilio** via the connector (you'll be prompted for Twilio credentials when we get there).
 
-### `src/routes/auth.tsx` (small additions)
-- Read `next` from search params.
-- Default `mode` to `"signup"` when arriving from the choose screen (use a `mode=signup` search param).
-- After successful signup/signin, navigate to `next` if present, else `/profile` (current behavior).
-- Already-signed-in redirect: also honor `next`.
+**Password reset**
+- "Forgot password?" link on the email tab → sends reset email.
+- New public `/reset-password` route that reads the recovery token and lets the user set a new password.
 
-### Route search params
-- `/auth` accepts optional `?mode=signup&next=/vendor/apply`. Validated with a small Zod schema in `validateSearch`.
+**MFA (TOTP)**
+- New `/profile/security` page: enroll authenticator app (QR code), verify code, list/revoke factors.
+- Step-up prompt on sign-in for users with MFA enabled.
 
-## Not changing
-- No database changes — vendor role is still granted only after admin approves the vendor application (existing flow).
-- No new translations strings wired (English only for now, matching existing splash copy). Can add i18n keys later if you want.
-- Splash auto-advance timing and the 3 slides themselves stay the same.
+**Out of scope this phase:** Facebook (not supported on Lovable Cloud), Apple (skip unless you want it — say the word).
 
-Approve and I'll implement.
+---
+
+## Phase 2 — In-app notifications
+
+**Schema (`notifications` table):** `id, user_id, type, title, body, link, read_at, created_at` + RLS so users only see their own.
+
+**Generators (DB triggers, so they're automatic):**
+- New message in a conversation → notify the other participant
+- Vendor application approved/rejected → notify applicant
+- New booking created → notify vendor
+- Payment status changes → notify customer
+
+**UI**
+- Bell icon in `AppShell` header with unread count badge
+- `/notifications` page: list, mark-as-read, mark-all-read
+- Realtime subscription so the badge updates live
+- `/profile/notifications` preferences (per-type on/off)
+
+**Email alerts** for the same events via Lovable's email system (verified domain required — I'll walk you through it when we hit that step).
+
+---
+
+## Phase 3 — Manual mobile-money checkout
+
+Reworks the existing `payments` table flow into a real checkout.
+
+**`/checkout/$bookingRef` page**
+- Order summary (service, vendor, total, currency)
+- Pick method: **EVC Plus**, **Edahab**, **M-Pesa** (uses `vendor_profiles.evc_number / edahab_number / phone`)
+- Step-by-step USSD/app instructions for the chosen method
+- Form: payer name, payer phone, transaction reference, screenshot upload (optional)
+- Submits a row to `payments` with `status='pending'`
+
+**Vendor dashboard additions**
+- New "Payments" tab: list pending payments, **Confirm received** or **Reject** buttons
+- Confirmation updates `payments.status` and notifies the customer (uses Phase 2 notifications)
+
+**Customer side**
+- `/my-payments` already exists — extend with status badges and timeline
+- Booking flow links to `/checkout/...` instead of "contact via WhatsApp" (WhatsApp stays as a fallback)
+
+**Storage**
+- New `payment-proofs` bucket (private, owner-read + vendor-of-payment-read)
+
+---
+
+## Phase 4 — Geolocation: nearby vendors
+
+**Schema**
+- Add `latitude numeric, longitude numeric` to `vendor_profiles` (nullable, with a validation trigger for valid ranges).
+- Vendor dashboard: "Pin my location" button → uses browser geolocation, saves coords.
+
+**Browse experience**
+- `/explore` and category pages: "Use my location" toggle
+- Sort vendors by Haversine distance to user
+- Display "2.3 km away" badge on cards
+- Permission denial fallback: city-based filter (existing behavior)
+
+**Out of scope:** map view (Leaflet/Mapbox). Distance + sort first; map is a follow-up if you want it.
+
+---
+
+## Technical notes
+
+- All new server logic goes through `createServerFn` (TanStack Start pattern already used in the project) — no Supabase Edge Functions.
+- All new tables get RLS from day one. Roles continue using the existing `user_roles` + `has_role()` pattern.
+- Phone auth, Twilio connection, and email-domain setup each need one-time user input (Lovable Cloud Auth settings, Twilio account, DNS record) — I'll prompt you in-flow when we get to each.
+- Phase 1 needs no schema changes. Phases 2–4 each have one migration that I'll show you before applying.
+
+---
+
+Approve and I'll start Phase 1 (auth upgrades), or tell me to reorder / drop a phase.
