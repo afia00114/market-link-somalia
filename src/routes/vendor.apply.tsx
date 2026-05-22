@@ -72,11 +72,11 @@ function VendorApply() {
     setError(null);
     const err = validateStep(step);
     if (err) return setError(err);
-    setStep((s) => Math.min(4, (s + 1) as Step));
+    setStep((s) => Math.min(4, s + 1) as Step);
   };
   const goBack = () => {
     setError(null);
-    setStep((s) => Math.max(0, (s - 1) as Step));
+    setStep((s) => Math.max(0, s - 1) as Step);
   };
 
   const submit = async () => {
