@@ -84,10 +84,11 @@ function VendorDashboard() {
           <Link to="/profile" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
             <ArrowLeft className="h-4 w-4" />
           </Link>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h1 className="truncate text-lg font-bold">{vendorProfile.business_name}</h1>
             <p className="text-xs opacity-80 capitalize">{vendorProfile.category_key.replace("-", " ")}</p>
           </div>
+          <Link to="/messages" className="rounded-full bg-white/20 px-3 py-1.5 text-xs font-semibold">Inbox</Link>
         </div>
         <div className="mt-4 grid grid-cols-3 gap-2 text-center">
           <Stat label="Posts" value={posts.length} />

@@ -25,6 +25,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelIndexRouteImport } from './routes/travel.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
+import { Route as VendorsIdRouteImport } from './routes/vendors.$id'
 import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
 import { Route as VendorApplyRouteImport } from './routes/vendor.apply'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
@@ -37,6 +38,7 @@ import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelBusRouteImport } from './routes/travel.bus'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
+import { Route as MessagesIdRouteImport } from './routes/messages.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health_.$id'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
@@ -133,6 +135,11 @@ const HotelsIndexRoute = HotelsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => HotelsRoute,
 } as any)
+const VendorsIdRoute = VendorsIdRouteImport.update({
+  id: '/vendors/$id',
+  path: '/vendors/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VendorDashboardRoute = VendorDashboardRouteImport.update({
   id: '/vendor/dashboard',
   path: '/vendor/dashboard',
@@ -192,6 +199,11 @@ const PropertyIdRoute = PropertyIdRouteImport.update({
   id: '/property/$id',
   path: '/property/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesIdRoute = MessagesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => MessagesRoute,
 } as any)
 const HotelsIdRoute = HotelsIdRouteImport.update({
   id: '/$id',
@@ -277,7 +289,7 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
-  '/messages': typeof MessagesRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
@@ -288,6 +300,7 @@ export interface FileRoutesByFullPath {
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
+  '/messages/$id': typeof MessagesIdRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -300,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -321,7 +335,7 @@ export interface FileRoutesByTo {
   '/explore': typeof ExploreRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
-  '/messages': typeof MessagesRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
@@ -331,6 +345,7 @@ export interface FileRoutesByTo {
   '/category/$key': typeof CategoryKeyRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
+  '/messages/$id': typeof MessagesIdRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -343,6 +358,7 @@ export interface FileRoutesByTo {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendors/$id': typeof VendorsIdRoute
   '/hotels': typeof HotelsIndexRoute
   '/travel': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -366,7 +382,7 @@ export interface FileRoutesById {
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
-  '/messages': typeof MessagesRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
@@ -377,6 +393,7 @@ export interface FileRoutesById {
   '/category/$key': typeof CategoryKeyRoute
   '/health_/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
+  '/messages/$id': typeof MessagesIdRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -389,6 +406,7 @@ export interface FileRoutesById {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -424,6 +442,7 @@ export interface FileRouteTypes {
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
+    | '/messages/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -436,6 +455,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendors/$id'
     | '/hotels/'
     | '/travel/'
     | '/hotels/$id/book'
@@ -467,6 +487,7 @@ export interface FileRouteTypes {
     | '/category/$key'
     | '/health/$id'
     | '/hotels/$id'
+    | '/messages/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -479,6 +500,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendors/$id'
     | '/hotels'
     | '/travel'
     | '/hotels/$id/book'
@@ -512,6 +534,7 @@ export interface FileRouteTypes {
     | '/category/$key'
     | '/health_/$id'
     | '/hotels/$id'
+    | '/messages/$id'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -524,6 +547,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendors/$id'
     | '/hotels/'
     | '/travel/'
     | '/hotels/$id/book'
@@ -547,7 +571,7 @@ export interface RootRouteChildren {
   HealthRoute: typeof HealthRoute
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
-  MessagesRoute: typeof MessagesRoute
+  MessagesRoute: typeof MessagesRouteWithChildren
   PostRoute: typeof PostRoute
   ProfileRoute: typeof ProfileRoute
   RealEstateRoute: typeof RealEstateRoute
@@ -560,6 +584,7 @@ export interface RootRouteChildren {
   PropertyIdRoute: typeof PropertyIdRoute
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
+  VendorsIdRoute: typeof VendorsIdRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
   ListingIdIndexRoute: typeof ListingIdIndexRoute
@@ -679,6 +704,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HotelsIndexRouteImport
       parentRoute: typeof HotelsRoute
     }
+    '/vendors/$id': {
+      id: '/vendors/$id'
+      path: '/vendors/$id'
+      fullPath: '/vendors/$id'
+      preLoaderRoute: typeof VendorsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vendor/dashboard': {
       id: '/vendor/dashboard'
       path: '/vendor/dashboard'
@@ -762,6 +794,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/property/$id'
       preLoaderRoute: typeof PropertyIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/messages/$id': {
+      id: '/messages/$id'
+      path: '/$id'
+      fullPath: '/messages/$id'
+      preLoaderRoute: typeof MessagesIdRouteImport
+      parentRoute: typeof MessagesRoute
     }
     '/hotels/$id': {
       id: '/hotels/$id'
@@ -896,6 +935,18 @@ const HotelsRouteChildren: HotelsRouteChildren = {
 const HotelsRouteWithChildren =
   HotelsRoute._addFileChildren(HotelsRouteChildren)
 
+interface MessagesRouteChildren {
+  MessagesIdRoute: typeof MessagesIdRoute
+}
+
+const MessagesRouteChildren: MessagesRouteChildren = {
+  MessagesIdRoute: MessagesIdRoute,
+}
+
+const MessagesRouteWithChildren = MessagesRoute._addFileChildren(
+  MessagesRouteChildren,
+)
+
 interface TravelAgenciesRouteChildren {
   TravelAgenciesIdRoute: typeof TravelAgenciesIdRoute
 }
@@ -1007,7 +1058,7 @@ const rootRouteChildren: RootRouteChildren = {
   HealthRoute: HealthRoute,
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
-  MessagesRoute: MessagesRoute,
+  MessagesRoute: MessagesRouteWithChildren,
   PostRoute: PostRoute,
   ProfileRoute: ProfileRoute,
   RealEstateRoute: RealEstateRoute,
@@ -1020,6 +1071,7 @@ const rootRouteChildren: RootRouteChildren = {
   PropertyIdRoute: PropertyIdRoute,
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
+  VendorsIdRoute: VendorsIdRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
   ListingIdIndexRoute: ListingIdIndexRoute,
