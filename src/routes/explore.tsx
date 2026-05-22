@@ -5,18 +5,42 @@ import { CategoryCard } from "@/components/CategoryCard";
 import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/explore")({
-  head: () => ({
-    meta: [
-      { title: "Explore Categories — MaalsoorHub" },
-      { name: "description", content: "Explore all service categories: real estate, travel, health, jobs, and more across Somalia." },
-      { property: "og:title", content: "Explore Categories — MaalsoorHub" },
-      { property: "og:description", content: "Explore all service categories on MaalsoorHub." },
-      { property: "og:url", content: "https://market-link-somalia.lovable.app/explore" },
-    ],
-    links: [
-      { rel: "canonical", href: "https://market-link-somalia.lovable.app/explore" },
-    ],
-  }),
+  head: () => {
+    const url = "https://market-link-somalia.lovable.app/explore";
+    const title = "Explore Categories — MaalsoorHub";
+    const description = "Explore all service categories: real estate, travel, health, jobs, and more across Somalia.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: url },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              itemListElement: CATEGORIES.map((c, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: c.label,
+                url: `https://market-link-somalia.lovable.app${c.href}`,
+              })),
+            },
+          }),
+        },
+      ],
+    };
+  },
   component: Explore,
 });
 

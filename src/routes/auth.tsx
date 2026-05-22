@@ -14,13 +14,19 @@ const authSearchSchema = z.object({
 
 export const Route = createFileRoute("/auth")({
   validateSearch: zodValidator(authSearchSchema),
-  head: () => ({
-    meta: [
-      { title: "Sign in — MaalsoorHub" },
-      { name: "description", content: "Sign in or create a MaalsoorHub account to save listings, manage bookings, and reach providers faster." },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () => {
+    const title = "Sign in — MaalsoorHub";
+    const description = "Sign in or create a MaalsoorHub account to save listings, manage bookings, and reach providers faster.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { name: "robots", content: "noindex" },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+      ],
+    };
+  },
   component: AuthPage,
 });
 
