@@ -24,7 +24,7 @@ export function ChatStartButton({ vendorId, postId, className, label = "Message"
     setLoading(true);
     const { data, error } = await supabase.rpc("start_conversation", {
       _vendor_id: vendorId,
-      _post_id: postId ?? null,
+      _post_id: postId ?? undefined,
     });
     setLoading(false);
     if (error) {
