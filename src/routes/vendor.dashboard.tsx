@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useVendor, type VendorProfile } from "@/hooks/use-vendor";
 import { CATEGORIES } from "@/data/categories";
+import { PostEditor } from "@/components/vendor/PostEditor";
+
 
 export const Route = createFileRoute("/vendor/dashboard")({
   head: () => ({
@@ -134,15 +136,16 @@ function VendorDashboard() {
                     </div>
                   </div>
                   <div className="mt-2 flex gap-2">
+                    <Link to="/posts/$id" params={{ id: p.id }} className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-secondary py-1.5 text-xs"><Eye className="h-3 w-3" /> View</Link>
                     <button onClick={() => setEditing(p)} className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-secondary py-1.5 text-xs"><Pencil className="h-3 w-3" /> Edit</button>
                     <button
                       onClick={async () => {
                         await supabase.from("vendor_posts").update({ is_published: !p.is_published }).eq("id", p.id);
                         reloadPosts();
                       }}
-                      className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-secondary py-1.5 text-xs"
+                      className="flex items-center justify-center gap-1 rounded-lg bg-secondary px-2 py-1.5 text-xs"
                     >
-                      {p.is_published ? <><EyeOff className="h-3 w-3" /> Hide</> : <><Eye className="h-3 w-3" /> Show</>}
+                      {p.is_published ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
                     </button>
                     <button
                       onClick={async () => {
@@ -155,6 +158,7 @@ function VendorDashboard() {
                       <Trash2 className="h-3 w-3" />
                     </button>
                   </div>
+
                 </li>
               ))}
             </ul>
@@ -257,73 +261,8 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
   );
 }
 
-function PostEditor({ vendorId, defaultCategory, post, onClose, onSaved }: {
-  vendorId: string; defaultCategory: string; post: VendorPost | null; onClose: () => void; onSaved: () => void;
-}) {
-  const [title, setTitle] = useState(post?.title ?? "");
-  const [description, setDescription] = useState(post?.description ?? "");
-  const [categoryKey, setCategoryKey] = useState(post?.category_key ?? defaultCategory);
-  const [price, setPrice] = useState(post?.price?.toString() ?? "");
-  const [priceUnit, setPriceUnit] = useState(post?.price_unit ?? "");
-  const [imageUrl, setImageUrl] = useState(post?.image_url ?? "");
-  const [location, setLocation] = useState(post?.location ?? "");
-  const [saving, setSaving] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+// PostEditor moved to src/components/vendor/PostEditor.tsx
 
-  const save = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErr(null);
-    if (title.trim().length < 2) return setErr("Title is required");
-    setSaving(true);
-    const payload = {
-      vendor_id: vendorId,
-      title: title.trim(),
-      description: description.trim() || null,
-      category_key: categoryKey,
-      price: price ? Number(price) : null,
-      price_unit: priceUnit.trim() || null,
-      image_url: imageUrl.trim() || null,
-      location: location.trim() || null,
-    };
-    const { error } = post
-      ? await supabase.from("vendor_posts").update(payload).eq("id", post.id)
-      : await supabase.from("vendor_posts").insert(payload);
-    setSaving(false);
-    if (error) return setErr(error.message);
-    onSaved();
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={onClose}>
-      <form onSubmit={save} onClick={(e) => e.stopPropagation()} className="w-full max-w-lg space-y-3 rounded-t-3xl bg-card p-4 pb-6">
-        <div className="mx-auto h-1 w-10 rounded-full bg-border" />
-        <h2 className="text-base font-bold">{post ? "Edit post" : "New post"}</h2>
-        <Input label="Title" value={title} onChange={setTitle} required />
-        <div>
-          <label className="mb-1 block text-xs font-medium text-muted-foreground">Category</label>
-          <select value={categoryKey} onChange={(e) => setCategoryKey(e.target.value)} className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm">
-            {CATEGORIES.map((c) => <option key={c.key} value={c.key}>{c.label}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-muted-foreground">Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm" />
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <Input label="Price" value={price} onChange={setPrice} inputMode="tel" placeholder="100" />
-          <Input label="Per (unit)" value={priceUnit} onChange={setPriceUnit} placeholder="hour, day, job" />
-        </div>
-        <Input label="Image URL" value={imageUrl} onChange={setImageUrl} placeholder="https://…" />
-        <Input label="Location" value={location} onChange={setLocation} />
-        {err && <p className="text-xs text-destructive">{err}</p>}
-        <div className="flex gap-2">
-          <button type="button" onClick={onClose} className="flex-1 rounded-xl bg-secondary py-2.5 text-sm font-semibold">Cancel</button>
-          <button type="submit" disabled={saving} className="flex-1 rounded-xl bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60">{saving ? "Saving…" : "Save"}</button>
-        </div>
-      </form>
-    </div>
-  );
-}
 
 function Input({ label, value, onChange, required, inputMode, placeholder }: {
   label: string; value: string; onChange: (v: string) => void; required?: boolean; inputMode?: "tel" | "text"; placeholder?: string;

@@ -4,7 +4,7 @@ import { ArrowLeft, MapPin, Phone } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatStartButton } from "@/components/ChatStartButton";
-import { PayButton } from "@/components/PayButton";
+
 
 interface VP {
   id: string;
@@ -159,7 +159,7 @@ function VendorPublic() {
           <ul className="space-y-2">
             {posts.map((p) => (
               <li key={p.id} className="rounded-2xl border border-border bg-card p-3">
-                <div className="flex gap-3">
+                <Link to="/posts/$id" params={{ id: p.id }} className="flex gap-3">
                   {p.image_url ? (
                     <img src={p.image_url} alt="" className="h-20 w-20 rounded-lg object-cover" />
                   ) : (
@@ -181,13 +181,14 @@ function VendorPublic() {
                       </p>
                     )}
                   </div>
-                </div>
+                </Link>
                 <div className="mt-2 flex gap-2">
-                  <ChatStartButton vendorId={vendor.id} postId={p.id} label="Message" className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-secondary py-2 text-xs font-semibold" />
-                  <PayButton vendorId={vendor.id} postId={p.id} defaultAmount={p.price ?? undefined} defaultCurrency={(p.currency as "USD" | "SOS") ?? "USD"} className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2 text-xs font-semibold text-primary-foreground" label="Pay now" />
+                  <Link to="/posts/$id" params={{ id: p.id }} className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-secondary py-2 text-xs font-semibold">View details</Link>
+                  <ChatStartButton vendorId={vendor.id} postId={p.id} label="Message" className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2 text-xs font-semibold text-primary-foreground" />
                 </div>
               </li>
             ))}
+
           </ul>
         )}
       </section>
