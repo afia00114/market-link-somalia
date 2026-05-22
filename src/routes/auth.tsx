@@ -30,7 +30,9 @@ const nameSchema = z.string().trim().min(2, "Enter your name").max(80);
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const search = Route.useSearch();
+  const nextPath = search.next || "/profile";
+  const [mode, setMode] = useState<"signin" | "signup">(search.mode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -38,12 +40,12 @@ function AuthPage() {
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  // Already signed in? bounce to profile.
+  // Already signed in? bounce to next or profile.
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/profile" });
+      if (data.session) navigate({ to: nextPath });
     });
-  }, [navigate]);
+  }, [navigate, nextPath]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
