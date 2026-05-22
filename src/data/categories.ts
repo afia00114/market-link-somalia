@@ -1,11 +1,10 @@
 import {
-  Home, Wrench, Plane, HeartPulse, UtensilsCrossed, Car, Wheat, Briefcase, Landmark, BedDouble,
+  Home, Wrench, Plane, HeartPulse, BedDouble,
   type LucideIcon,
 } from "lucide-react";
 
 export type CategoryKey =
-  | "real-estate" | "services" | "travel" | "hotels" | "health" | "food"
-  | "vehicles" | "livestock" | "jobs" | "banking";
+  | "real-estate" | "services" | "travel" | "hotels" | "health";
 
 export interface Category {
   key: CategoryKey;
