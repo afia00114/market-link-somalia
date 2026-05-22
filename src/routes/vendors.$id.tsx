@@ -4,7 +4,7 @@ import { ArrowLeft, MapPin, Phone } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatStartButton } from "@/components/ChatStartButton";
-import { PayButton } from "@/components/PayButton";
+
 
 interface VP {
   id: string;
