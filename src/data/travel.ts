@@ -67,11 +67,13 @@ export const TRAVEL_SUBS: TravelSub[] = [
     href: "/travel/agencies",
     description: "Browse all verified travel agencies, view their services, ratings, and contact them directly.",
     offers: [
-      "Verified agency profiles",
-      "Ratings & customer reviews",
-      "Available services per agency",
-      "Office location & hours",
-      "Linked flights, tours & visas",
+      "Visa services (tourist, business, study)",
+      "Hajj & Umrah packages",
+      "Tour packages (safari, beach, culture)",
+      "Car rental (with or without driver)",
+      "Bus tickets (intercity & cross-border)",
+      "Cargo & shipping (air, sea, road)",
+      "Verified agency profiles & ratings",
       "Direct WhatsApp & call",
     ],
     highlights: [
