@@ -24,7 +24,8 @@ import {
   type Favorite,
 } from "@/lib/favorites";
 import { useAuth } from "@/hooks/use-auth";
-import { LogOut } from "lucide-react";
+import { useVendor } from "@/hooks/use-vendor";
+import { LogOut, Store, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -46,6 +47,7 @@ type SheetKind = null | "saved" | "reviews" | "verify" | "settings";
 function Profile() {
   const navigate = useNavigate();
   const { user, profile, isAuthenticated, signOut } = useAuth();
+  const { isVendor, isAdmin, application } = useVendor();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [favs, setFavs] = useState<Favorite[]>([]);
   const [sheet, setSheet] = useState<SheetKind>(null);
@@ -194,6 +196,47 @@ function Profile() {
             </button>
           ))}
         </div>
+
+        {isAuthenticated && (
+          <div className="mt-4 space-y-2">
+            <button
+              onClick={() => navigate({ to: isVendor ? "/vendor/dashboard" : "/vendor/apply" })}
+              className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3.5 shadow-soft active:scale-[0.99]"
+            >
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                <Store className="h-5 w-5" />
+              </div>
+              <span className="flex-1 text-left">
+                <span className="block text-sm font-semibold">
+                  {isVendor ? "Vendor Dashboard" : "Become a Vendor"}
+                </span>
+                <span className="block text-[11px] text-muted-foreground">
+                  {isVendor
+                    ? "Manage your business and posts"
+                    : application
+                    ? `Application: ${application.status}`
+                    : "List your services on MaalsoorHub"}
+                </span>
+              </span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </button>
+            {isAdmin && (
+              <button
+                onClick={() => navigate({ to: "/admin/vendors" })}
+                className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3.5 shadow-soft active:scale-[0.99]"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                  <Shield className="h-5 w-5" />
+                </div>
+                <span className="flex-1 text-left">
+                  <span className="block text-sm font-semibold">Admin · Vendors</span>
+                  <span className="block text-[11px] text-muted-foreground">Review applications</span>
+                </span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </button>
+            )}
+          </div>
+        )}
 
         <p className="mt-6 text-center text-[11px] text-muted-foreground">
           MaalsoorHub v1.0 · Search. Connect. WhatsApp.
