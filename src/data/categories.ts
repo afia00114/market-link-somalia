@@ -23,9 +23,4 @@ export const CATEGORIES: Category[] = [
   { key: "travel", label: "Travel & Tourism", short: "Flights · Visa · Tours · Cars", count: 312, icon: Plane, gradient: "grad-travel", href: "/travel" },
   { key: "hotels", label: "Hotels", short: "Book rooms via WhatsApp", count: 156, icon: BedDouble, gradient: "grad-hotels", href: "/hotels" },
   { key: "health", label: "Health & Medical", short: "Hospitals & clinics", count: 198, icon: HeartPulse, gradient: "grad-health", href: "/health" },
-  { key: "food", label: "Food & Restaurants", short: "Eat, dine, deliver", count: 540, icon: UtensilsCrossed, gradient: "grad-food", href: "/category/food" },
-  { key: "vehicles", label: "Vehicles & Transport", short: "Cars, trucks, parts", count: 420, icon: Car, gradient: "grad-vehicles", href: "/category/vehicles" },
-  { key: "livestock", label: "Livestock & Agriculture", short: "Camels, cattle, farms", count: 276, icon: Wheat, gradient: "grad-livestock", href: "/category/livestock" },
-  { key: "jobs", label: "Jobs & Opportunities", short: "Hiring near you", count: 388, icon: Briefcase, gradient: "grad-jobs", href: "/category/jobs" },
-  { key: "banking", label: "Banking & Finance", short: "Banks, forex, insurance", count: 92, icon: Landmark, gradient: "grad-banking", href: "/category/banking" },
 ];
