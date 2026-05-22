@@ -15,6 +15,8 @@ export interface VendorProfile {
   whatsapp: string | null;
   avatar_url: string | null;
   is_active: boolean;
+  evc_number: string | null;
+  edahab_number: string | null;
 }
 
 export interface VendorApplication {
