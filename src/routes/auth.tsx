@@ -1,12 +1,19 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { ArrowLeft, Loader2, Mail, Lock, User as UserIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { AppShell } from "@/components/AppShell";
 
+const authSearchSchema = z.object({
+  mode: fallback(z.enum(["signin", "signup"]), "signin").default("signin"),
+  next: fallback(z.string(), "").default(""),
+});
+
 export const Route = createFileRoute("/auth")({
+  validateSearch: zodValidator(authSearchSchema),
   head: () => ({
     meta: [
       { title: "Sign in — MaalsoorHub" },
