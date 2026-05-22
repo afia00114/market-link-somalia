@@ -336,3 +336,106 @@ function Input({ label, value, onChange, required, inputMode, placeholder }: {
     </div>
   );
 }
+
+interface PaymentRow {
+  id: string;
+  customer_id: string;
+  amount: number;
+  currency: string;
+  method: string;
+  reference: string;
+  status: "pending" | "confirmed" | "rejected";
+  note: string | null;
+  booking_ref: string | null;
+  created_at: string;
+}
+
+function VendorPayments({ vendorId }: { vendorId: string }) {
+  const [rows, setRows] = useState<PaymentRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<"pending" | "all">("pending");
+
+  const load = async () => {
+    setLoading(true);
+    const { data } = await supabase
+      .from("payments")
+      .select("id,customer_id,amount,currency,method,reference,status,note,booking_ref,created_at")
+      .eq("vendor_id", vendorId)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    setRows((data as PaymentRow[]) ?? []);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    load();
+    const channel = supabase
+      .channel(`payments:${vendorId}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `vendor_id=eq.${vendorId}` }, () => load())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [vendorId]);
+
+  const updateStatus = async (id: string, status: "confirmed" | "rejected") => {
+    let note: string | null = null;
+    if (status === "rejected") {
+      note = prompt("Reason for rejecting?") ?? null;
+    }
+    await supabase.from("payments").update({ status, note }).eq("id", id);
+    load();
+  };
+
+  const visible = filter === "pending" ? rows.filter((r) => r.status === "pending") : rows;
+
+  return (
+    <section className="px-4 py-4">
+      <div className="mb-3 flex gap-2">
+        <button onClick={() => setFilter("pending")} className={`rounded-full px-3 py-1.5 text-xs font-medium ${filter === "pending" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}>
+          Pending ({rows.filter((r) => r.status === "pending").length})
+        </button>
+        <button onClick={() => setFilter("all")} className={`rounded-full px-3 py-1.5 text-xs font-medium ${filter === "all" ? "bg-primary text-primary-foreground" : "bg-secondary"}`}>
+          All
+        </button>
+      </div>
+      {loading ? (
+        <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>
+      ) : visible.length === 0 ? (
+        <p className="py-10 text-center text-sm text-muted-foreground">No payments {filter === "pending" ? "pending" : "yet"}.</p>
+      ) : (
+        <ul className="space-y-2">
+          {visible.map((p) => (
+            <li key={p.id} className="rounded-2xl border border-border bg-card p-3">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <div className="text-base font-bold">{p.currency} {p.amount}</div>
+                  <div className="text-[11px] uppercase tracking-wide text-muted-foreground">{p.method === "evc" ? "EVC Plus" : "eDahab"} · {new Date(p.created_at).toLocaleString()}</div>
+                </div>
+                <StatusBadge status={p.status} />
+              </div>
+              <div className="mt-2 rounded-lg bg-secondary px-2 py-1.5 text-xs">
+                <span className="text-muted-foreground">Ref:</span> <span className="font-mono font-semibold">{p.reference}</span>
+              </div>
+              {p.booking_ref && <p className="mt-1 text-[11px] text-muted-foreground">Booking: {p.booking_ref}</p>}
+              {p.note && <p className="mt-1 text-[11px] text-muted-foreground">Note: {p.note}</p>}
+              {p.status === "pending" && (
+                <div className="mt-2 flex gap-2">
+                  <button onClick={() => updateStatus(p.id, "confirmed")} className="flex-1 rounded-lg bg-primary py-1.5 text-xs font-semibold text-primary-foreground">Confirm</button>
+                  <button onClick={() => updateStatus(p.id, "rejected")} className="flex-1 rounded-lg bg-secondary py-1.5 text-xs font-semibold text-destructive">Reject</button>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function StatusBadge({ status }: { status: "pending" | "confirmed" | "rejected" }) {
+  const map = {
+    pending: "bg-amber-100 text-amber-800",
+    confirmed: "bg-emerald-100 text-emerald-800",
+    rejected: "bg-red-100 text-red-800",
+  } as const;
+  return <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${map[status]}`}>{status}</span>;
+}
