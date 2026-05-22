@@ -25,6 +25,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelIndexRouteImport } from './routes/travel.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
+import { Route as VendorsIdRouteImport } from './routes/vendors.$id'
 import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
 import { Route as VendorApplyRouteImport } from './routes/vendor.apply'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
@@ -133,6 +134,11 @@ const HotelsIndexRoute = HotelsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => HotelsRoute,
+} as any)
+const VendorsIdRoute = VendorsIdRouteImport.update({
+  id: '/vendors/$id',
+  path: '/vendors/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const VendorDashboardRoute = VendorDashboardRouteImport.update({
   id: '/vendor/dashboard',
@@ -307,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -351,6 +358,7 @@ export interface FileRoutesByTo {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendors/$id': typeof VendorsIdRoute
   '/hotels': typeof HotelsIndexRoute
   '/travel': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -398,6 +406,7 @@ export interface FileRoutesById {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -446,6 +455,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendors/$id'
     | '/hotels/'
     | '/travel/'
     | '/hotels/$id/book'
@@ -490,6 +500,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendors/$id'
     | '/hotels'
     | '/travel'
     | '/hotels/$id/book'
@@ -536,6 +547,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendors/$id'
     | '/hotels/'
     | '/travel/'
     | '/hotels/$id/book'
@@ -572,6 +584,7 @@ export interface RootRouteChildren {
   PropertyIdRoute: typeof PropertyIdRoute
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
+  VendorsIdRoute: typeof VendorsIdRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
   ListingIdIndexRoute: typeof ListingIdIndexRoute
@@ -690,6 +703,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/hotels/'
       preLoaderRoute: typeof HotelsIndexRouteImport
       parentRoute: typeof HotelsRoute
+    }
+    '/vendors/$id': {
+      id: '/vendors/$id'
+      path: '/vendors/$id'
+      fullPath: '/vendors/$id'
+      preLoaderRoute: typeof VendorsIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/vendor/dashboard': {
       id: '/vendor/dashboard'
@@ -1051,6 +1071,7 @@ const rootRouteChildren: RootRouteChildren = {
   PropertyIdRoute: PropertyIdRoute,
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
+  VendorsIdRoute: VendorsIdRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
   ListingIdIndexRoute: ListingIdIndexRoute,
