@@ -237,6 +237,14 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
       <Input label="Location" value={location} onChange={setLocation} />
       <Input label="Phone" value={phone} onChange={setPhone} required inputMode="tel" />
       <Input label="WhatsApp" value={whatsapp} onChange={setWhatsapp} inputMode="tel" />
+      <div className="rounded-xl border border-border bg-background p-3">
+        <p className="mb-2 text-xs font-semibold">Mobile money — where customers send you payments</p>
+        <div className="space-y-2">
+          <Input label="EVC Plus number" value={evcNumber} onChange={setEvcNumber} inputMode="tel" placeholder="e.g. 615xxxxxx" />
+          <Input label="eDahab number" value={edahabNumber} onChange={setEdahabNumber} inputMode="tel" placeholder="e.g. 657xxxxxx" />
+        </div>
+        <p className="mt-2 text-[11px] text-muted-foreground">Leave a field blank to hide that option from customers.</p>
+      </div>
       <label className="flex items-center justify-between rounded-xl bg-secondary p-3 text-sm">
         <span>Show my profile publicly</span>
         <input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} />
