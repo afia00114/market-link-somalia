@@ -50,18 +50,14 @@ const CITIES = [
   "Nairobi", "Addis Ababa", "Dubai", "Istanbul", "Jeddah",
 ];
 
-type Cat = "all" | TravelSubKey;
+type Cat = "all" | "flights" | "agencies";
 const CATS: { key: Cat; label: string }[] = [
   { key: "all", label: "All" },
   { key: "flights", label: "Flights" },
-  { key: "bus", label: "Bus" },
-  { key: "cargo", label: "Cargo" },
-  { key: "visa", label: "Visa" },
-  { key: "tours", label: "Tours" },
-  { key: "car-rental", label: "Cars" },
-  { key: "hajj-umrah", label: "Hajj & Umrah" },
   { key: "agencies", label: "Agencies" },
 ];
+
+const VISIBLE_KEYS: TravelSubKey[] = ["flights", "agencies"];
 
 function TravelHub() {
   const [q, setQ] = useState("");
