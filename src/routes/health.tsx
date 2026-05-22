@@ -208,6 +208,23 @@ function HealthPage() {
         </div>
       </section>
 
+      {/* FULL DIRECTORY LINK */}
+      <section className="px-4 pt-3">
+        <Link
+          to="/health/directory"
+          className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-soft transition-colors hover:bg-secondary"
+        >
+          <div className="min-w-0">
+            <div className="text-sm font-bold text-foreground">Full Hospital Panel Directory</div>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              197 hospitals across Somalia, Kenya, Ethiopia & India
+            </p>
+          </div>
+          <ChevronRight className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
+        </Link>
+      </section>
+
+
       {/* TOP HOSPITALS */}
       <section className="px-4 pt-5" aria-labelledby="hospitals-heading">
         <SectionHeader id="hospitals-heading" title="Top Hospitals" />
