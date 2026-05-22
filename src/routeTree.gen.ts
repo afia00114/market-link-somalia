@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TravelRouteImport } from './routes/travel'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RealEstateRouteImport } from './routes/real-estate'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
@@ -70,6 +71,11 @@ const SubscribeRoute = SubscribeRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RealEstateRoute = RealEstateRouteImport.update({
@@ -307,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
@@ -355,6 +362,7 @@ export interface FileRoutesByTo {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/admin/vendors': typeof AdminVendorsRoute
@@ -404,6 +412,7 @@ export interface FileRoutesById {
   '/post': typeof PostRoute
   '/profile': typeof ProfileRoute
   '/real-estate': typeof RealEstateRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
@@ -455,6 +464,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/subscribe'
     | '/travel'
@@ -503,6 +513,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/subscribe'
     | '/admin/vendors'
@@ -551,6 +562,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/subscribe'
     | '/travel'
@@ -601,6 +613,7 @@ export interface RootRouteChildren {
   PostRoute: typeof PostRoute
   ProfileRoute: typeof ProfileRoute
   RealEstateRoute: typeof RealEstateRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubscribeRoute: typeof SubscribeRoute
   TravelRoute: typeof TravelRouteWithChildren
@@ -637,6 +650,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/real-estate': {
@@ -1104,6 +1124,7 @@ const rootRouteChildren: RootRouteChildren = {
   PostRoute: PostRoute,
   ProfileRoute: ProfileRoute,
   RealEstateRoute: RealEstateRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubscribeRoute: SubscribeRoute,
   TravelRoute: TravelRouteWithChildren,
