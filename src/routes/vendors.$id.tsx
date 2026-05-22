@@ -124,8 +124,9 @@ function VendorPublic() {
                     )}
                   </div>
                 </div>
-                <div className="mt-2">
-                  <ChatStartButton vendorId={vendor.id} postId={p.id} label="Message about this" className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary py-2 text-xs font-semibold text-primary-foreground" />
+                <div className="mt-2 flex gap-2">
+                  <ChatStartButton vendorId={vendor.id} postId={p.id} label="Message" className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-secondary py-2 text-xs font-semibold" />
+                  <PayButton vendorId={vendor.id} postId={p.id} defaultAmount={p.price ?? undefined} defaultCurrency={(p.currency as "USD" | "SOS") ?? "USD"} className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2 text-xs font-semibold text-primary-foreground" label="Pay now" />
                 </div>
               </li>
             ))}
