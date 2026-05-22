@@ -139,12 +139,11 @@ export function getAboutFields(key: string): FieldSpec[] {
 
 export function validateFields(fields: FieldSpec[], answers: CategoryAnswers): string | null {
   for (const f of fields) {
-    if (!("required" in f) || !f.required) continue;
+    if (f.type === "toggle") continue;
+    if (!f.required) continue;
     const v = answers[f.key];
     if (f.type === "multiselect-chip") {
       if (!Array.isArray(v) || v.length === 0) return `Select at least one ${f.label.toLowerCase()}`;
-    } else if (f.type === "toggle") {
-      // toggles are never strictly required
     } else {
       if (!v || (typeof v === "string" && v.trim().length === 0)) return `${f.label} is required`;
     }
