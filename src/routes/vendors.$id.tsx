@@ -25,6 +25,8 @@ interface VP {
   phone: string;
   avatar_url: string | null;
   is_active: boolean;
+  evc_number: string | null;
+  edahab_number: string | null;
 }
 interface Post {
   id: string;
