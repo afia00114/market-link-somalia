@@ -17,6 +17,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useVendor } from "@/hooks/use-vendor";
 import { CATEGORIES } from "@/data/categories";
+import {
+  getAboutFields,
+  getContactFields,
+  serializeAnswers,
+  validateFields,
+  type CategoryAnswers,
+} from "@/data/vendor-application-schemas";
+import { CategoryFields } from "@/components/vendor/CategoryFields";
 
 export const Route = createFileRoute("/vendor/apply")({
   head: () => ({
@@ -46,6 +54,7 @@ function VendorApply() {
   const [description, setDescription] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [categoryAnswers, setCategoryAnswers] = useState<CategoryAnswers>({});
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -58,12 +67,31 @@ function VendorApply() {
     [categoryKey],
   );
 
+  const contactFields = useMemo(() => getContactFields(categoryKey), [categoryKey]);
+  const aboutFields = useMemo(() => getAboutFields(categoryKey), [categoryKey]);
+
+  // Reset category-specific answers when category changes.
+  const changeCategory = (k: typeof categoryKey) => {
+    setCategoryKey(k);
+    setCategoryAnswers({});
+  };
+
+  const updateAnswer = (key: string, value: string | string[] | boolean) => {
+    setCategoryAnswers((prev) => ({ ...prev, [key]: value }));
+  };
+
   const validateStep = (s: Step): string | null => {
     if (s === 1) {
       if (businessName.trim().length < 2) return "Enter your business name";
     }
     if (s === 2) {
       if (phone.trim().length < 5) return "Phone is required";
+      const err = validateFields(contactFields, categoryAnswers);
+      if (err) return err;
+    }
+    if (s === 3) {
+      const err = validateFields(aboutFields, categoryAnswers);
+      if (err) return err;
     }
     return null;
   };
@@ -79,10 +107,24 @@ function VendorApply() {
     setStep((s) => Math.max(0, s - 1) as Step);
   };
 
+  const buildDescription = () => {
+    const sections: string[] = [];
+    const detailLines = [
+      ...serializeAnswers(contactFields, categoryAnswers),
+      ...serializeAnswers(aboutFields, categoryAnswers),
+    ];
+    if (detailLines.length > 0) {
+      sections.push(`[${selectedCategory.label} details]\n${detailLines.join("\n")}`);
+    }
+    const about = description.trim();
+    if (about) sections.push(`[About]\n${about}`);
+    return sections.join("\n\n") || null;
+  };
+
   const submit = async () => {
     setError(null);
     if (!user) return;
-    for (const s of [1, 2] as Step[]) {
+    for (const s of [1, 2, 3] as Step[]) {
       const err = validateStep(s);
       if (err) { setStep(s); return setError(err); }
     }
@@ -94,7 +136,7 @@ function VendorApply() {
       phone: phone.trim(),
       whatsapp: whatsapp.trim() || null,
       location: location.trim() || null,
-      description: description.trim() || null,
+      description: buildDescription(),
     });
     setSubmitting(false);
     if (insErr) return setError(insErr.message);
@@ -135,7 +177,7 @@ function VendorApply() {
                   <label className="mb-1 block text-xs font-medium text-muted-foreground">Category</label>
                   <select
                     value={categoryKey}
-                    onChange={(e) => setCategoryKey(e.target.value as typeof categoryKey)}
+                    onChange={(e) => changeCategory(e.target.value as typeof categoryKey)}
                     className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm"
                   >
                     {CATEGORIES.map((c) => (
@@ -144,6 +186,11 @@ function VendorApply() {
                   </select>
                   <p className="mt-1 text-[11px] text-muted-foreground">{selectedCategory.short}</p>
                 </div>
+                {contactFields.length > 0 && (
+                  <p className="rounded-lg bg-primary-soft/60 px-3 py-2 text-[11px] text-primary">
+                    We'll ask a few extra questions tailored to <span className="font-semibold">{selectedCategory.label}</span> in the next steps.
+                  </p>
+                )}
               </Card>
             )}
 
@@ -152,6 +199,18 @@ function VendorApply() {
                 <Field label="Phone" value={phone} onChange={setPhone} required inputMode="tel" placeholder="+252…" />
                 <Field label="WhatsApp (optional)" value={whatsapp} onChange={setWhatsapp} inputMode="tel" placeholder="+252…" />
                 <Field label="Location (city, area)" value={location} onChange={setLocation} placeholder="Mogadishu, Hodan" />
+                {contactFields.length > 0 && (
+                  <>
+                    <div className="my-2 flex items-center gap-2">
+                      <div className="h-px flex-1 bg-border" />
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {selectedCategory.label} details
+                      </span>
+                      <div className="h-px flex-1 bg-border" />
+                    </div>
+                    <CategoryFields fields={contactFields} answers={categoryAnswers} onChange={updateAnswer} />
+                  </>
+                )}
               </Card>
             )}
 
@@ -169,6 +228,9 @@ function VendorApply() {
                   />
                   <p className="mt-1 text-right text-[11px] text-muted-foreground">{description.length}/1000</p>
                 </div>
+                {aboutFields.length > 0 && (
+                  <CategoryFields fields={aboutFields} answers={categoryAnswers} onChange={updateAnswer} />
+                )}
               </Card>
             )}
 
@@ -179,6 +241,14 @@ function VendorApply() {
                 <Row label="Phone" value={phone || "—"} />
                 <Row label="WhatsApp" value={whatsapp || "—"} />
                 <Row label="Location" value={location || "—"} icon={<MapPin className="h-3.5 w-3.5" />} />
+                {[...contactFields, ...aboutFields].map((f) => {
+                  const v = categoryAnswers[f.key];
+                  let display = "—";
+                  if (f.type === "toggle") display = v === true ? "Yes" : "No";
+                  else if (Array.isArray(v)) display = v.length > 0 ? v.join(", ") : "—";
+                  else if (typeof v === "string" && v.trim()) display = v;
+                  return <Row key={f.key} label={f.label} value={display} multiline />;
+                })}
                 <Row label="About" value={description || "—"} multiline />
                 <p className="pt-2 text-[11px] text-muted-foreground">
                   An admin will review your application. You'll be notified once approved and can then complete your vendor profile.
