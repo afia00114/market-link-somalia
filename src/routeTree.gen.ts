@@ -41,6 +41,7 @@ import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelBusRouteImport } from './routes/travel.bus'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
+import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
 import { Route as MessagesIdRouteImport } from './routes/messages.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health_.$id'
@@ -218,6 +219,11 @@ const PropertyIdRoute = PropertyIdRouteImport.update({
   path: '/property/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileSecurityRoute = ProfileSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => ProfileRoute,
+} as any)
 const MessagesIdRoute = MessagesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -311,7 +317,7 @@ export interface FileRoutesByFullPath {
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/real-estate': typeof RealEstateRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -322,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -360,7 +367,7 @@ export interface FileRoutesByTo {
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/real-estate': typeof RealEstateRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -370,6 +377,7 @@ export interface FileRoutesByTo {
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -410,7 +418,7 @@ export interface FileRoutesById {
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/real-estate': typeof RealEstateRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -421,6 +429,7 @@ export interface FileRoutesById {
   '/health_/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -473,6 +482,7 @@ export interface FileRouteTypes {
     | '/health/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -521,6 +531,7 @@ export interface FileRouteTypes {
     | '/health/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -571,6 +582,7 @@ export interface FileRouteTypes {
     | '/health_/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -611,7 +623,7 @@ export interface RootRouteChildren {
   MessagesRoute: typeof MessagesRouteWithChildren
   MyPaymentsRoute: typeof MyPaymentsRoute
   PostRoute: typeof PostRoute
-  ProfileRoute: typeof ProfileRoute
+  ProfileRoute: typeof ProfileRouteWithChildren
   RealEstateRoute: typeof RealEstateRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -855,6 +867,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertyIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/security': {
+      id: '/profile/security'
+      path: '/security'
+      fullPath: '/profile/security'
+      preLoaderRoute: typeof ProfileSecurityRouteImport
+      parentRoute: typeof ProfileRoute
+    }
     '/messages/$id': {
       id: '/messages/$id'
       path: '/$id'
@@ -1007,6 +1026,17 @@ const MessagesRouteWithChildren = MessagesRoute._addFileChildren(
   MessagesRouteChildren,
 )
 
+interface ProfileRouteChildren {
+  ProfileSecurityRoute: typeof ProfileSecurityRoute
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileSecurityRoute: ProfileSecurityRoute,
+}
+
+const ProfileRouteWithChildren =
+  ProfileRoute._addFileChildren(ProfileRouteChildren)
+
 interface TravelAgenciesRouteChildren {
   TravelAgenciesIdRoute: typeof TravelAgenciesIdRoute
 }
@@ -1122,7 +1152,7 @@ const rootRouteChildren: RootRouteChildren = {
   MessagesRoute: MessagesRouteWithChildren,
   MyPaymentsRoute: MyPaymentsRoute,
   PostRoute: PostRoute,
-  ProfileRoute: ProfileRoute,
+  ProfileRoute: ProfileRouteWithChildren,
   RealEstateRoute: RealEstateRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
