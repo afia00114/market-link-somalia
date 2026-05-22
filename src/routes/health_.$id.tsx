@@ -419,17 +419,35 @@ function BookingSheet({
               className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-primary"
             />
           </Field>
-          <Field label="Department">
-            <select
-              value={dept}
-              onChange={(e) => setDept(e.target.value)}
-              className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-primary"
-            >
+          <Field label="Choose department — tap a picture">
+            <div className="grid grid-cols-3 gap-2">
               {h.departments.map((k) => {
                 const d = DEPARTMENTS.find((x) => x.key === k);
-                return <option key={k} value={k}>{d?.label ?? k}</option>;
+                const Ic = d?.icon ?? Stethoscope;
+                const active = dept === k;
+                return (
+                  <button
+                    type="button"
+                    key={k}
+                    onClick={() => setDept(k)}
+                    aria-pressed={active}
+                    aria-label={d?.label ?? k}
+                    className={`flex flex-col items-center gap-1.5 rounded-2xl border p-2.5 transition active:scale-[0.97] ${
+                      active
+                        ? "border-primary bg-primary/10 ring-2 ring-primary"
+                        : "border-border bg-card hover:bg-secondary"
+                    }`}
+                  >
+                    <span className={`flex h-12 w-12 items-center justify-center rounded-full ${active ? "bg-primary/15" : "bg-secondary"}`}>
+                      <Ic className={`h-6 w-6 ${d?.tone ?? "text-primary"}`} />
+                    </span>
+                    <span className="text-center text-[11px] font-semibold leading-tight">
+                      {d?.label ?? k}
+                    </span>
+                  </button>
+                );
               })}
-            </select>
+            </div>
           </Field>
           <Field label="Preferred date">
             <input
