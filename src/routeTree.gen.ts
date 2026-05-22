@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TravelRouteImport } from './routes/travel'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RealEstateRouteImport } from './routes/real-estate'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
@@ -20,6 +21,7 @@ import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as HealthRouteImport } from './routes/health'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as EmployeeDashboardRouteImport } from './routes/employee-dashboard'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -39,6 +41,7 @@ import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelBusRouteImport } from './routes/travel.bus'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
+import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
 import { Route as MessagesIdRouteImport } from './routes/messages.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health_.$id'
@@ -69,6 +72,11 @@ const SubscribeRoute = SubscribeRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RealEstateRoute = RealEstateRouteImport.update({
@@ -109,6 +117,11 @@ const HomeRoute = HomeRouteImport.update({
 const HealthRoute = HealthRouteImport.update({
   id: '/health',
   path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExploreRoute = ExploreRouteImport.update({
@@ -206,6 +219,11 @@ const PropertyIdRoute = PropertyIdRouteImport.update({
   path: '/property/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileSecurityRoute = ProfileSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => ProfileRoute,
+} as any)
 const MessagesIdRoute = MessagesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -292,14 +310,16 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/real-estate': typeof RealEstateRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
@@ -308,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -340,13 +361,15 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/real-estate': typeof RealEstateRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/admin/vendors': typeof AdminVendorsRoute
@@ -354,6 +377,7 @@ export interface FileRoutesByTo {
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -387,14 +411,16 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/employee-dashboard': typeof EmployeeDashboardRoute
   '/explore': typeof ExploreRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRoute
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/real-estate': typeof RealEstateRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
@@ -403,6 +429,7 @@ export interface FileRoutesById {
   '/health_/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
   '/messages/$id': typeof MessagesIdRoute
+  '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -437,6 +464,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/employee-dashboard'
     | '/explore'
+    | '/forgot-password'
     | '/health'
     | '/home'
     | '/hotels'
@@ -445,6 +473,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/subscribe'
     | '/travel'
@@ -453,6 +482,7 @@ export interface FileRouteTypes {
     | '/health/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -485,6 +515,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/employee-dashboard'
     | '/explore'
+    | '/forgot-password'
     | '/health'
     | '/home'
     | '/messages'
@@ -492,6 +523,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/subscribe'
     | '/admin/vendors'
@@ -499,6 +531,7 @@ export interface FileRouteTypes {
     | '/health/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -531,6 +564,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/employee-dashboard'
     | '/explore'
+    | '/forgot-password'
     | '/health'
     | '/home'
     | '/hotels'
@@ -539,6 +573,7 @@ export interface FileRouteTypes {
     | '/post'
     | '/profile'
     | '/real-estate'
+    | '/reset-password'
     | '/sitemap.xml'
     | '/subscribe'
     | '/travel'
@@ -547,6 +582,7 @@ export interface FileRouteTypes {
     | '/health_/$id'
     | '/hotels/$id'
     | '/messages/$id'
+    | '/profile/security'
     | '/property/$id'
     | '/travel/agencies'
     | '/travel/bus'
@@ -580,14 +616,16 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   EmployeeDashboardRoute: typeof EmployeeDashboardRoute
   ExploreRoute: typeof ExploreRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   HealthRoute: typeof HealthRoute
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
   MessagesRoute: typeof MessagesRouteWithChildren
   MyPaymentsRoute: typeof MyPaymentsRoute
   PostRoute: typeof PostRoute
-  ProfileRoute: typeof ProfileRoute
+  ProfileRoute: typeof ProfileRouteWithChildren
   RealEstateRoute: typeof RealEstateRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubscribeRoute: typeof SubscribeRoute
   TravelRoute: typeof TravelRouteWithChildren
@@ -624,6 +662,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/real-estate': {
@@ -680,6 +725,13 @@ declare module '@tanstack/react-router' {
       path: '/health'
       fullPath: '/health'
       preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/explore': {
@@ -814,6 +866,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/property/$id'
       preLoaderRoute: typeof PropertyIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/profile/security': {
+      id: '/profile/security'
+      path: '/security'
+      fullPath: '/profile/security'
+      preLoaderRoute: typeof ProfileSecurityRouteImport
+      parentRoute: typeof ProfileRoute
     }
     '/messages/$id': {
       id: '/messages/$id'
@@ -967,6 +1026,17 @@ const MessagesRouteWithChildren = MessagesRoute._addFileChildren(
   MessagesRouteChildren,
 )
 
+interface ProfileRouteChildren {
+  ProfileSecurityRoute: typeof ProfileSecurityRoute
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileSecurityRoute: ProfileSecurityRoute,
+}
+
+const ProfileRouteWithChildren =
+  ProfileRoute._addFileChildren(ProfileRouteChildren)
+
 interface TravelAgenciesRouteChildren {
   TravelAgenciesIdRoute: typeof TravelAgenciesIdRoute
 }
@@ -1075,14 +1145,16 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   EmployeeDashboardRoute: EmployeeDashboardRoute,
   ExploreRoute: ExploreRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   HealthRoute: HealthRoute,
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
   MessagesRoute: MessagesRouteWithChildren,
   MyPaymentsRoute: MyPaymentsRoute,
   PostRoute: PostRoute,
-  ProfileRoute: ProfileRoute,
+  ProfileRoute: ProfileRouteWithChildren,
   RealEstateRoute: RealEstateRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubscribeRoute: SubscribeRoute,
   TravelRoute: TravelRouteWithChildren,
