@@ -1,40 +1,30 @@
 ## Goal
-Let customers pay vendors with **EVC Plus** or **eDahab**, confirm the transaction in-app, and track everything in your database — without needing API approval from Hormuud or Golis.
+After the user finishes the 3 onboarding slides on the splash route (`/`), show a choice screen with two paths: **Register as Customer** or **Register as Vendor** — instead of the single "Get Started" button that currently dumps everyone on `/home`.
 
-## How it works (customer view)
-1. Customer clicks "Pay" on an order/booking.
-2. App shows the vendor's EVC Plus and eDahab numbers + the amount due.
-3. Customer sends the money from their own phone (USSD or app).
-4. Customer enters the **transaction reference** they received and taps "I've paid".
-5. Vendor sees a pending payment, verifies on their phone, and approves → order is marked paid.
+## Changes
 
-## What I'll build
+### `src/routes/index.tsx`
+- Add a 4th stage `"choose"` after the last onboarding slide.
+- On the final slide, replace "Get Started" with **Continue** → moves to the choose stage.
+- Choose stage shows:
+  - Heading: "How will you use MaalsoorHub?"
+  - Two large cards/buttons:
+    - **I'm a Customer** — "Browse listings, book services, chat with vendors." → navigates to `/auth` (signup mode).
+    - **I'm a Vendor** — "List your business, get bookings, receive payments." → navigates to `/auth?next=/vendor/apply` (after signup, lands on the vendor application form).
+  - Small text below: "Already have an account? **Sign in**" → `/auth`.
 
-### 1. Database
-- `payment_methods` table on `vendor_profiles`: `evc_number`, `edahab_number` (vendor adds in their settings).
-- `payments` table:
-  - `id`, `customer_id`, `vendor_id`, `amount`, `currency` (USD/SOS)
-  - `method` (`evc` | `edahab`)
-  - `reference` (transaction ID entered by customer)
-  - `status` (`pending` | `confirmed` | `rejected`)
-  - `note` (optional vendor reason if rejected)
-  - timestamps
-- RLS: customer sees their own, vendor sees payments to them, admin sees all.
+### `src/routes/auth.tsx` (small additions)
+- Read `next` from search params.
+- Default `mode` to `"signup"` when arriving from the choose screen (use a `mode=signup` search param).
+- After successful signup/signin, navigate to `next` if present, else `/profile` (current behavior).
+- Already-signed-in redirect: also honor `next`.
 
-### 2. UI
-- **Vendor settings**: add/edit EVC and eDahab numbers.
-- **Checkout page**: shows vendor's numbers, amount, method picker, reference input, submit.
-- **Vendor dashboard → Payments tab**: list of pending payments with Approve / Reject buttons.
-- **Customer profile → My Payments**: history with status.
+### Route search params
+- `/auth` accepts optional `?mode=signup&next=/vendor/apply`. Validated with a small Zod schema in `validateSearch`.
 
-### 3. Notifications
-Realtime row update on the `payments` table so vendor sees new pending payments instantly.
+## Not changing
+- No database changes — vendor role is still granted only after admin approves the vendor application (existing flow).
+- No new translations strings wired (English only for now, matching existing splash copy). Can add i18n keys later if you want.
+- Splash auto-advance timing and the 3 slides themselves stay the same.
 
-## Upgrade path (later)
-When you get WaafiPay (EVC) or eDahab API credentials, I can swap the manual confirmation for automatic verification — the `payments` table stays the same.
-
-## Not included
-- No automatic verification against Hormuud/Golis (requires merchant API access).
-- No subscription billing (the current `subscribe.tsx` $5/$50 page would need a different model — confirm if you want that converted to manual too, or keep it for now).
-
-Approve and I'll start with the migration.
+Approve and I'll implement.

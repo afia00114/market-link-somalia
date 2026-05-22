@@ -1,12 +1,19 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { ArrowLeft, Loader2, Mail, Lock, User as UserIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { AppShell } from "@/components/AppShell";
 
+const authSearchSchema = z.object({
+  mode: fallback(z.enum(["signin", "signup"]), "signin").default("signin"),
+  next: fallback(z.string(), "").default(""),
+});
+
 export const Route = createFileRoute("/auth")({
+  validateSearch: zodValidator(authSearchSchema),
   head: () => ({
     meta: [
       { title: "Sign in — MaalsoorHub" },
@@ -23,7 +30,9 @@ const nameSchema = z.string().trim().min(2, "Enter your name").max(80);
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const search = Route.useSearch();
+  const nextPath = search.next || "/profile";
+  const [mode, setMode] = useState<"signin" | "signup">(search.mode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -31,12 +40,12 @@ function AuthPage() {
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  // Already signed in? bounce to profile.
+  // Already signed in? bounce to next or profile.
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/profile" });
+      if (data.session) navigate({ to: nextPath });
     });
-  }, [navigate]);
+  }, [navigate, nextPath]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -60,7 +69,7 @@ function AuthPage() {
           email: emailRes.data,
           password: passRes.data,
           options: {
-            emailRedirectTo: `${window.location.origin}/profile`,
+            emailRedirectTo: `${window.location.origin}${nextPath}`,
             data: { display_name: nameRes.data, full_name: nameRes.data },
           },
         });
@@ -87,7 +96,7 @@ function AuthPage() {
           );
           return;
         }
-        navigate({ to: "/profile" });
+        navigate({ to: nextPath });
       }
     } finally {
       setBusy(false);
@@ -99,7 +108,7 @@ function AuthPage() {
     setBusy(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/profile`,
+        redirect_uri: `${window.location.origin}${nextPath}`,
       });
       if (result.error) {
         setError(result.error.message ?? "Google sign-in failed");
@@ -107,7 +116,7 @@ function AuthPage() {
         return;
       }
       if (result.redirected) return;
-      navigate({ to: "/profile" });
+      navigate({ to: nextPath });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Google sign-in failed");
       setBusy(false);
