@@ -1,5 +1,5 @@
 import {
-  Home, Wrench, Plane, HeartPulse, BedDouble,
+  Home, Wrench, Plane, HeartPulse, BedDouble, Beef,
   type LucideIcon,
 } from "lucide-react";
 
@@ -23,4 +23,5 @@ export const CATEGORIES: Category[] = [
   { key: "travel", label: "Travel & Tourism", short: "Flights · Visa · Tours · Cars", count: 312, icon: Plane, gradient: "grad-travel", href: "/travel" },
   { key: "hotels", label: "Hotels", short: "Book rooms via WhatsApp", count: 156, icon: BedDouble, gradient: "grad-hotels", href: "/hotels" },
   { key: "health", label: "Health & Medical", short: "Hospitals & clinics", count: 198, icon: HeartPulse, gradient: "grad-health", href: "/health" },
+  { key: "livestock", label: "Animal Market", short: "Buy & sell livestock", count: 370, icon: Beef, gradient: "grad-livestock", href: "/livestock" },
 ];

@@ -18,6 +18,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
 import { Route as MyPaymentsRouteImport } from './routes/my-payments'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as LivestockRouteImport } from './routes/livestock'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as HealthRouteImport } from './routes/health'
@@ -104,6 +105,11 @@ const MyPaymentsRoute = MyPaymentsRouteImport.update({
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LivestockRoute = LivestockRouteImport.update({
+  id: '/livestock',
+  path: '/livestock',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HotelsRoute = HotelsRouteImport.update({
@@ -326,6 +332,7 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
+  '/livestock': typeof LivestockRoute
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
@@ -378,6 +385,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
+  '/livestock': typeof LivestockRoute
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
@@ -431,6 +439,7 @@ export interface FileRoutesById {
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
+  '/livestock': typeof LivestockRoute
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
@@ -486,6 +495,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/hotels'
+    | '/livestock'
     | '/messages'
     | '/my-payments'
     | '/post'
@@ -538,6 +548,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/health'
     | '/home'
+    | '/livestock'
     | '/messages'
     | '/my-payments'
     | '/post'
@@ -590,6 +601,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/hotels'
+    | '/livestock'
     | '/messages'
     | '/my-payments'
     | '/post'
@@ -644,6 +656,7 @@ export interface RootRouteChildren {
   HealthRoute: typeof HealthRouteWithChildren
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
+  LivestockRoute: typeof LivestockRoute
   MessagesRoute: typeof MessagesRouteWithChildren
   MyPaymentsRoute: typeof MyPaymentsRoute
   PostRoute: typeof PostRoute
@@ -729,6 +742,13 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/livestock': {
+      id: '/livestock'
+      path: '/livestock'
+      fullPath: '/livestock'
+      preLoaderRoute: typeof LivestockRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hotels': {
@@ -1199,6 +1219,7 @@ const rootRouteChildren: RootRouteChildren = {
   HealthRoute: HealthRouteWithChildren,
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
+  LivestockRoute: LivestockRoute,
   MessagesRoute: MessagesRouteWithChildren,
   MyPaymentsRoute: MyPaymentsRoute,
   PostRoute: PostRoute,
