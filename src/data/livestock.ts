@@ -164,6 +164,3 @@ export const LIVESTOCK_LOCATIONS = [
   { city: "Baidoa", count: "25+", image: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=400&q=60" },
 ];
 
-export interface LivestockEgg { _: string }
-export const _EGG: LivestockEgg = { _: "" };
-export { Egg };
