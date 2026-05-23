@@ -1,5 +1,5 @@
 import {
-  Beef, Bird, Rabbit, Egg, Dog, ShieldCheck, Stethoscope,
+  Beef, Bird, Rabbit, Dog, ShieldCheck, Stethoscope,
   Wheat, Truck, FileCheck, type LucideIcon,
 } from "lucide-react";
 
