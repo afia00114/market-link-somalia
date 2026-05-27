@@ -309,34 +309,38 @@ function SectionHeader({ title, actionLabel, onAction }: { title: string; action
 function AnimalCard({ a }: { a: (typeof ANIMAL_LISTINGS)[number] }) {
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all hover:shadow-card">
-      <div className="relative">
-        <img src={a.image} alt={a.title} className="h-32 w-full object-cover" loading="lazy" />
-        {a.featured && (
-          <span className="absolute left-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
-            FEATURED
-          </span>
-        )}
-      </div>
-      <div className="p-2.5">
-        <div className="text-xs font-bold text-foreground line-clamp-1">{a.title}</div>
-        <div className="mt-0.5 text-sm font-bold text-primary">${a.price}</div>
-        <div className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
-          <MapPin className="h-3 w-3" /> <span className="line-clamp-1">{a.district}, {a.city}</span>
+      <Link to="/livestock/$id" params={{ id: a.id }} className="block">
+        <div className="relative">
+          <img src={a.image} alt={a.title} className="h-32 w-full object-cover" loading="lazy" />
+          {a.featured && (
+            <span className="absolute left-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
+              FEATURED
+            </span>
+          )}
         </div>
-        <div className="mt-0.5 text-[11px] text-muted-foreground line-clamp-1">
-          {a.age} · {a.gender}
+        <div className="p-2.5">
+          <div className="text-xs font-bold text-foreground line-clamp-1">{a.title}</div>
+          <div className="mt-0.5 text-sm font-bold text-primary">${a.price}</div>
+          <div className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+            <MapPin className="h-3 w-3" /> <span className="line-clamp-1">{a.district}, {a.city}</span>
+          </div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground line-clamp-1">
+            {a.age} · {a.gender}
+          </div>
+          <div className="mt-1.5 flex items-center justify-between">
+            <span className="inline-flex rounded-full bg-primary-soft px-2 py-0.5 text-[10px] font-medium text-primary">
+              {a.tag}
+            </span>
+            {a.sellerVerified && <BadgeCheck className="h-3.5 w-3.5 text-primary" />}
+          </div>
         </div>
-        <div className="mt-1.5 flex items-center justify-between">
-          <span className="inline-flex rounded-full bg-primary-soft px-2 py-0.5 text-[10px] font-medium text-primary">
-            {a.tag}
-          </span>
-          {a.sellerVerified && <BadgeCheck className="h-3.5 w-3.5 text-primary" />}
-        </div>
+      </Link>
+      <div className="px-2.5 pb-2.5">
         <a
           href={whatsappLink(a.whatsapp, `Hello, is the ${a.title} still available?`)}
           target="_blank"
           rel="noreferrer"
-          className="mt-2 flex items-center justify-center gap-1 rounded-xl bg-primary py-1.5 text-[11px] font-semibold text-primary-foreground active:scale-[0.98]"
+          className="flex items-center justify-center gap-1 rounded-xl bg-primary py-1.5 text-[11px] font-semibold text-primary-foreground active:scale-[0.98]"
         >
           <MessageCircle className="h-3.5 w-3.5" /> Chat with Seller
         </a>
@@ -344,3 +348,4 @@ function AnimalCard({ a }: { a: (typeof ANIMAL_LISTINGS)[number] }) {
     </article>
   );
 }
+
