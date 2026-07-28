@@ -4,12 +4,14 @@ import {
   ArrowLeft, Search, PackageOpen, Wrench, Zap, Sparkles, Snowflake,
   PaintBucket, Hammer, Brush, Truck, Car as CarIcon, Wheat, Briefcase,
   Landmark, UtensilsCrossed, Stethoscope, Plane, Home as HomeIcon, MoreHorizontal,
-  X, type LucideIcon,
+  X, Navigation, type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { CATEGORIES, type CategoryKey } from "@/data/categories";
 import { ListingCard } from "@/components/ListingCard";
 import { listingsByCategory } from "@/data/listings";
+import { useUserLocation } from "@/hooks/use-user-location";
+import { coordsFor, distanceKm } from "@/lib/geo";
 
 type PopularItem = { label: string; icon: LucideIcon; tone: string };
 
@@ -111,6 +113,8 @@ function CategoryPage() {
 
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [sortByNearby, setSortByNearby] = useState(false);
+  const { coords, status, request } = useUserLocation();
 
   const items = useMemo(() => {
     let list = allItems;
@@ -133,8 +137,17 @@ function CategoryPage() {
           (l.district ?? "").toLowerCase().includes(q),
       );
     }
+    if (sortByNearby && coords) {
+      list = [...list].sort((a, b) => {
+        const pa = coordsFor(a.city, a.district);
+        const pb = coordsFor(b.city, b.district);
+        const da = pa ? distanceKm(coords, pa) : Infinity;
+        const db = pb ? distanceKm(coords, pb) : Infinity;
+        return da - db;
+      });
+    }
     return list;
-  }, [allItems, activeFilter, query]);
+  }, [allItems, activeFilter, query, sortByNearby, coords]);
 
   return (
     <AppShell>
@@ -214,7 +227,51 @@ function CategoryPage() {
         </section>
       )}
 
-      <section className="px-4 pt-4 pb-2">
+      <section className="px-4 pt-4">
+        {status !== "granted" ? (
+          <button
+            onClick={request}
+            disabled={status === "loading" || status === "unavailable"}
+            className="mb-3 flex w-full items-center justify-between gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-left shadow-soft active:scale-[0.99] disabled:opacity-60"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 text-white">
+                <Navigation className="h-4 w-4" />
+              </span>
+              <div className="min-w-0">
+                <div className="text-sm font-bold text-emerald-900">
+                  {status === "loading" ? "Finding you…"
+                    : status === "denied" ? "Location blocked"
+                    : status === "unavailable" ? "Location unavailable"
+                    : "See who's closest to you"}
+                </div>
+                <div className="text-[11px] text-emerald-800/80">
+                  {status === "denied"
+                    ? "Enable location in your browser settings to sort by nearest."
+                    : "Share your location to sort providers by distance."}
+                </div>
+              </div>
+            </div>
+            {status === "prompt" && (
+              <span className="rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-semibold text-white">
+                Use my location
+              </span>
+            )}
+          </button>
+        ) : (
+          <button
+            onClick={() => setSortByNearby((v) => !v)}
+            className={`mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold shadow-soft transition ${
+              sortByNearby
+                ? "bg-emerald-600 text-white"
+                : "border border-emerald-200 bg-emerald-50 text-emerald-800"
+            }`}
+          >
+            <Navigation className="h-3.5 w-3.5" />
+            {sortByNearby ? "Sorted by nearest" : "Sort by nearest"}
+          </button>
+        )}
+
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-bold text-foreground">
             {items.length} {items.length === 1 ? "listing" : "listings"}

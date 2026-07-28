@@ -1,9 +1,14 @@
-import { BadgeCheck, MapPin, Phone, MessageCircle, Star } from "lucide-react";
+import { BadgeCheck, MapPin, Phone, MessageCircle, Star, Navigation } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Listing } from "@/data/listings";
 import { whatsappLink, telLink } from "@/lib/contact";
+import { coordsFor, distanceKm, formatDistance } from "@/lib/geo";
+import { useUserLocation } from "@/hooks/use-user-location";
 
 export function ListingCard({ l }: { l: Listing }) {
+  const { coords } = useUserLocation();
+  const place = coordsFor(l.city, l.district);
+  const km = coords && place ? distanceKm(coords, place) : null;
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
       <Link to="/listing/$id" params={{ id: l.id }} className="flex gap-3 p-3 active:scale-[0.99]">
@@ -21,9 +26,14 @@ export function ListingCard({ l }: { l: Listing }) {
             )}
           </div>
           <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{l.subtitle}</div>
-          <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
             <MapPin className="h-3 w-3" />
             <span className="line-clamp-1">{l.district ? `${l.district}, ` : ""}{l.city}</span>
+            {km !== null && (
+              <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+                <Navigation className="h-2.5 w-2.5" /> {formatDistance(km)}
+              </span>
+            )}
           </div>
           <div className="mt-1.5 flex items-center gap-2 text-xs">
             <span className="inline-flex items-center gap-1 rounded-full bg-primary-soft px-2 py-0.5 font-medium text-primary">
