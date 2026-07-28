@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      booking_tracking: {
+        Row: {
+          accuracy: number | null
+          booking_ref: string
+          created_at: string
+          customer_user_id: string | null
+          heading: number | null
+          id: string
+          lat: number
+          lng: number
+          provider_user_id: string | null
+          speed: number | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          accuracy?: number | null
+          booking_ref: string
+          created_at?: string
+          customer_user_id?: string | null
+          heading?: number | null
+          id?: string
+          lat: number
+          lng: number
+          provider_user_id?: string | null
+          speed?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          accuracy?: number | null
+          booking_ref?: string
+          created_at?: string
+          customer_user_id?: string | null
+          heading?: number | null
+          id?: string
+          lat?: number
+          lng?: number
+          provider_user_id?: string | null
+          speed?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           channel: string

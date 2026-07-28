@@ -4,6 +4,7 @@ import { ArrowLeft, MapPin, Phone } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatStartButton } from "@/components/ChatStartButton";
+import { LocationMap } from "@/components/LocationMap";
 
 
 interface VP {
@@ -148,6 +149,13 @@ function VendorPublic() {
         </div>
         {vendor.description && <p className="mt-3 text-sm opacity-90">{vendor.description}</p>}
       </header>
+
+      {vendor.location && (
+        <section className="px-4 pt-4">
+          <h2 className="mb-2 text-sm font-bold">Location</h2>
+          <LocationMap address={`${vendor.business_name}, ${vendor.location}`} label={vendor.business_name} />
+        </section>
+      )}
 
       <section className="px-4 py-4">
         <h2 className="mb-2 text-sm font-bold">Listings</h2>

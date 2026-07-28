@@ -9,6 +9,7 @@ import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatStartButton } from "@/components/ChatStartButton";
 import { PayButton } from "@/components/PayButton";
+import { LocationMap } from "@/components/LocationMap";
 
 const SITE_URL = "https://market-link-somalia.lovable.app";
 
@@ -318,6 +319,14 @@ function PostDetail() {
           {contact.address && <ContactRow icon={<MapPin className="h-4 w-4 text-primary" />} label="Address" value={contact.address} onCopy={() => copy("address", contact.address)} copied={copied === "address"} />}
         </div>
       </section>
+
+      {/* Location map */}
+      {(contact.address || post.location) && (
+        <section className="mt-5 px-4">
+          <h2 className="mb-2 text-sm font-bold">Location</h2>
+          <LocationMap address={contact.address || post.location} label={post.title} />
+        </section>
+      )}
 
       {/* Booking CTA */}
       {post.booking_enabled && vendor && (

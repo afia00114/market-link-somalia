@@ -150,7 +150,14 @@ function BookedPage() {
         </div>
       </section>
 
-      <section className="px-5 pb-10 pt-6">
+      <section className="px-5 pb-10 pt-6 space-y-2">
+        <Link
+          to="/tracking/$ref"
+          params={{ ref: item.id }}
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-soft active:scale-[0.98]"
+        >
+          Open Live Tracking
+        </Link>
         <Link
           to="/listing/$id"
           params={{ id: item.id }}

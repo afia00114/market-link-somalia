@@ -41,6 +41,7 @@ import { Route as TravelCargoRouteImport } from './routes/travel.cargo'
 import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelBusRouteImport } from './routes/travel.bus'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
+import { Route as TrackingRefRouteImport } from './routes/tracking.$ref'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
 import { Route as PostsIdRouteImport } from './routes/posts.$id'
@@ -62,6 +63,7 @@ import { Route as TravelAgenciesIdRouteImport } from './routes/travel.agencies.$
 import { Route as ListingIdBookedRouteImport } from './routes/listing.$id.booked'
 import { Route as ListingIdBookRouteImport } from './routes/listing.$id.book'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
+import { Route as ApiPublicGeocodeRouteImport } from './routes/api/public/geocode'
 
 const TravelRoute = TravelRouteImport.update({
   id: '/travel',
@@ -223,6 +225,11 @@ const TravelAgenciesRoute = TravelAgenciesRouteImport.update({
   path: '/agencies',
   getParentRoute: () => TravelRoute,
 } as any)
+const TrackingRefRoute = TrackingRefRouteImport.update({
+  id: '/tracking/$ref',
+  path: '/tracking/$ref',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PropertyIdRoute = PropertyIdRouteImport.update({
   id: '/property/$id',
   path: '/property/$id',
@@ -328,6 +335,11 @@ const HotelsIdBookRoute = HotelsIdBookRouteImport.update({
   path: '/book',
   getParentRoute: () => HotelsIdRoute,
 } as any)
+const ApiPublicGeocodeRoute = ApiPublicGeocodeRouteImport.update({
+  id: '/api/public/geocode',
+  path: '/api/public/geocode',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -358,6 +370,7 @@ export interface FileRoutesByFullPath {
   '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
+  '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
@@ -372,6 +385,7 @@ export interface FileRoutesByFullPath {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/travel/': typeof TravelIndexRoute
+  '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -411,6 +425,7 @@ export interface FileRoutesByTo {
   '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
+  '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
@@ -425,6 +440,7 @@ export interface FileRoutesByTo {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels': typeof HotelsIndexRoute
   '/travel': typeof TravelIndexRoute
+  '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -467,6 +483,7 @@ export interface FileRoutesById {
   '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
+  '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
   '/travel/car-rental': typeof TravelCarRentalRouteWithChildren
@@ -481,6 +498,7 @@ export interface FileRoutesById {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/travel/': typeof TravelIndexRoute
+  '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -524,6 +542,7 @@ export interface FileRouteTypes {
     | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
+    | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
     | '/travel/car-rental'
@@ -538,6 +557,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels/'
     | '/travel/'
+    | '/api/public/geocode'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -577,6 +597,7 @@ export interface FileRouteTypes {
     | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
+    | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
     | '/travel/car-rental'
@@ -591,6 +612,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels'
     | '/travel'
+    | '/api/public/geocode'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -632,6 +654,7 @@ export interface FileRouteTypes {
     | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
+    | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
     | '/travel/car-rental'
@@ -646,6 +669,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels/'
     | '/travel/'
+    | '/api/public/geocode'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -683,9 +707,11 @@ export interface RootRouteChildren {
   HealthIdRoute: typeof HealthIdRoute
   PostsIdRoute: typeof PostsIdRoute
   PropertyIdRoute: typeof PropertyIdRoute
+  TrackingRefRoute: typeof TrackingRefRoute
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
   VendorsIdRoute: typeof VendorsIdRoute
+  ApiPublicGeocodeRoute: typeof ApiPublicGeocodeRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
   ListingIdIndexRoute: typeof ListingIdIndexRoute
@@ -917,6 +943,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TravelAgenciesRouteImport
       parentRoute: typeof TravelRoute
     }
+    '/tracking/$ref': {
+      id: '/tracking/$ref'
+      path: '/tracking/$ref'
+      fullPath: '/tracking/$ref'
+      preLoaderRoute: typeof TrackingRefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/property/$id': {
       id: '/property/$id'
       path: '/property/$id'
@@ -1063,6 +1096,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/hotels/$id/book'
       preLoaderRoute: typeof HotelsIdBookRouteImport
       parentRoute: typeof HotelsIdRoute
+    }
+    '/api/public/geocode': {
+      id: '/api/public/geocode'
+      path: '/api/public/geocode'
+      fullPath: '/api/public/geocode'
+      preLoaderRoute: typeof ApiPublicGeocodeRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -1265,9 +1305,11 @@ const rootRouteChildren: RootRouteChildren = {
   HealthIdRoute: HealthIdRoute,
   PostsIdRoute: PostsIdRoute,
   PropertyIdRoute: PropertyIdRoute,
+  TrackingRefRoute: TrackingRefRoute,
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
   VendorsIdRoute: VendorsIdRoute,
+  ApiPublicGeocodeRoute: ApiPublicGeocodeRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
   ListingIdIndexRoute: ListingIdIndexRoute,
@@ -1275,13 +1317,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
