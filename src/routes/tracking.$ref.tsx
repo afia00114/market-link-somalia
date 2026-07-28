@@ -41,7 +41,7 @@ function TrackingPage() {
   // Initial fetch + realtime subscription
   useEffect(() => {
     let alive = true;
-    supabase
+    sb
       .from("booking_tracking")
       .select("lat,lng,updated_at,status,provider_user_id")
       .eq("booking_ref", ref)
