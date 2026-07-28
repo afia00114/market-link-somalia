@@ -4,12 +4,14 @@ import {
   ArrowLeft, Search, PackageOpen, Wrench, Zap, Sparkles, Snowflake,
   PaintBucket, Hammer, Brush, Truck, Car as CarIcon, Wheat, Briefcase,
   Landmark, UtensilsCrossed, Stethoscope, Plane, Home as HomeIcon, MoreHorizontal,
-  X, type LucideIcon,
+  X, Navigation, type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { CATEGORIES, type CategoryKey } from "@/data/categories";
 import { ListingCard } from "@/components/ListingCard";
 import { listingsByCategory } from "@/data/listings";
+import { useUserLocation } from "@/hooks/use-user-location";
+import { coordsFor, distanceKm } from "@/lib/geo";
 
 type PopularItem = { label: string; icon: LucideIcon; tone: string };
 
@@ -111,6 +113,8 @@ function CategoryPage() {
 
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [sortByNearby, setSortByNearby] = useState(false);
+  const { coords, status, request } = useUserLocation();
 
   const items = useMemo(() => {
     let list = allItems;
@@ -133,8 +137,17 @@ function CategoryPage() {
           (l.district ?? "").toLowerCase().includes(q),
       );
     }
+    if (sortByNearby && coords) {
+      list = [...list].sort((a, b) => {
+        const pa = coordsFor(a.city, a.district);
+        const pb = coordsFor(b.city, b.district);
+        const da = pa ? distanceKm(coords, pa) : Infinity;
+        const db = pb ? distanceKm(coords, pb) : Infinity;
+        return da - db;
+      });
+    }
     return list;
-  }, [allItems, activeFilter, query]);
+  }, [allItems, activeFilter, query, sortByNearby, coords]);
 
   return (
     <AppShell>
