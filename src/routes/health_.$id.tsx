@@ -8,6 +8,7 @@ import {
 import { AppShell } from "@/components/AppShell";
 import { getHospital, DEPARTMENTS } from "@/data/health";
 import { whatsappLink, telLink } from "@/lib/contact";
+import { LocationMap } from "@/components/LocationMap";
 
 export const Route = createFileRoute("/health_/$id")({
   loader: ({ params }) => {
@@ -221,6 +222,12 @@ function HospitalDetail() {
           <ContactRow icon={Mail} label="Email" value={h.email} copyValue={h.email} />
           <ContactRow icon={MapPin} label="Address" value={`${h.district}, ${h.city}`} copyValue={`${h.district}, ${h.city}`} />
         </div>
+      </section>
+
+      {/* Location map */}
+      <section className="px-4 pt-5">
+        <h2 className="mb-2 text-sm font-bold">Location</h2>
+        <LocationMap address={`${h.name}, ${h.district}, ${h.city}`} label={h.name} />
       </section>
 
       {/* Booking CTA card */}
