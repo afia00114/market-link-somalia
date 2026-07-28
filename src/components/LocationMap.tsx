@@ -50,12 +50,11 @@ export function LocationMap({
   // Render map when we have coords
   useEffect(() => {
     if (!resolved || !containerRef.current) return;
-    let map: google.maps.Map | null = null;
-    let marker: google.maps.Marker | null = null;
+    let marker: any = null;
     loadGoogleMaps()
       .then((g) => {
         if (!containerRef.current) return;
-        map = new g.maps.Map(containerRef.current, {
+        const map = new g.maps.Map(containerRef.current, {
           center: resolved,
           zoom: 15,
           disableDefaultUI: true,

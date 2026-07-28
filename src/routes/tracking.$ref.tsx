@@ -29,10 +29,11 @@ function TrackingPage() {
   const { ref } = useParams({ from: "/tracking/$ref" });
   const { user } = useAuth();
   const mapDivRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<google.maps.Map | null>(null);
-  const markerRef = useRef<google.maps.Marker | null>(null);
+  const mapRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
   const watchIdRef = useRef<number | null>(null);
   const [tracking, setTracking] = useState<TrackingRow | null>(null);
+  const sb: any = supabase;
   const [sharing, setSharing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isProvider = !!user && tracking?.provider_user_id === user.id;

@@ -1,7 +1,7 @@
 // Singleton Google Maps JS loader (browser only)
-let loaderPromise: Promise<typeof google> | null = null;
+let loaderPromise: Promise<any> | null = null;
 
-export function loadGoogleMaps(): Promise<typeof google> {
+export function loadGoogleMaps(): Promise<any> {
   if (typeof window === "undefined") {
     return Promise.reject(new Error("Google Maps can only load in the browser"));
   }
