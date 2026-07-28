@@ -46,8 +46,8 @@ function TrackingPage() {
       .select("lat,lng,updated_at,status,provider_user_id")
       .eq("booking_ref", ref)
       .maybeSingle()
-      .then(({ data }) => {
-        if (alive && data) setTracking(data as TrackingRow);
+      .then(({ data }: { data: TrackingRow | null }) => {
+        if (alive && data) setTracking(data);
       });
 
     const channel = supabase
@@ -117,7 +117,7 @@ function TrackingPage() {
         status: "active",
         updated_at: new Date().toISOString(),
       };
-      const { error } = await supabase
+      const { error } = await sb
         .from("booking_tracking")
         .upsert(row, { onConflict: "booking_ref" });
       if (error) setError(error.message);
@@ -137,7 +137,7 @@ function TrackingPage() {
     }
     setSharing(false);
     if (user) {
-      await supabase
+      await sb
         .from("booking_tracking")
         .update({ status: "ended" })
         .eq("booking_ref", ref)
