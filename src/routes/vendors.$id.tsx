@@ -150,7 +150,6 @@ function VendorPublic() {
         {vendor.description && <p className="mt-3 text-sm opacity-90">{vendor.description}</p>}
       </header>
 
-      <section className="px-4 py-4">
       {vendor.location && (
         <section className="px-4 pt-4">
           <h2 className="mb-2 text-sm font-bold">Location</h2>
