@@ -28,6 +28,7 @@ import { Route as EmployeeDashboardRouteImport } from './routes/employee-dashboa
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelIndexRouteImport } from './routes/travel.index'
+import { Route as RestaurantsIndexRouteImport } from './routes/restaurants.index'
 import { Route as JobsIndexRouteImport } from './routes/jobs.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as VendorsIdRouteImport } from './routes/vendors.$id'
@@ -43,6 +44,7 @@ import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelBusRouteImport } from './routes/travel.bus'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as TrackingRefRouteImport } from './routes/tracking.$ref'
+import { Route as RestaurantsIdRouteImport } from './routes/restaurants.$id'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
 import { Route as PostsIdRouteImport } from './routes/posts.$id'
@@ -162,6 +164,11 @@ const TravelIndexRoute = TravelIndexRouteImport.update({
   path: '/',
   getParentRoute: () => TravelRoute,
 } as any)
+const RestaurantsIndexRoute = RestaurantsIndexRouteImport.update({
+  id: '/restaurants/',
+  path: '/restaurants/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const JobsIndexRoute = JobsIndexRouteImport.update({
   id: '/jobs/',
   path: '/jobs/',
@@ -235,6 +242,11 @@ const TravelAgenciesRoute = TravelAgenciesRouteImport.update({
 const TrackingRefRoute = TrackingRefRouteImport.update({
   id: '/tracking/$ref',
   path: '/tracking/$ref',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RestaurantsIdRoute = RestaurantsIdRouteImport.update({
+  id: '/restaurants/$id',
+  path: '/restaurants/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertyIdRoute = PropertyIdRouteImport.update({
@@ -383,6 +395,7 @@ export interface FileRoutesByFullPath {
   '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
+  '/restaurants/$id': typeof RestaurantsIdRoute
   '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -398,6 +411,7 @@ export interface FileRoutesByFullPath {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/jobs/': typeof JobsIndexRoute
+  '/restaurants/': typeof RestaurantsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -440,6 +454,7 @@ export interface FileRoutesByTo {
   '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
+  '/restaurants/$id': typeof RestaurantsIdRoute
   '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -455,6 +470,7 @@ export interface FileRoutesByTo {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels': typeof HotelsIndexRoute
   '/jobs': typeof JobsIndexRoute
+  '/restaurants': typeof RestaurantsIndexRoute
   '/travel': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -500,6 +516,7 @@ export interface FileRoutesById {
   '/posts/$id': typeof PostsIdRoute
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
+  '/restaurants/$id': typeof RestaurantsIdRoute
   '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -515,6 +532,7 @@ export interface FileRoutesById {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/jobs/': typeof JobsIndexRoute
+  '/restaurants/': typeof RestaurantsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -561,6 +579,7 @@ export interface FileRouteTypes {
     | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
+    | '/restaurants/$id'
     | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
@@ -576,6 +595,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels/'
     | '/jobs/'
+    | '/restaurants/'
     | '/travel/'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -618,6 +638,7 @@ export interface FileRouteTypes {
     | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
+    | '/restaurants/$id'
     | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
@@ -633,6 +654,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels'
     | '/jobs'
+    | '/restaurants'
     | '/travel'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -677,6 +699,7 @@ export interface FileRouteTypes {
     | '/posts/$id'
     | '/profile/security'
     | '/property/$id'
+    | '/restaurants/$id'
     | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
@@ -692,6 +715,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels/'
     | '/jobs/'
+    | '/restaurants/'
     | '/travel/'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -732,11 +756,13 @@ export interface RootRouteChildren {
   JobsIdRoute: typeof JobsIdRoute
   PostsIdRoute: typeof PostsIdRoute
   PropertyIdRoute: typeof PropertyIdRoute
+  RestaurantsIdRoute: typeof RestaurantsIdRoute
   TrackingRefRoute: typeof TrackingRefRoute
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
   VendorsIdRoute: typeof VendorsIdRoute
   JobsIndexRoute: typeof JobsIndexRoute
+  RestaurantsIndexRoute: typeof RestaurantsIndexRoute
   ApiPublicGeocodeRoute: typeof ApiPublicGeocodeRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
@@ -878,6 +904,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TravelIndexRouteImport
       parentRoute: typeof TravelRoute
     }
+    '/restaurants/': {
+      id: '/restaurants/'
+      path: '/restaurants'
+      fullPath: '/restaurants/'
+      preLoaderRoute: typeof RestaurantsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/jobs/': {
       id: '/jobs/'
       path: '/jobs'
@@ -981,6 +1014,13 @@ declare module '@tanstack/react-router' {
       path: '/tracking/$ref'
       fullPath: '/tracking/$ref'
       preLoaderRoute: typeof TrackingRefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/restaurants/$id': {
+      id: '/restaurants/$id'
+      path: '/restaurants/$id'
+      fullPath: '/restaurants/$id'
+      preLoaderRoute: typeof RestaurantsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/property/$id': {
@@ -1346,11 +1386,13 @@ const rootRouteChildren: RootRouteChildren = {
   JobsIdRoute: JobsIdRoute,
   PostsIdRoute: PostsIdRoute,
   PropertyIdRoute: PropertyIdRoute,
+  RestaurantsIdRoute: RestaurantsIdRoute,
   TrackingRefRoute: TrackingRefRoute,
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
   VendorsIdRoute: VendorsIdRoute,
   JobsIndexRoute: JobsIndexRoute,
+  RestaurantsIndexRoute: RestaurantsIndexRoute,
   ApiPublicGeocodeRoute: ApiPublicGeocodeRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
