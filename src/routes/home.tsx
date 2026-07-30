@@ -11,10 +11,11 @@ import { useI18n } from "@/lib/i18n/I18nProvider";
 export const Route = createFileRoute("/home")({
   head: () => ({
     meta: [
-      { title: "MaalsoorHub — Home" },
+      { title: "MaalsoorHub — Somalia's Smart Marketplace" },
       { name: "description", content: "Browse verified businesses, real estate, travel, and services across Somalia and East Africa." },
-      { property: "og:title", content: "MaalsoorHub — Home" },
+      { property: "og:title", content: "MaalsoorHub — Discover Trusted Businesses in Somalia" },
       { property: "og:description", content: "Browse verified businesses, real estate, travel, and services across Somalia and East Africa." },
+      { property: "og:type", content: "website" },
       { property: "og:url", content: "https://market-link-somalia.lovable.app/home" },
     ],
     links: [
