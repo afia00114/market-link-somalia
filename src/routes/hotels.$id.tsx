@@ -20,12 +20,13 @@ export const Route = createFileRoute("/hotels/$id")({
     const url = `https://market-link-somalia.lovable.app/hotels/${params.id}`;
     if (!h) return { meta: [{ title: "Hotel — MaalsoorHub" }], links: [{ rel: "canonical", href: url }] };
     const title = `${h.name} — MaalsoorHub`.slice(0, 60);
+    const description = String(h.about ?? `${h.name} in ${h.city}, ${h.region}. Book via WhatsApp on MaalsoorHub.`).slice(0, 158);
     return {
       meta: [
         { title },
-        { name: "description", content: h.about ?? `${h.name} in ${h.city}, ${h.region}. Book via WhatsApp on MaalsoorHub.` },
+        { name: "description", content: description },
         { property: "og:title", content: title },
-        { property: "og:description", content: h.about ?? `${h.name} in ${h.city}, ${h.region}.` },
+        { property: "og:description", content: description },
         { property: "og:image", content: h.image },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },

@@ -15,6 +15,7 @@ export const Route = createFileRoute("/travel/my-tickets")({
     meta: [
       { title: "My Tickets — MaalsoorHub" },
       { name: "description", content: "Your saved flight requests and booking history." },
+      { name: "robots", content: "noindex" },
     ],
   }),
   component: MyTicketsPage,

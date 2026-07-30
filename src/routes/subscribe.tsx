@@ -10,7 +10,10 @@ export const Route = createFileRoute("/subscribe")({
     meta: [
       { title: "Subscribe — MaalsoorHub" },
       { name: "description", content: "Subscribe to MaalsoorHub with EVC Plus, Zaad, Sahal, eDahab or Mastercard." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/subscribe" },
     ],
+    links: [{ rel: "canonical", href: "https://market-link-somalia.lovable.app/subscribe" }],
   }),
   component: SubscribePage,
 });

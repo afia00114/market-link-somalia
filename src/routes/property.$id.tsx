@@ -20,12 +20,13 @@ export const Route = createFileRoute("/property/$id")({
     const url = `https://market-link-somalia.lovable.app/property/${params.id}`;
     if (!loaderData) return { meta: [{ title: "Property — MaalsoorHub" }], links: [{ rel: "canonical", href: url }] };
     const title = `${loaderData.title} — MaalsoorHub`.slice(0, 60);
+    const description = String(loaderData.description ?? "").slice(0, 158);
     return {
       meta: [
         { title },
-        { name: "description", content: loaderData.description },
+        { name: "description", content: description },
         { property: "og:title", content: loaderData.title },
-        { property: "og:description", content: loaderData.description },
+        { property: "og:description", content: description },
         { property: "og:image", content: loaderData.image },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },

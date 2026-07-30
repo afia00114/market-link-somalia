@@ -16,7 +16,10 @@ export const Route = createFileRoute("/travel/tours")({
       { name: "description", content: "Discover tour packages across East Africa and beyond from verified Somali agencies. Compare itineraries, durations, and prices per traveler." },
       { property: "og:title", content: "Tour Packages — MaalsoorHub" },
       { property: "og:description", content: "Verified tour packages — compare and book via WhatsApp." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/travel/tours" },
     ],
+    links: [{ rel: "canonical", href: "https://market-link-somalia.lovable.app/travel/tours" }],
   }),
   component: ToursPage,
 });

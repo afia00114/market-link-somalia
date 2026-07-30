@@ -15,7 +15,10 @@ export const Route = createFileRoute("/travel/cargo")({
       { name: "description", content: "Send parcels and freight by air, sea or road with verified cargo agents. Compare rates, customs support and tracking." },
       { property: "og:title", content: "Cargo & Shipping — MaalsoorHub" },
       { property: "og:description", content: "Verified cargo providers — compare rates and contact directly via WhatsApp or call." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/travel/cargo" },
     ],
+    links: [{ rel: "canonical", href: "https://market-link-somalia.lovable.app/travel/cargo" }],
   }),
   component: CargoPage,
 });

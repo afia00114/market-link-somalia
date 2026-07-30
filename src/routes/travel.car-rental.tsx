@@ -16,7 +16,10 @@ export const Route = createFileRoute("/travel/car-rental")({
       { name: "description", content: "Rent cars from verified agencies across Somalia and East Africa. Compare daily rates, automatic vs manual, and book directly via WhatsApp." },
       { property: "og:title", content: "Car Rental in Somalia — MaalsoorHub" },
       { property: "og:description", content: "Compare and book car rentals from verified providers via WhatsApp." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/travel/car-rental" },
     ],
+    links: [{ rel: "canonical", href: "https://market-link-somalia.lovable.app/travel/car-rental" }],
   }),
   component: CarRentalPage,
 });
