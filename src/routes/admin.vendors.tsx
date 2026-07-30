@@ -35,6 +35,8 @@ function AdminVendors() {
   const [apps, setApps] = useState<AppRow[]>([]);
   const [filter, setFilter] = useState<"pending" | "approved" | "rejected">("pending");
   const [working, setWorking] = useState<string | null>(null);
+  const approveApp = useServerFn(approveVendorApplication);
+
 
   const load = useCallback(async () => {
     const { data } = await supabase
