@@ -28,6 +28,7 @@ import { Route as EmployeeDashboardRouteImport } from './routes/employee-dashboa
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelIndexRouteImport } from './routes/travel.index'
+import { Route as RestaurantsIndexRouteImport } from './routes/restaurants.index'
 import { Route as JobsIndexRouteImport } from './routes/jobs.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as VendorsIdRouteImport } from './routes/vendors.$id'
@@ -161,6 +162,11 @@ const TravelIndexRoute = TravelIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => TravelRoute,
+} as any)
+const RestaurantsIndexRoute = RestaurantsIndexRouteImport.update({
+  id: '/restaurants/',
+  path: '/restaurants/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const JobsIndexRoute = JobsIndexRouteImport.update({
   id: '/jobs/',
@@ -398,6 +404,7 @@ export interface FileRoutesByFullPath {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/jobs/': typeof JobsIndexRoute
+  '/restaurants/': typeof RestaurantsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -455,6 +462,7 @@ export interface FileRoutesByTo {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels': typeof HotelsIndexRoute
   '/jobs': typeof JobsIndexRoute
+  '/restaurants': typeof RestaurantsIndexRoute
   '/travel': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -515,6 +523,7 @@ export interface FileRoutesById {
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
   '/jobs/': typeof JobsIndexRoute
+  '/restaurants/': typeof RestaurantsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -576,6 +585,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels/'
     | '/jobs/'
+    | '/restaurants/'
     | '/travel/'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -633,6 +643,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels'
     | '/jobs'
+    | '/restaurants'
     | '/travel'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -692,6 +703,7 @@ export interface FileRouteTypes {
     | '/vendors/$id'
     | '/hotels/'
     | '/jobs/'
+    | '/restaurants/'
     | '/travel/'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -737,6 +749,7 @@ export interface RootRouteChildren {
   VendorDashboardRoute: typeof VendorDashboardRoute
   VendorsIdRoute: typeof VendorsIdRoute
   JobsIndexRoute: typeof JobsIndexRoute
+  RestaurantsIndexRoute: typeof RestaurantsIndexRoute
   ApiPublicGeocodeRoute: typeof ApiPublicGeocodeRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
@@ -877,6 +890,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/travel/'
       preLoaderRoute: typeof TravelIndexRouteImport
       parentRoute: typeof TravelRoute
+    }
+    '/restaurants/': {
+      id: '/restaurants/'
+      path: '/restaurants'
+      fullPath: '/restaurants/'
+      preLoaderRoute: typeof RestaurantsIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/jobs/': {
       id: '/jobs/'
@@ -1351,6 +1371,7 @@ const rootRouteChildren: RootRouteChildren = {
   VendorDashboardRoute: VendorDashboardRoute,
   VendorsIdRoute: VendorsIdRoute,
   JobsIndexRoute: JobsIndexRoute,
+  RestaurantsIndexRoute: RestaurantsIndexRoute,
   ApiPublicGeocodeRoute: ApiPublicGeocodeRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
@@ -1359,13 +1380,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
