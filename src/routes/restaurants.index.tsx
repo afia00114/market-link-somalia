@@ -23,6 +23,28 @@ export const Route = createFileRoute("/restaurants/")({
         { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: RESTAURANTS.length,
+              itemListElement: RESTAURANTS.slice(0, 20).map((r, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: r.name,
+                url: `https://market-link-somalia.lovable.app/restaurants/${r.id}`,
+              })),
+            },
+          }),
+        },
+      ],
     };
   },
   component: RestaurantsPage,
