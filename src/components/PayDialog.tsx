@@ -1,13 +1,20 @@
 import { useState } from "react";
-import { X, Copy, Check } from "lucide-react";
+import { X, Copy, Check, PhoneCall } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
+import {
+  MOBILE_MONEY,
+  MOBILE_MONEY_ORDER,
+  ussdDialLink,
+  type MobileMoneyMethod,
+} from "@/lib/mobile-money";
 
 interface Vendor {
   id: string;
   business_name: string;
   evc_number: string | null;
   edahab_number: string | null;
+  zaad_number: string | null;
 }
 
 interface PayDialogProps {
@@ -20,13 +27,17 @@ interface PayDialogProps {
   onSubmitted?: () => void;
 }
 
+function numberFor(vendor: Vendor, m: MobileMoneyMethod): string | null {
+  if (m === "evc") return vendor.evc_number;
+  if (m === "edahab") return vendor.edahab_number;
+  return vendor.zaad_number;
+}
+
 export function PayDialog({ vendor, postId, bookingRef, defaultAmount, defaultCurrency = "USD", onClose, onSubmitted }: PayDialogProps) {
   const { user } = useAuth();
-  const methods: Array<"evc" | "edahab"> = [];
-  if (vendor.evc_number) methods.push("evc");
-  if (vendor.edahab_number) methods.push("edahab");
+  const methods = MOBILE_MONEY_ORDER.filter((m) => numberFor(vendor, m));
 
-  const [method, setMethod] = useState<"evc" | "edahab" | null>(methods[0] ?? null);
+  const [method, setMethod] = useState<MobileMoneyMethod | null>(methods[0] ?? null);
   const [amount, setAmount] = useState(defaultAmount?.toString() ?? "");
   const [currency, setCurrency] = useState<"USD" | "SOS">(defaultCurrency);
   const [reference, setReference] = useState("");
@@ -35,7 +46,9 @@ export function PayDialog({ vendor, postId, bookingRef, defaultAmount, defaultCu
   const [copied, setCopied] = useState(false);
   const [done, setDone] = useState(false);
 
-  const payTo = method === "evc" ? vendor.evc_number : method === "edahab" ? vendor.edahab_number : null;
+  const meta = method ? MOBILE_MONEY[method] : null;
+  const payTo = method ? numberFor(vendor, method) : null;
+  const ussd = meta && payTo ? meta.ussd(payTo, amount || undefined) : null;
 
   const copy = async () => {
     if (!payTo) return;
@@ -71,7 +84,7 @@ export function PayDialog({ vendor, postId, bookingRef, defaultAmount, defaultCu
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-lg rounded-t-3xl bg-card p-4 pb-6">
+      <div onClick={(e) => e.stopPropagation()} className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl bg-card p-4 pb-6">
         <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-border" />
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-base font-bold">Pay {vendor.business_name}</h2>
@@ -91,32 +104,16 @@ export function PayDialog({ vendor, postId, bookingRef, defaultAmount, defaultCu
           <form onSubmit={submit} className="space-y-3">
             <div>
               <label className="mb-1 block text-xs font-medium text-muted-foreground">Payment method</label>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {methods.map((m) => (
                   <button key={m} type="button" onClick={() => setMethod(m)}
-                    className={`flex-1 rounded-xl border py-2.5 text-sm font-semibold ${method === m ? "border-primary bg-primary/10 text-primary" : "border-border bg-background"}`}>
-                    {m === "evc" ? "EVC Plus" : "eDahab"}
+                    className={`rounded-xl border py-2.5 text-center text-sm font-semibold ${method === m ? "border-primary bg-primary/10 text-primary" : "border-border bg-background"}`}>
+                    {MOBILE_MONEY[m].label}
+                    <span className="block text-[10px] font-normal text-muted-foreground">{MOBILE_MONEY[m].operator}</span>
                   </button>
                 ))}
               </div>
             </div>
-
-            {payTo && (
-              <div className="rounded-xl bg-secondary p-3">
-                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Send to this number</p>
-                <div className="mt-1 flex items-center justify-between gap-2">
-                  <span className="text-lg font-bold tabular-nums">{payTo}</span>
-                  <button type="button" onClick={copy} className="flex items-center gap-1 rounded-lg bg-card px-2.5 py-1.5 text-xs font-semibold">
-                    {copied ? <><Check className="h-3 w-3" /> Copied</> : <><Copy className="h-3 w-3" /> Copy</>}
-                  </button>
-                </div>
-                <p className="mt-2 text-[11px] text-muted-foreground">
-                  {method === "evc"
-                    ? "Dial *712*number*amount# on your phone, then paste the SMS reference below."
-                    : "Use the eDahab app or USSD, then paste the SMS reference below."}
-                </p>
-              </div>
-            )}
 
             <div className="grid grid-cols-3 gap-2">
               <div className="col-span-2">
@@ -133,6 +130,25 @@ export function PayDialog({ vendor, postId, bookingRef, defaultAmount, defaultCu
                 </select>
               </div>
             </div>
+
+            {payTo && meta && (
+              <div className="rounded-xl bg-secondary p-3">
+                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{meta.label} number</p>
+                <div className="mt-1 flex items-center justify-between gap-2">
+                  <span className="text-lg font-bold tabular-nums">{payTo}</span>
+                  <button type="button" onClick={copy} className="flex items-center gap-1 rounded-lg bg-card px-2.5 py-1.5 text-xs font-semibold">
+                    {copied ? <><Check className="h-3 w-3" /> Copied</> : <><Copy className="h-3 w-3" /> Copy</>}
+                  </button>
+                </div>
+                {ussd && (
+                  <a href={ussdDialLink(ussd)}
+                    className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground">
+                    <PhoneCall className="h-4 w-4" /> Dial {ussd}
+                  </a>
+                )}
+                <p className="mt-2 text-[11px] text-muted-foreground">{meta.hint}</p>
+              </div>
+            )}
 
             <div>
               <label className="mb-1 block text-xs font-medium text-muted-foreground">Transaction reference *</label>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Wallet } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
+import { methodLabel } from "@/lib/mobile-money";
 import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/my-payments")({
@@ -76,7 +77,7 @@ function MyPayments() {
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <div className="text-sm font-semibold">{p.vendor_profiles?.business_name ?? "Vendor"}</div>
-                    <div className="text-[11px] text-muted-foreground">{p.method === "evc" ? "EVC Plus" : "eDahab"} · {new Date(p.created_at).toLocaleString()}</div>
+                    <div className="text-[11px] text-muted-foreground">{methodLabel(p.method)} · {new Date(p.created_at).toLocaleString()}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-base font-bold">{p.currency} {p.amount}</div>
