@@ -5,11 +5,11 @@ import {
   MessageCircle, Phone, ShoppingBag, X,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { RESTAURANTS, MENU_CATEGORIES, type MenuItem } from "@/data/restaurants";
+import { RESTAURANTS, MENU_CATEGORIES, type MenuItem, type Restaurant } from "@/data/restaurants";
 import { whatsappLink, telLink } from "@/lib/contact";
 
 export const Route = createFileRoute("/restaurants/$id")({
-  loader: ({ params }) => {
+  loader: ({ params }): { restaurant: Restaurant } => {
     const restaurant = RESTAURANTS.find((r) => r.id === params.id);
     if (!restaurant) throw notFound();
     return { restaurant };
@@ -65,7 +65,8 @@ export const Route = createFileRoute("/restaurants/$id")({
 });
 
 function RestaurantDetail() {
-  const { restaurant } = Route.useLoaderData();
+  const { id } = Route.useParams();
+  const restaurant = RESTAURANTS.find((r) => r.id === id)!;
   const [cart, setCart] = useState<Record<string, number>>({});
   const [cartOpen, setCartOpen] = useState(false);
   const [activeCat, setActiveCat] = useState<string | null>(null);
