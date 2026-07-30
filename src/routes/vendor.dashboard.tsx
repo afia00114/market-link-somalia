@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Plus, Pencil, Trash2, Eye, EyeOff, Store, Save } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
+import { methodLabel } from "@/lib/mobile-money";
 import { useAuth } from "@/hooks/use-auth";
 import { useVendor, type VendorProfile } from "@/hooks/use-vendor";
 import { CATEGORIES } from "@/data/categories";
@@ -209,6 +210,7 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
   const [whatsapp, setWhatsapp] = useState(profile.whatsapp ?? "");
   const [evcNumber, setEvcNumber] = useState(profile.evc_number ?? "");
   const [edahabNumber, setEdahabNumber] = useState(profile.edahab_number ?? "");
+  const [zaadNumber, setZaadNumber] = useState(profile.zaad_number ?? "");
   const [isActive, setIsActive] = useState(profile.is_active);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -224,6 +226,7 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
       whatsapp: whatsapp.trim() || null,
       evc_number: evcNumber.trim() || null,
       edahab_number: edahabNumber.trim() || null,
+      zaad_number: zaadNumber.trim() || null,
       is_active: isActive,
     }).eq("id", profile.id);
     setSaving(false);
@@ -246,6 +249,7 @@ function ProfileEditor({ profile, onSaved }: { profile: VendorProfile; onSaved: 
         <div className="space-y-2">
           <Input label="EVC Plus number" value={evcNumber} onChange={setEvcNumber} inputMode="tel" placeholder="e.g. 615xxxxxx" />
           <Input label="eDahab number" value={edahabNumber} onChange={setEdahabNumber} inputMode="tel" placeholder="e.g. 657xxxxxx" />
+          <Input label="Zaad number" value={zaadNumber} onChange={setZaadNumber} inputMode="tel" placeholder="e.g. 63xxxxxxx" />
         </div>
         <p className="mt-2 text-[11px] text-muted-foreground">Leave a field blank to hide that option from customers.</p>
       </div>
@@ -347,7 +351,7 @@ function VendorPayments({ vendorId }: { vendorId: string }) {
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <div className="text-base font-bold">{p.currency} {p.amount}</div>
-                  <div className="text-[11px] uppercase tracking-wide text-muted-foreground">{p.method === "evc" ? "EVC Plus" : "eDahab"} · {new Date(p.created_at).toLocaleString()}</div>
+                  <div className="text-[11px] uppercase tracking-wide text-muted-foreground">{methodLabel(p.method)} · {new Date(p.created_at).toLocaleString()}</div>
                 </div>
                 <StatusBadge status={p.status} />
               </div>

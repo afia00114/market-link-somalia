@@ -18,6 +18,7 @@ interface VendorRow {
   business_name: string;
   evc_number: string | null;
   edahab_number: string | null;
+  zaad_number: string | null;
 }
 
 export function PayButton({ vendorId, postId, bookingRef, defaultAmount, defaultCurrency, className, label = "Pay with mobile money" }: PayButtonProps) {
@@ -27,14 +28,14 @@ export function PayButton({ vendorId, postId, bookingRef, defaultAmount, default
   useEffect(() => {
     supabase
       .from("vendor_profiles")
-      .select("id,business_name,evc_number,edahab_number")
+      .select("id,business_name,evc_number,edahab_number,zaad_number")
       .eq("id", vendorId)
       .maybeSingle()
       .then(({ data }) => setVendor((data as VendorRow | null) ?? null));
   }, [vendorId]);
 
   if (!vendor) return null;
-  const hasAny = vendor.evc_number || vendor.edahab_number;
+  const hasAny = vendor.evc_number || vendor.edahab_number || vendor.zaad_number;
   if (!hasAny) return null;
 
   return (

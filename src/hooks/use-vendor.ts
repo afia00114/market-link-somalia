@@ -17,6 +17,7 @@ export interface VendorProfile {
   is_active: boolean;
   evc_number: string | null;
   edahab_number: string | null;
+  zaad_number: string | null;
 }
 
 export interface VendorApplication {
