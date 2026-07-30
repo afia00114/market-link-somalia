@@ -206,3 +206,27 @@ function EmployeeDashboard() {
     </AppShell>
   );
 }
+
+function StatCard({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: string; tone: string }) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-3 shadow-soft">
+      <div className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[11px] font-semibold ${tone}`}>
+        {icon}
+        {label}
+      </div>
+      <p className="mt-2 text-lg font-bold text-foreground">{value}</p>
+    </div>
+  );
+}
+
+function Th({ children, className = "" }: { children?: React.ReactNode; className?: string }) {
+  return <th className={`px-2 py-2 text-left font-semibold ${className}`}>{children}</th>;
+}
+
+function Td({ children, className = "", colSpan }: { children?: React.ReactNode; className?: string; colSpan?: number }) {
+  return (
+    <td colSpan={colSpan} className={`px-2 py-2 ${className}`}>
+      {children}
+    </td>
+  );
+}
