@@ -50,7 +50,7 @@ function Splash() {
     return (
       <main className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-background px-6 pb-10 pt-8">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground">How will you use MaalsoorHub?</h2>
+          <h1 className="text-2xl font-bold text-foreground">How will you use MaalsoorHub?</h1>
           <p className="mt-2 text-sm text-muted-foreground">Choose how you'd like to get started.</p>
         </div>
 
@@ -116,7 +116,7 @@ function Splash() {
         <div className="mb-8 flex h-44 w-44 items-center justify-center rounded-3xl grad-hero text-white shadow-card">
           <Icon className="h-20 w-20" strokeWidth={1.5} />
         </div>
-        <h2 className="text-2xl font-bold text-foreground">{Slide.title}</h2>
+        <h1 className="text-2xl font-bold text-foreground">{Slide.title}</h1>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{Slide.desc}</p>
       </div>
       <div className="flex items-center justify-center gap-2 pb-6">
