@@ -20,8 +20,8 @@ export const Route = createFileRoute("/restaurants/$id")({
       return { meta: [{ title: "Restaurant — MaalsoorHub" }, { name: "robots", content: "noindex" }] };
     }
     const url = `https://market-link-somalia.lovable.app/restaurants/${r.id}`;
-    const title = `${r.name} — Food Delivery in ${r.city} | MaalsoorHub`;
-    const description = `Order from ${r.name} (${r.cuisine}) in ${r.district}, ${r.city}. Delivery in ${r.deliveryMins} for $${r.deliveryFee.toFixed(2)}.`;
+    const title = `${r.name} — Food Delivery in ${r.city} | MaalsoorHub`.slice(0, 60);
+    const description = `Order from ${r.name} (${r.cuisine}) in ${r.district}, ${r.city}. Delivery in ${r.deliveryMins} for $${r.deliveryFee.toFixed(2)}.`.slice(0, 158);
     return {
       meta: [
         { title },
