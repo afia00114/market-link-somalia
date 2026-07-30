@@ -32,6 +32,19 @@ export const Route = createFileRoute("/health/directory")({
         { property: "og:url", content: url },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            about: "Hospitals and clinics in Somalia, Kenya, Ethiopia and India",
+          }),
+        },
+      ],
     };
   },
   component: DirectoryPage,

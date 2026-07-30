@@ -30,6 +30,28 @@ export const Route = createFileRoute("/livestock/$id")({
         { property: "og:url", content: url },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: a.title,
+            description,
+            image: a.image,
+            category: a.type,
+            url,
+            offers: {
+              "@type": "Offer",
+              price: a.price,
+              priceCurrency: a.currency,
+              availability: "https://schema.org/InStock",
+              url,
+              seller: { "@type": "Person", name: a.sellerName },
+            },
+          }),
+        },
+      ],
     };
   },
   component: LivestockDetail,
