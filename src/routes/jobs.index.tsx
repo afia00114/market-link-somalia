@@ -17,7 +17,7 @@ const SUPPORT_PHONE = "+252611234567";
 export const Route = createFileRoute("/jobs/")({
   head: () => {
     const url = "https://market-link-somalia.lovable.app/jobs";
-    const title = "Jobs in Somalia — NGO, Government & Private Sector | MaalsoorHub";
+    const title = "Jobs in Somalia — NGO, Govt & Private | MaalsoorHub";
     const description =
       "Browse verified job vacancies in Somalia across NGOs, government ministries and private companies. Apply by email or WhatsApp.";
     return {
@@ -31,6 +31,28 @@ export const Route = createFileRoute("/jobs/")({
         { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: JOB_LISTINGS.length,
+              itemListElement: JOB_LISTINGS.slice(0, 20).map((j, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: `${j.title} — ${j.organisation}`,
+                url: `https://market-link-somalia.lovable.app/jobs/${j.id}`,
+              })),
+            },
+          }),
+        },
+      ],
     };
   },
   component: JobsPage,

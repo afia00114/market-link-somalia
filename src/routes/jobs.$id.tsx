@@ -20,7 +20,7 @@ export const Route = createFileRoute("/jobs/$id")({
         meta: [{ title: "Job not found — MaalsoorHub" }, { name: "robots", content: "noindex" }],
       };
     const url = `https://market-link-somalia.lovable.app/jobs/${j.id}`;
-    const title = `${j.title} at ${j.organisation} — ${j.city} | MaalsoorHub Jobs`;
+    const title = `${j.title} at ${j.organisation} — ${j.city} | MaalsoorHub Jobs`.slice(0, 60);
     const description = `${j.summary} ${j.type} role in ${j.city}. Apply before ${j.deadline}.`.slice(0, 158);
     return {
       meta: [

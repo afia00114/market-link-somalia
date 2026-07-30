@@ -28,6 +28,28 @@ export const Route = createFileRoute("/livestock")({
         { property: "og:url", content: url },
       ],
       links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: title,
+            description,
+            url,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: ANIMAL_LISTINGS.length,
+              itemListElement: ANIMAL_LISTINGS.slice(0, 20).map((a, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: a.title,
+                url: `https://market-link-somalia.lovable.app/livestock/${a.id}`,
+              })),
+            },
+          }),
+        },
+      ],
     };
   },
   component: LivestockPage,
