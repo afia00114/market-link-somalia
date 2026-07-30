@@ -18,6 +18,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PostRouteImport } from './routes/post'
 import { Route as MyPaymentsRouteImport } from './routes/my-payments'
 import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LivestockRouteImport } from './routes/livestock'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
@@ -56,6 +57,8 @@ import { Route as HealthIdRouteImport } from './routes/health_.$id'
 import { Route as HealthDirectoryRouteImport } from './routes/health.directory'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
 import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ListingIdIndexRouteImport } from './routes/listing.$id.index'
 import { Route as TravelVisaIdRouteImport } from './routes/travel.visa.$id'
 import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
@@ -68,6 +71,8 @@ import { Route as ListingIdBookedRouteImport } from './routes/listing.$id.booked
 import { Route as ListingIdBookRouteImport } from './routes/listing.$id.book'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 import { Route as ApiPublicGeocodeRouteImport } from './routes/api/public/geocode'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const TravelRoute = TravelRouteImport.update({
   id: '/travel',
@@ -112,6 +117,11 @@ const MyPaymentsRoute = MyPaymentsRouteImport.update({
 const MessagesRoute = MessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LivestockRoute = LivestockRouteImport.update({
@@ -304,6 +314,18 @@ const AdminVendorsRoute = AdminVendorsRouteImport.update({
   path: '/admin/vendors',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ListingIdIndexRoute = ListingIdIndexRouteImport.update({
   id: '/listing/$id/',
   path: '/listing/$id/',
@@ -364,6 +386,17 @@ const ApiPublicGeocodeRoute = ApiPublicGeocodeRouteImport.update({
   path: '/api/public/geocode',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -375,6 +408,7 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/livestock': typeof LivestockRouteWithChildren
+  '/mcp': typeof McpRoute
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
@@ -384,6 +418,8 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
   '/health/directory': typeof HealthDirectoryRoute
@@ -413,6 +449,8 @@ export interface FileRoutesByFullPath {
   '/jobs/': typeof JobsIndexRoute
   '/restaurants/': typeof RestaurantsIndexRoute
   '/travel/': typeof TravelIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -435,6 +473,7 @@ export interface FileRoutesByTo {
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/livestock': typeof LivestockRouteWithChildren
+  '/mcp': typeof McpRoute
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
@@ -443,6 +482,8 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
   '/health/directory': typeof HealthDirectoryRoute
@@ -472,6 +513,8 @@ export interface FileRoutesByTo {
   '/jobs': typeof JobsIndexRoute
   '/restaurants': typeof RestaurantsIndexRoute
   '/travel': typeof TravelIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -496,6 +539,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
   '/livestock': typeof LivestockRouteWithChildren
+  '/mcp': typeof McpRoute
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
   '/post': typeof PostRoute
@@ -505,6 +549,8 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/subscribe': typeof SubscribeRoute
   '/travel': typeof TravelRouteWithChildren
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
   '/health/directory': typeof HealthDirectoryRoute
@@ -534,6 +580,8 @@ export interface FileRoutesById {
   '/jobs/': typeof JobsIndexRoute
   '/restaurants/': typeof RestaurantsIndexRoute
   '/travel/': typeof TravelIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -559,6 +607,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/hotels'
     | '/livestock'
+    | '/mcp'
     | '/messages'
     | '/my-payments'
     | '/post'
@@ -568,6 +617,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subscribe'
     | '/travel'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
     | '/health/directory'
@@ -597,6 +648,8 @@ export interface FileRouteTypes {
     | '/jobs/'
     | '/restaurants/'
     | '/travel/'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -619,6 +672,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/livestock'
+    | '/mcp'
     | '/messages'
     | '/my-payments'
     | '/post'
@@ -627,6 +681,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/sitemap.xml'
     | '/subscribe'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
     | '/health/directory'
@@ -656,6 +712,8 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/restaurants'
     | '/travel'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -679,6 +737,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/hotels'
     | '/livestock'
+    | '/mcp'
     | '/messages'
     | '/my-payments'
     | '/post'
@@ -688,6 +747,8 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/subscribe'
     | '/travel'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
     | '/health/directory'
@@ -717,6 +778,8 @@ export interface FileRouteTypes {
     | '/jobs/'
     | '/restaurants/'
     | '/travel/'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -741,6 +804,7 @@ export interface RootRouteChildren {
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
   LivestockRoute: typeof LivestockRouteWithChildren
+  McpRoute: typeof McpRoute
   MessagesRoute: typeof MessagesRouteWithChildren
   MyPaymentsRoute: typeof MyPaymentsRoute
   PostRoute: typeof PostRoute
@@ -750,6 +814,8 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SubscribeRoute: typeof SubscribeRoute
   TravelRoute: typeof TravelRouteWithChildren
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminVendorsRoute: typeof AdminVendorsRoute
   CategoryKeyRoute: typeof CategoryKeyRoute
   HealthIdRoute: typeof HealthIdRoute
@@ -763,6 +829,8 @@ export interface RootRouteChildren {
   VendorsIdRoute: typeof VendorsIdRoute
   JobsIndexRoute: typeof JobsIndexRoute
   RestaurantsIndexRoute: typeof RestaurantsIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicGeocodeRoute: typeof ApiPublicGeocodeRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
@@ -832,6 +900,13 @@ declare module '@tanstack/react-router' {
       path: '/messages'
       fullPath: '/messages'
       preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/livestock': {
@@ -1100,6 +1175,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminVendorsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/listing/$id/': {
       id: '/listing/$id/'
       path: '/listing/$id'
@@ -1182,6 +1271,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public/geocode'
       fullPath: '/api/public/geocode'
       preLoaderRoute: typeof ApiPublicGeocodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -1371,6 +1474,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
   LivestockRoute: LivestockRouteWithChildren,
+  McpRoute: McpRoute,
   MessagesRoute: MessagesRouteWithChildren,
   MyPaymentsRoute: MyPaymentsRoute,
   PostRoute: PostRoute,
@@ -1380,6 +1484,9 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SubscribeRoute: SubscribeRoute,
   TravelRoute: TravelRouteWithChildren,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminVendorsRoute: AdminVendorsRoute,
   CategoryKeyRoute: CategoryKeyRoute,
   HealthIdRoute: HealthIdRoute,
@@ -1393,6 +1500,8 @@ const rootRouteChildren: RootRouteChildren = {
   VendorsIdRoute: VendorsIdRoute,
   JobsIndexRoute: JobsIndexRoute,
   RestaurantsIndexRoute: RestaurantsIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicGeocodeRoute: ApiPublicGeocodeRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
@@ -1401,3 +1510,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
