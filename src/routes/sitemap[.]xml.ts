@@ -26,6 +26,12 @@ export const Route = createFileRoute("/sitemap.xml")({
           .select("id")
           .eq("is_active", true);
 
+        const { data: posts } = await supabase
+          .from("vendor_posts")
+          .select("id")
+          .eq("is_published", true);
+
+
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/home", changefreq: "weekly", priority: "0.9" },
