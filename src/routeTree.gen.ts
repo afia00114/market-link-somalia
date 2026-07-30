@@ -19,7 +19,6 @@ import { Route as PostRouteImport } from './routes/post'
 import { Route as MyPaymentsRouteImport } from './routes/my-payments'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as LivestockRouteImport } from './routes/livestock'
-import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as HealthRouteImport } from './routes/health'
@@ -29,6 +28,7 @@ import { Route as EmployeeDashboardRouteImport } from './routes/employee-dashboa
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TravelIndexRouteImport } from './routes/travel.index'
+import { Route as JobsIndexRouteImport } from './routes/jobs.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as VendorsIdRouteImport } from './routes/vendors.$id'
 import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
@@ -116,11 +116,6 @@ const LivestockRoute = LivestockRouteImport.update({
   path: '/livestock',
   getParentRoute: () => rootRouteImport,
 } as any)
-const JobsRoute = JobsRouteImport.update({
-  id: '/jobs',
-  path: '/jobs',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HotelsRoute = HotelsRouteImport.update({
   id: '/hotels',
   path: '/hotels',
@@ -165,6 +160,11 @@ const TravelIndexRoute = TravelIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => TravelRoute,
+} as any)
+const JobsIndexRoute = JobsIndexRouteImport.update({
+  id: '/jobs/',
+  path: '/jobs/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const HotelsIndexRoute = HotelsIndexRouteImport.update({
   id: '/',
@@ -356,7 +356,6 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
-  '/jobs': typeof JobsRoute
   '/livestock': typeof LivestockRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
@@ -391,6 +390,7 @@ export interface FileRoutesByFullPath {
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
+  '/jobs/': typeof JobsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -413,7 +413,6 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
-  '/jobs': typeof JobsRoute
   '/livestock': typeof LivestockRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
@@ -447,6 +446,7 @@ export interface FileRoutesByTo {
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels': typeof HotelsIndexRoute
+  '/jobs': typeof JobsIndexRoute
   '/travel': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -471,7 +471,6 @@ export interface FileRoutesById {
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
-  '/jobs': typeof JobsRoute
   '/livestock': typeof LivestockRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
@@ -506,6 +505,7 @@ export interface FileRoutesById {
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
   '/hotels/': typeof HotelsIndexRoute
+  '/jobs/': typeof JobsIndexRoute
   '/travel/': typeof TravelIndexRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
@@ -531,7 +531,6 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/hotels'
-    | '/jobs'
     | '/livestock'
     | '/messages'
     | '/my-payments'
@@ -566,6 +565,7 @@ export interface FileRouteTypes {
     | '/vendor/dashboard'
     | '/vendors/$id'
     | '/hotels/'
+    | '/jobs/'
     | '/travel/'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -588,7 +588,6 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/health'
     | '/home'
-    | '/jobs'
     | '/livestock'
     | '/messages'
     | '/my-payments'
@@ -622,6 +621,7 @@ export interface FileRouteTypes {
     | '/vendor/dashboard'
     | '/vendors/$id'
     | '/hotels'
+    | '/jobs'
     | '/travel'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -645,7 +645,6 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/hotels'
-    | '/jobs'
     | '/livestock'
     | '/messages'
     | '/my-payments'
@@ -680,6 +679,7 @@ export interface FileRouteTypes {
     | '/vendor/dashboard'
     | '/vendors/$id'
     | '/hotels/'
+    | '/jobs/'
     | '/travel/'
     | '/api/public/geocode'
     | '/hotels/$id/book'
@@ -704,7 +704,6 @@ export interface RootRouteChildren {
   HealthRoute: typeof HealthRouteWithChildren
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
-  JobsRoute: typeof JobsRoute
   LivestockRoute: typeof LivestockRouteWithChildren
   MessagesRoute: typeof MessagesRouteWithChildren
   MyPaymentsRoute: typeof MyPaymentsRoute
@@ -724,6 +723,7 @@ export interface RootRouteChildren {
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
   VendorsIdRoute: typeof VendorsIdRoute
+  JobsIndexRoute: typeof JobsIndexRoute
   ApiPublicGeocodeRoute: typeof ApiPublicGeocodeRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
@@ -802,13 +802,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LivestockRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/jobs': {
-      id: '/jobs'
-      path: '/jobs'
-      fullPath: '/jobs'
-      preLoaderRoute: typeof JobsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/hotels': {
       id: '/hotels'
       path: '/hotels'
@@ -871,6 +864,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/travel/'
       preLoaderRoute: typeof TravelIndexRouteImport
       parentRoute: typeof TravelRoute
+    }
+    '/jobs/': {
+      id: '/jobs/'
+      path: '/jobs'
+      fullPath: '/jobs/'
+      preLoaderRoute: typeof JobsIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/hotels/': {
       id: '/hotels/'
@@ -1310,7 +1310,6 @@ const rootRouteChildren: RootRouteChildren = {
   HealthRoute: HealthRouteWithChildren,
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
-  JobsRoute: JobsRoute,
   LivestockRoute: LivestockRouteWithChildren,
   MessagesRoute: MessagesRouteWithChildren,
   MyPaymentsRoute: MyPaymentsRoute,
@@ -1330,6 +1329,7 @@ const rootRouteChildren: RootRouteChildren = {
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
   VendorsIdRoute: VendorsIdRoute,
+  JobsIndexRoute: JobsIndexRoute,
   ApiPublicGeocodeRoute: ApiPublicGeocodeRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
