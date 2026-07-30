@@ -85,7 +85,31 @@ export const Route = createFileRoute("/posts/$id")({
       meta.push({ property: "og:image", content: p.image_url });
       meta.push({ property: "twitter:image", content: p.image_url });
     }
-    return { meta, links: [{ rel: "canonical", href: url }] };
+    const ld: Record<string, any> = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: p.title,
+      description: desc,
+      url,
+      category: cat,
+    };
+    if (p.image_url) ld.image = [p.image_url, ...(p.gallery_urls ?? [])].filter(Boolean);
+    if (p.price != null) {
+      ld.offers = {
+        "@type": "Offer",
+        price: p.price,
+        priceCurrency: p.currency || "USD",
+        availability: "https://schema.org/InStock",
+        url,
+      };
+    }
+    const addr = p.contact?.address || p.location;
+    if (addr) ld.areaServed = { "@type": "Place", address: { "@type": "PostalAddress", streetAddress: addr } };
+    return {
+      meta,
+      links: [{ rel: "canonical", href: url }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(ld) }],
+    };
   },
   notFoundComponent: () => <AppShell><div className="p-6 text-sm">Listing not found.</div></AppShell>,
   errorComponent: () => <AppShell><div className="p-6 text-sm">Something went wrong loading this listing.</div></AppShell>,
