@@ -7,6 +7,7 @@ import { HOSPITALS } from "@/data/health";
 import { HOTELS } from "@/data/hotels";
 import { LISTINGS } from "@/data/listings";
 import { ANIMAL_LISTINGS } from "@/data/livestock";
+import { JOB_LISTINGS } from "@/data/jobs";
 import { AGENCIES, FLIGHT_OFFERS, PILGRIM_PACKAGES, TOUR_PACKAGES, CAR_OFFERS, VISA_SERVICES } from "@/data/travel";
 
 const BASE_URL = "https://market-link-somalia.lovable.app";
@@ -63,6 +64,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/my-payments", changefreq: "weekly", priority: "0.4" },
           { path: "/vendor/dashboard", changefreq: "weekly", priority: "0.4" },
           { path: "/livestock", changefreq: "weekly", priority: "0.8" },
+          { path: "/jobs", changefreq: "daily", priority: "0.8" },
+          ...JOB_LISTINGS.map((j) => ({ path: `/jobs/${j.id}`, changefreq: "daily" as const, priority: "0.6" })),
           ...ANIMAL_LISTINGS.map((a) => ({ path: `/livestock/${a.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...(posts ?? []).map((p: { id: string }) => ({ path: `/posts/${p.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...CATEGORIES.map((c) => ({ path: `/category/${c.key}`, changefreq: "weekly" as const, priority: "0.6" })),
