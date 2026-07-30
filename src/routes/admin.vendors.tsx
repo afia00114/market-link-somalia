@@ -1,9 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, CheckCircle2, XCircle, Shield } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { useVendor } from "@/hooks/use-vendor";
+import { approveVendorApplication } from "@/lib/vendor.functions";
+
 
 export const Route = createFileRoute("/admin/vendors")({
   head: () => ({
