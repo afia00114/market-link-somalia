@@ -1,8 +1,9 @@
 import { MessageCircle } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/hooks/use-auth";
+import { startConversation } from "@/lib/vendor.functions";
 
 interface Props {
   vendorId: string;
@@ -15,6 +16,7 @@ export function ChatStartButton({ vendorId, postId, className, label = "Message"
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const start_ = useServerFn(startConversation);
 
   const start = async () => {
     if (!user) {
@@ -22,18 +24,18 @@ export function ChatStartButton({ vendorId, postId, className, label = "Message"
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.rpc("start_conversation", {
-      _vendor_id: vendorId,
-      _post_id: postId ?? undefined,
-    });
-    setLoading(false);
-    if (error) {
-      alert(error.message);
-      return;
+    try {
+      const res = await start_({ data: { vendorId, postId: postId ?? null } });
+      if (res?.conversationId) {
+        navigate({ to: "/messages/$id", params: { id: String(res.conversationId) } });
+      }
+    } catch (e: any) {
+      alert(e?.message ?? "Could not start conversation");
+    } finally {
+      setLoading(false);
     }
-    if (!data) return;
-    navigate({ to: "/messages/$id", params: { id: String(data) } });
   };
+
 
   return (
     <button

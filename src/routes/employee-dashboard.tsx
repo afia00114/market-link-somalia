@@ -1,13 +1,17 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { ArrowLeft, Download, TrendingUp, Receipt, Percent, Wallet } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, Download, TrendingUp, Receipt, Percent, Wallet, Shield } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { useVendor } from "@/hooks/use-vendor";
+import { getPayroll } from "@/lib/payroll.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 export const Route = createFileRoute("/employee-dashboard")({
   head: () => ({
     meta: [
       { title: "Employee Dashboard — MaalsoorHub" },
-      { name: "description", content: "Track employee earnings, tax, commission, and net amount across daily services." },
+      { name: "robots", content: "noindex, nofollow" },
+      { name: "description", content: "Internal payroll dashboard. Admin access only." },
     ],
   }),
   component: EmployeeDashboard,
@@ -30,43 +34,6 @@ type EmployeeRow = {
   earn: number;
 };
 
-const SERVICES: ServiceRow[] = Array.from({ length: 26 }, (_, i) => ({
-  sn: i + 1,
-  code: "20156",
-  date: `5/${i + 1}/2026`,
-  magacada: "Mohamud Ali",
-  macamil: [
-    "Shankaroon Mohamed Nur Abdi", "Daud Mohamed Abdirahman Alin", "Mohamed Ahmed Garar Abikar",
-    "Mohamed Sheikh Idle Nunow", "Abdi Mahdi Abdullahi Jelle", "Aadan Ahmed Garar Abikar",
-    "Nunow Adan Ged Mohamed", "Sharmaarke Adan Mohamed Ahmed", "Zakaria Jimale Yarkow Hassan",
-    "Safa Mohamed Nuur Ali", "Liban Yahya Mohamed Ibrahim", "Suleqa Hassan Ibrahim Abdirahman",
-    "Nadifo Maxamad Nur Ali", "Abdiwadud Ahmed Osman Mohamud", "Zakaria Abass Mohamud Hassan",
-    "Jelle Mohamed Osman Ali", "Yusra Ali Adan Hassan", "Ibrahim Yusuf Maxamed Xasan",
-    "Yussuf Ahmed Yerrow Abikar", "Siyat Ibrahim Issak Adan", "Mohamed Noor Abukar Hassan",
-    "Siyad Abdirahman Mohamud Mohamed", "Abdi Rakau Adan Salat", "Yusuf Mohamed Hassan Abdulle",
-    "Abdirisak Aden Ibrahim Hirsi", "Ramla Yusuf Mohamed Hassan",
-  ][i],
-  price: 10,
-  discount: 1,
-}));
-
-const EMPLOYEES: EmployeeRow[] = [
-  ["Mohamud Ali", 144], ["Ahmed Mohamed Ali Warsame", 144], ["Habiba Ali Abdulle Isaaq", 144],
-  ["Muktar Mohamed Kassim Aden", 144], ["Nasteh Burhan Hassan Jamac", 144], ["Mumina Hussein Mohamed Ali", 144],
-  ["Ubah Hassan Adan Jibril", 144], ["Kaltuma Dubow Rashid Odowa", 144], ["ISMAIL HAJI MOHAMED ABDILAHI", 144],
-  ["Fartun Hassan Ali Yussuf", 144], ["Munino Hassan Mohamuud Aden", 144], ["Fahma Jelle Mohamed Osman", 135],
-  ["Borrow Ali Ibrahim Ali", 126], ["Sahra Abdirahman Ismail Hassan", 117], ["Ahmed Mohamed Mohamud Bare", 108],
-  ["Sacda Hassan Abayle Ahmed", 99], ["Barwaaqo Mohamed Osmaan Ali", 90], ["Faadimo Adan Mohamed Osmaan", 81],
-  ["Abdimalik Yusuf Maxamed Xasan", 72], ["Halima Mayow Isaaq Mursal", 63], ["Mohamed Abdi Degow Hilowle", 54],
-  ["Hamdi Jele Mohamed Osman", 45], ["Hussein Ali Abdi Hussein", 36], ["Yakub Hussein Mohamed Ali", 27],
-  ["Bishar Dubow Ahmed Yussuf", 18],
-].map(([name, earn], i) => ({
-  code: String(20156 + i),
-  month: "May-26",
-  name: name as string,
-  earn: earn as number,
-}));
-
 const TAX_RATE = 0.018;
 const COMMISSION_RATE = 0.15;
 
@@ -75,21 +42,63 @@ function fmt(n: number) {
 }
 
 function EmployeeDashboard() {
+  const navigate = useNavigate();
+  const { isAdmin, loading, user } = useVendor();
+  const fetchPayroll = useServerFn(getPayroll);
   const [selectedCode, setSelectedCode] = useState("20156");
+  const [services, setServices] = useState<ServiceRow[]>([]);
+  const [employees, setEmployees] = useState<EmployeeRow[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
 
-  const selected = EMPLOYEES.find((e) => e.code === selectedCode) ?? EMPLOYEES[0];
+  useEffect(() => {
+    if (loading) return;
+    if (!user || !isAdmin) {
+      navigate({ to: "/home" });
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetchPayroll({});
+        if (cancelled) return;
+        setServices(res.services);
+        setEmployees(res.employees);
+        setSelectedCode(res.employees[0]?.code ?? "");
+      } catch {
+        if (!cancelled) navigate({ to: "/home" });
+      } finally {
+        if (!cancelled) setDataLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [loading, isAdmin, user?.id]);
+
+  const selected = employees.find((e) => e.code === selectedCode) ?? employees[0];
+
+  const totals = useMemo(() => {
+    const totalEarn = employees.reduce((s, e) => s + e.earn, 0);
+    const totalComm = employees.reduce((s, e) => s + +(e.earn * COMMISSION_RATE).toFixed(2), 0);
+    const totalNet = employees.reduce((s, e) => s + (e.earn - +(e.earn * COMMISSION_RATE).toFixed(2)), 0);
+    return { totalEarn, totalComm, totalNet };
+  }, [employees]);
+
+  if (loading || dataLoading || !selected) {
+    return (
+      <AppShell>
+        <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3 px-6 text-center">
+          <Shield className="h-8 w-8 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">Checking access…</p>
+        </div>
+      </AppShell>
+    );
+  }
+
   const earn = selected.earn;
   const tax = +(earn * TAX_RATE).toFixed(2);
   const commission = +(earn * COMMISSION_RATE).toFixed(2);
   const net = +(earn - tax - commission).toFixed(2);
-
-  const totals = useMemo(() => {
-    const totalEarn = EMPLOYEES.reduce((s, e) => s + e.earn, 0);
-    const totalTax = EMPLOYEES.reduce((s, e) => s + (e.earn >= 130 ? +(e.earn * TAX_RATE).toFixed(2) : e.earn >= 110 ? 1.02 : 0), 0);
-    const totalComm = EMPLOYEES.reduce((s, e) => s + +(e.earn * COMMISSION_RATE).toFixed(2), 0);
-    const totalNet = EMPLOYEES.reduce((s, e) => s + (e.earn - +(e.earn * COMMISSION_RATE).toFixed(2)), 0);
-    return { totalEarn, totalTax, totalComm, totalNet };
-  }, []);
 
   return (
     <AppShell>
@@ -111,7 +120,7 @@ function EmployeeDashboard() {
             onChange={(e) => setSelectedCode(e.target.value)}
             className="mt-1 w-full rounded-xl bg-white px-3 py-2.5 text-sm font-medium text-foreground outline-none shadow-soft"
           >
-            {EMPLOYEES.map((e) => (
+            {employees.map((e) => (
               <option key={e.code} value={e.code}>
                 {e.code} — {e.name}
               </option>
@@ -141,7 +150,7 @@ function EmployeeDashboard() {
               </tr>
             </thead>
             <tbody>
-              {SERVICES.map((s) => (
+              {services.map((s) => (
                 <tr key={s.sn} className="border-t border-border">
                   <Td>{s.sn}</Td>
                   <Td className="whitespace-nowrap">{s.date}</Td>
@@ -167,7 +176,7 @@ function EmployeeDashboard() {
               </tr>
             </thead>
             <tbody>
-              {EMPLOYEES.map((e) => {
+              {employees.map((e) => {
                 const comm = +(e.earn * COMMISSION_RATE).toFixed(2);
                 const n = +(e.earn - comm).toFixed(2);
                 return (
@@ -200,18 +209,24 @@ function EmployeeDashboard() {
 
 function StatCard({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: string; tone: string }) {
   return (
-    <div className={`rounded-2xl p-3 shadow-soft ${tone}`}>
-      <div className="flex items-center gap-1.5 text-xs font-medium opacity-80">
-        {icon} {label}
+    <div className="rounded-2xl border border-border bg-card p-3 shadow-soft">
+      <div className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-[11px] font-semibold ${tone}`}>
+        {icon}
+        {label}
       </div>
-      <div className="mt-1 text-lg font-bold">{value}</div>
+      <p className="mt-2 text-lg font-bold text-foreground">{value}</p>
     </div>
   );
 }
 
-function Th({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <th className={`px-2.5 py-2 text-left font-semibold ${className}`}>{children}</th>;
+function Th({ children, className = "" }: { children?: React.ReactNode; className?: string }) {
+  return <th className={`px-2 py-2 text-left font-semibold ${className}`}>{children}</th>;
 }
-function Td({ children, className = "", colSpan }: { children: React.ReactNode; className?: string; colSpan?: number }) {
-  return <td colSpan={colSpan} className={`px-2.5 py-2 ${className}`}>{children}</td>;
+
+function Td({ children, className = "", colSpan }: { children?: React.ReactNode; className?: string; colSpan?: number }) {
+  return (
+    <td colSpan={colSpan} className={`px-2 py-2 ${className}`}>
+      {children}
+    </td>
+  );
 }

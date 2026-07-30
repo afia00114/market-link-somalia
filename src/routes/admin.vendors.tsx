@@ -1,9 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, CheckCircle2, XCircle, Shield } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { useVendor } from "@/hooks/use-vendor";
+import { approveVendorApplication } from "@/lib/vendor.functions";
+
 
 export const Route = createFileRoute("/admin/vendors")({
   head: () => ({
@@ -32,6 +35,8 @@ function AdminVendors() {
   const [apps, setApps] = useState<AppRow[]>([]);
   const [filter, setFilter] = useState<"pending" | "approved" | "rejected">("pending");
   const [working, setWorking] = useState<string | null>(null);
+  const approveApp = useServerFn(approveVendorApplication);
+
 
   const load = useCallback(async () => {
     const { data } = await supabase
@@ -48,10 +53,16 @@ function AdminVendors() {
 
   const approve = async (id: string) => {
     setWorking(id);
-    const { error } = await supabase.rpc("approve_vendor_application", { _application_id: id });
-    setWorking(null);
-    if (error) alert(error.message); else load();
+    try {
+      await approveApp({ data: { applicationId: id } });
+      load();
+    } catch (e: any) {
+      alert(e?.message ?? "Approval failed");
+    } finally {
+      setWorking(null);
+    }
   };
+
   const reject = async (id: string) => {
     const notes = prompt("Rejection reason (optional)") ?? null;
     setWorking(id);
