@@ -1,0 +1,204 @@
+{
+  "version": 1,
+  "sdk_version": "0.25.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://yfcebtlypprvuyygqaot.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "somalia-connect",
+      "version": "0.1.0",
+      "title": "Somalia Connect"
+    },
+    "tools": [
+      {
+        "name": "search_vendors",
+        "title": "Search vendors",
+        "description": "Search active MaalsoorHub vendors by business name, category or location (e.g. plumbing, hotels, real-estate in Mogadishu).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Free text matched against business name and description.",
+              "type": "string"
+            },
+            "category_key": {
+              "description": "Category slug, e.g. 'real-estate', 'hotels', 'services'.",
+              "type": "string"
+            },
+            "location": {
+              "description": "City or district, e.g. 'Mogadishu'.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Max rows to return, default 20.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_vendor",
+        "title": "Get vendor details",
+        "description": "Get one MaalsoorHub vendor profile together with its published listings.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "vendor_id": {
+              "type": "string",
+              "description": "Vendor profile UUID (from search_vendors)."
+            }
+          },
+          "required": [
+            "vendor_id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_listings",
+        "title": "Search listings",
+        "description": "Search published MaalsoorHub listings (services, properties, rooms, livestock and more) by text, category, location and price.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Free text matched against listing title and description.",
+              "type": "string"
+            },
+            "category_key": {
+              "description": "Category slug, e.g. 'real-estate', 'services'.",
+              "type": "string"
+            },
+            "location": {
+              "description": "City or district.",
+              "type": "string"
+            },
+            "max_price": {
+              "description": "Only listings priced at or below this amount.",
+              "type": "number"
+            },
+            "limit": {
+              "description": "Max rows to return, default 20.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_hospitals",
+        "title": "Search hospitals",
+        "description": "Search the MaalsoorHub health directory of hospitals and clinics by name, city or type.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Free text matched against hospital name.",
+              "type": "string"
+            },
+            "city": {
+              "description": "City, e.g. 'Mogadishu'.",
+              "type": "string"
+            },
+            "type": {
+              "description": "Facility type, e.g. 'hospital', 'clinic'.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Max rows to return, default 20.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_bookings",
+        "title": "List my bookings",
+        "description": "List the signed-in user's MaalsoorHub bookings (travel, hotels, services) with status and totals.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "description": "Filter by booking status, e.g. 'pending', 'confirmed'.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Max rows to return, default 20.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_vendor_posts",
+        "title": "List my vendor listings",
+        "description": "List listings belonging to the signed-in user's vendor profile, including unpublished drafts. Returns an empty list if the user is not a vendor.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Max rows to return, default 20.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
