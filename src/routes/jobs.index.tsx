@@ -14,7 +14,7 @@ import { whatsappLink, telLink } from "@/lib/contact";
 const SUPPORT_WA = "252611234567";
 const SUPPORT_PHONE = "+252611234567";
 
-export const Route = createFileRoute("/jobs")({
+export const Route = createFileRoute("/jobs/")({
   head: () => {
     const url = "https://market-link-somalia.lovable.app/jobs";
     const title = "Jobs in Somalia — NGO, Government & Private Sector | MaalsoorHub";

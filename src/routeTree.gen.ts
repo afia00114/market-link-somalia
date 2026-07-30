@@ -19,6 +19,7 @@ import { Route as PostRouteImport } from './routes/post'
 import { Route as MyPaymentsRouteImport } from './routes/my-payments'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as LivestockRouteImport } from './routes/livestock'
+import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as HotelsRouteImport } from './routes/hotels'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as HealthRouteImport } from './routes/health'
@@ -113,6 +114,11 @@ const MessagesRoute = MessagesRouteImport.update({
 const LivestockRoute = LivestockRouteImport.update({
   id: '/livestock',
   path: '/livestock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JobsRoute = JobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HotelsRoute = HotelsRouteImport.update({
@@ -350,6 +356,7 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
+  '/jobs': typeof JobsRoute
   '/livestock': typeof LivestockRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
@@ -406,6 +413,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
+  '/jobs': typeof JobsRoute
   '/livestock': typeof LivestockRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
@@ -463,6 +471,7 @@ export interface FileRoutesById {
   '/health': typeof HealthRouteWithChildren
   '/home': typeof HomeRoute
   '/hotels': typeof HotelsRouteWithChildren
+  '/jobs': typeof JobsRoute
   '/livestock': typeof LivestockRouteWithChildren
   '/messages': typeof MessagesRouteWithChildren
   '/my-payments': typeof MyPaymentsRoute
@@ -522,6 +531,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/hotels'
+    | '/jobs'
     | '/livestock'
     | '/messages'
     | '/my-payments'
@@ -578,6 +588,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/health'
     | '/home'
+    | '/jobs'
     | '/livestock'
     | '/messages'
     | '/my-payments'
@@ -634,6 +645,7 @@ export interface FileRouteTypes {
     | '/health'
     | '/home'
     | '/hotels'
+    | '/jobs'
     | '/livestock'
     | '/messages'
     | '/my-payments'
@@ -692,6 +704,7 @@ export interface RootRouteChildren {
   HealthRoute: typeof HealthRouteWithChildren
   HomeRoute: typeof HomeRoute
   HotelsRoute: typeof HotelsRouteWithChildren
+  JobsRoute: typeof JobsRoute
   LivestockRoute: typeof LivestockRouteWithChildren
   MessagesRoute: typeof MessagesRouteWithChildren
   MyPaymentsRoute: typeof MyPaymentsRoute
@@ -787,6 +800,13 @@ declare module '@tanstack/react-router' {
       path: '/livestock'
       fullPath: '/livestock'
       preLoaderRoute: typeof LivestockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jobs': {
+      id: '/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hotels': {
@@ -1290,6 +1310,7 @@ const rootRouteChildren: RootRouteChildren = {
   HealthRoute: HealthRouteWithChildren,
   HomeRoute: HomeRoute,
   HotelsRoute: HotelsRouteWithChildren,
+  JobsRoute: JobsRoute,
   LivestockRoute: LivestockRouteWithChildren,
   MessagesRoute: MessagesRouteWithChildren,
   MyPaymentsRoute: MyPaymentsRoute,
@@ -1317,13 +1338,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
