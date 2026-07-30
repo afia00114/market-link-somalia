@@ -1,0 +1,1 @@
+ALTER TABLE public.vendor_profiles ADD COLUMN IF NOT EXISTS zaad_number text;
