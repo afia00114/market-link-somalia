@@ -15,7 +15,10 @@ export const Route = createFileRoute("/travel/bus")({
       { name: "description", content: "Book intercity and cross-border bus tickets with verified operators across Somalia and East Africa. Compare classes, schedules and fares." },
       { property: "og:title", content: "Bus Tickets — MaalsoorHub" },
       { property: "og:description", content: "Verified bus operators — compare schedules and contact directly via WhatsApp or call." },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/travel/bus" },
+      { property: "og:type", content: "website" },
     ],
+    links: [{ rel: "canonical", href: "https://market-link-somalia.lovable.app/travel/bus" }],
   }),
   component: BusPage,
 });
