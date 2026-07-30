@@ -8,6 +8,7 @@ import { HOTELS } from "@/data/hotels";
 import { LISTINGS } from "@/data/listings";
 import { ANIMAL_LISTINGS } from "@/data/livestock";
 import { JOB_LISTINGS } from "@/data/jobs";
+import { RESTAURANTS } from "@/data/restaurants";
 import { AGENCIES, FLIGHT_OFFERS, PILGRIM_PACKAGES, TOUR_PACKAGES, CAR_OFFERS, VISA_SERVICES } from "@/data/travel";
 
 const BASE_URL = "https://market-link-somalia.lovable.app";
