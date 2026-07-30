@@ -684,7 +684,7 @@ export type Database = {
     }
     Functions: {
       approve_vendor_application: {
-        Args: { _application_id: string }
+        Args: { _application_id: string; _caller?: string }
         Returns: string
       }
       has_role: {
@@ -699,7 +699,7 @@ export type Database = {
         Returns: boolean
       }
       start_conversation: {
-        Args: { _post_id?: string; _vendor_id: string }
+        Args: { _caller?: string; _post_id?: string; _vendor_id: string }
         Returns: string
       }
     }
