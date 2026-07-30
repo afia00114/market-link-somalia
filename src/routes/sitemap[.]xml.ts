@@ -6,6 +6,7 @@ import { PROPERTIES } from "@/data/properties";
 import { HOSPITALS } from "@/data/health";
 import { HOTELS } from "@/data/hotels";
 import { LISTINGS } from "@/data/listings";
+import { ANIMAL_LISTINGS } from "@/data/livestock";
 import { AGENCIES, FLIGHT_OFFERS, PILGRIM_PACKAGES, TOUR_PACKAGES, CAR_OFFERS, VISA_SERVICES } from "@/data/travel";
 
 const BASE_URL = "https://market-link-somalia.lovable.app";
@@ -24,6 +25,12 @@ export const Route = createFileRoute("/sitemap.xml")({
           .from("vendor_profiles")
           .select("id")
           .eq("is_active", true);
+
+        const { data: posts } = await supabase
+          .from("vendor_posts")
+          .select("id")
+          .eq("is_published", true);
+
 
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
@@ -55,6 +62,9 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/employee-dashboard", changefreq: "weekly", priority: "0.5" },
           { path: "/my-payments", changefreq: "weekly", priority: "0.4" },
           { path: "/vendor/dashboard", changefreq: "weekly", priority: "0.4" },
+          { path: "/livestock", changefreq: "weekly", priority: "0.8" },
+          ...ANIMAL_LISTINGS.map((a) => ({ path: `/livestock/${a.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...(posts ?? []).map((p: { id: string }) => ({ path: `/posts/${p.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...CATEGORIES.map((c) => ({ path: `/category/${c.key}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...PROPERTIES.map((p) => ({ path: `/property/${p.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...HOSPITALS.map((h) => ({ path: `/health/${h.id}`, changefreq: "weekly" as const, priority: "0.6" })),
