@@ -16,7 +16,10 @@ export const Route = createFileRoute("/travel/hajj-umrah")({
       { name: "description", content: "Browse Hajj and Umrah packages from verified Somali agencies. Compare tiers, durations, and inclusions, and book directly via WhatsApp." },
       { property: "og:title", content: "Hajj & Umrah Packages — MaalsoorHub" },
       { property: "og:description", content: "Compare verified Hajj and Umrah packages and contact agencies via WhatsApp." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/travel/hajj-umrah" },
     ],
+    links: [{ rel: "canonical", href: "https://market-link-somalia.lovable.app/travel/hajj-umrah" }],
   }),
   component: HajjPage,
 });

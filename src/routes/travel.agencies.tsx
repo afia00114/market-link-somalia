@@ -17,7 +17,10 @@ export const Route = createFileRoute("/travel/agencies")({
       { name: "description", content: "Browse verified travel agencies across Somalia and East Africa. Compare ratings, services, and contact directly via WhatsApp, call, or email." },
       { property: "og:title", content: "Travel Agencies — MaalsoorHub" },
       { property: "og:description", content: "Verified travel agencies — compare and contact directly." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://market-link-somalia.lovable.app/travel/agencies" },
     ],
+    links: [{ rel: "canonical", href: "https://market-link-somalia.lovable.app/travel/agencies" }],
   }),
   component: AgenciesPage,
 });
