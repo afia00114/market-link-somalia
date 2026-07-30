@@ -48,10 +48,16 @@ function AdminVendors() {
 
   const approve = async (id: string) => {
     setWorking(id);
-    const { error } = await supabase.rpc("approve_vendor_application", { _application_id: id });
-    setWorking(null);
-    if (error) alert(error.message); else load();
+    try {
+      await approveApp({ data: { applicationId: id } });
+      load();
+    } catch (e: any) {
+      alert(e?.message ?? "Approval failed");
+    } finally {
+      setWorking(null);
+    }
   };
+
   const reject = async (id: string) => {
     const notes = prompt("Rejection reason (optional)") ?? null;
     setWorking(id);
