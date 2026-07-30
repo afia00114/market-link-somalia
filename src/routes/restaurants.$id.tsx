@@ -214,8 +214,8 @@ function RestaurantDetail() {
       )}
 
       {cartOpen && (
-        <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-t-3xl bg-background p-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50">
+          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-t-3xl bg-background p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="text-base font-bold">Your order</h3>
               <button
