@@ -82,9 +82,23 @@ export const Route = createFileRoute("/vendors/$id")({
       meta.push({ property: "og:image", content: v.avatar_url });
       meta.push({ property: "twitter:image", content: v.avatar_url });
     }
+    const ld: Record<string, any> = {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      name: v.business_name,
+      description,
+      url,
+      category,
+    };
+    if (v.avatar_url) ld.image = v.avatar_url;
+    if (v.location) {
+      ld.address = { "@type": "PostalAddress", addressLocality: v.location, addressCountry: "SO" };
+      ld.areaServed = v.location;
+    }
     return {
       meta,
       links: [{ rel: "canonical", href: url }],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(ld) }],
     };
   },
   notFoundComponent: () => (
