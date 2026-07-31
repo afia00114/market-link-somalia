@@ -12,6 +12,8 @@ import { ListingCard } from "@/components/ListingCard";
 import { listingsByCategory } from "@/data/listings";
 import { useUserLocation } from "@/hooks/use-user-location";
 import { coordsFor, distanceKm } from "@/lib/geo";
+import { useLivePosts } from "@/hooks/use-live-posts";
+import { LivePostCard } from "@/components/LivePostCard";
 
 type PopularItem = { label: string; icon: LucideIcon; tone: string };
 
