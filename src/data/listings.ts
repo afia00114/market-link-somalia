@@ -256,6 +256,64 @@ export const LISTINGS: Listing[] = [
     description: "Affordable Sharia-compliant insurance plans.",
     provider: { name: "Takaful Somalia", badge: "Verified Business", rating: 4.6, reviews: 130, whatsapp: "252612349003", phone: "+252 61 234 9003" },
   },
+
+  // SHOPS
+  {
+    id: "sh1", category: "shops", title: "Bakaaraha Fresh Market", subtitle: "Groceries · Fresh produce",
+    price: "Daily deals", city: "Mogadishu", district: "Howlwadaag",
+    image: u("1542838132-92c53300491e"),
+    description: "Fruits, vegetables, rice, oil and household basics at market prices. Home delivery available.",
+    provider: { name: "Bakaaraha Fresh", badge: "Verified Business", rating: 4.7, reviews: 340, whatsapp: "252615550101", phone: "+252 61 555 0101" },
+  },
+  {
+    id: "sh2", category: "shops", title: "Hodan Electronics Center", subtitle: "Electronics · Phones & TVs",
+    price: "From $45", city: "Mogadishu", district: "Hodan",
+    image: u("1498049794561-7780e7231661"),
+    description: "Smartphones, laptops, TVs and accessories with warranty and repair service.",
+    provider: { name: "Hodan Electronics", badge: "Verified Business", rating: 4.6, reviews: 218, whatsapp: "252615550102", phone: "+252 61 555 0102" },
+  },
+  {
+    id: "sh3", category: "shops", title: "Nuur Fashion House", subtitle: "Clothing · Men & Women",
+    price: "From $12", city: "Hargeisa", district: "Ahmed Dhagah",
+    image: u("1441986300917-64674bd600d8"),
+    description: "Abayas, dirac, shirts, shoes and kids wear. New arrivals every week.",
+    provider: { name: "Nuur Fashion", badge: "Verified Business", rating: 4.8, reviews: 176, whatsapp: "252634440103", phone: "+252 63 444 0103" },
+  },
+  {
+    id: "sh4", category: "shops", title: "Shifo Pharmacy & Health Store", subtitle: "Pharmacy · Medicine",
+    price: "Open 24/7", city: "Mogadishu", district: "Wadajir",
+    image: u("1587854692152-cbe660dbde88"),
+    description: "Licensed pharmacy stocking prescription medicine, vitamins and baby care.",
+    provider: { name: "Shifo Pharmacy", badge: "Verified Business", rating: 4.9, reviews: 402, whatsapp: "252615550104", phone: "+252 61 555 0104" },
+  },
+  {
+    id: "sh5", category: "shops", title: "Barwaaqo Hardware Supplies", subtitle: "Hardware · Tools & paint",
+    price: "Wholesale prices", city: "Bosaso",
+    image: u("1581092160562-40aa08e78837"),
+    description: "Cement, tools, plumbing and electrical supplies for builders and homes.",
+    provider: { name: "Barwaaqo Hardware", badge: "Verified Business", rating: 4.5, reviews: 121, whatsapp: "252905550105", phone: "+252 90 555 0105" },
+  },
+  {
+    id: "sh6", category: "shops", title: "Hoyga Furniture Gallery", subtitle: "Furniture · Home & office",
+    price: "From $80", city: "Mogadishu", district: "Kaxda",
+    image: u("1555041469-a586c61ea9bc"),
+    description: "Sofas, beds, dining sets and office desks with free city delivery.",
+    provider: { name: "Hoyga Furniture", badge: "Verified Business", rating: 4.6, reviews: 94, whatsapp: "252615550106", phone: "+252 61 555 0106" },
+  },
+  {
+    id: "sh7", category: "shops", title: "Qurux Beauty Shop", subtitle: "Beauty · Cosmetics & perfume",
+    price: "From $5", city: "Hargeisa",
+    image: u("1596462502278-27bfdc403348"),
+    description: "Skincare, makeup, oud and perfumes from trusted brands.",
+    provider: { name: "Qurux Beauty", badge: "Verified Business", rating: 4.7, reviews: 158, whatsapp: "252634440107", phone: "+252 63 444 0107" },
+  },
+  {
+    id: "sh8", category: "shops", title: "Kismayo Mini Supermarket", subtitle: "Groceries · Supermarket",
+    price: "Everyday low prices", city: "Kismayo",
+    image: u("1604719312566-8912e9227c6a"),
+    description: "One-stop shop for food, drinks, cleaning products and stationery.",
+    provider: { name: "Kismayo Mini Mart", badge: "Verified Business", rating: 4.4, reviews: 87, whatsapp: "252615550108", phone: "+252 61 555 0108" },
+  },
 ];
 
 export function listingsByCategory(key: CategoryKey): Listing[] {
