@@ -28,6 +28,16 @@ const POPULAR: Record<string, PopularItem[]> = {
     { label: "Masonry", icon: Brush, tone: "text-emerald-700 bg-emerald-50" },
     { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
   ],
+  shops: [
+    { label: "Groceries", icon: Wheat, tone: "text-emerald-600 bg-emerald-50" },
+    { label: "Electronics", icon: Zap, tone: "text-amber-600 bg-amber-50" },
+    { label: "Clothing", icon: Sparkles, tone: "text-rose-600 bg-rose-50" },
+    { label: "Pharmacy", icon: Stethoscope, tone: "text-sky-600 bg-sky-50" },
+    { label: "Hardware", icon: Hammer, tone: "text-orange-700 bg-orange-50" },
+    { label: "Furniture", icon: HomeIcon, tone: "text-slate-600 bg-slate-100" },
+    { label: "Beauty", icon: Brush, tone: "text-fuchsia-600 bg-fuchsia-50" },
+    { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
+  ],
   food: [
     { label: "Restaurants", icon: UtensilsCrossed, tone: "text-rose-600 bg-rose-50" },
     { label: "Delivery", icon: Truck, tone: "text-amber-600 bg-amber-50" },
