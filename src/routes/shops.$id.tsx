@@ -114,7 +114,14 @@ function ShopDetail() {
   return (
     <AppShell>
       <div className="relative">
-        <img src={shop.image} alt={`${shop.name} in ${shop.city}`} className="h-48 w-full object-cover" />
+        <ImageZoom
+          src={shop.image}
+          alt={`${shop.name} in ${shop.city}`}
+          caption={shop.name}
+          loading="eager"
+          wrapperClassName="block h-48 w-full"
+          className="h-48 w-full object-cover"
+        />
         <Link
           to="/category/$key"
           params={{ key: "shops" }}
