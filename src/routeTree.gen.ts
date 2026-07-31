@@ -45,6 +45,7 @@ import { Route as TravelCarRentalRouteImport } from './routes/travel.car-rental'
 import { Route as TravelBusRouteImport } from './routes/travel.bus'
 import { Route as TravelAgenciesRouteImport } from './routes/travel.agencies'
 import { Route as TrackingRefRouteImport } from './routes/tracking.$ref'
+import { Route as ShopsIdRouteImport } from './routes/shops.$id'
 import { Route as RestaurantsIdRouteImport } from './routes/restaurants.$id'
 import { Route as PropertyIdRouteImport } from './routes/property.$id'
 import { Route as ProfileSecurityRouteImport } from './routes/profile.security'
@@ -254,6 +255,11 @@ const TrackingRefRoute = TrackingRefRouteImport.update({
   path: '/tracking/$ref',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopsIdRoute = ShopsIdRouteImport.update({
+  id: '/shops/$id',
+  path: '/shops/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RestaurantsIdRoute = RestaurantsIdRouteImport.update({
   id: '/restaurants/$id',
   path: '/restaurants/$id',
@@ -432,6 +438,7 @@ export interface FileRoutesByFullPath {
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/restaurants/$id': typeof RestaurantsIdRoute
+  '/shops/$id': typeof ShopsIdRoute
   '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -496,6 +503,7 @@ export interface FileRoutesByTo {
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/restaurants/$id': typeof RestaurantsIdRoute
+  '/shops/$id': typeof ShopsIdRoute
   '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -563,6 +571,7 @@ export interface FileRoutesById {
   '/profile/security': typeof ProfileSecurityRoute
   '/property/$id': typeof PropertyIdRoute
   '/restaurants/$id': typeof RestaurantsIdRoute
+  '/shops/$id': typeof ShopsIdRoute
   '/tracking/$ref': typeof TrackingRefRoute
   '/travel/agencies': typeof TravelAgenciesRouteWithChildren
   '/travel/bus': typeof TravelBusRoute
@@ -631,6 +640,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/property/$id'
     | '/restaurants/$id'
+    | '/shops/$id'
     | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
@@ -695,6 +705,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/property/$id'
     | '/restaurants/$id'
+    | '/shops/$id'
     | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
@@ -761,6 +772,7 @@ export interface FileRouteTypes {
     | '/profile/security'
     | '/property/$id'
     | '/restaurants/$id'
+    | '/shops/$id'
     | '/tracking/$ref'
     | '/travel/agencies'
     | '/travel/bus'
@@ -823,6 +835,7 @@ export interface RootRouteChildren {
   PostsIdRoute: typeof PostsIdRoute
   PropertyIdRoute: typeof PropertyIdRoute
   RestaurantsIdRoute: typeof RestaurantsIdRoute
+  ShopsIdRoute: typeof ShopsIdRoute
   TrackingRefRoute: typeof TrackingRefRoute
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
@@ -1089,6 +1102,13 @@ declare module '@tanstack/react-router' {
       path: '/tracking/$ref'
       fullPath: '/tracking/$ref'
       preLoaderRoute: typeof TrackingRefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shops/$id': {
+      id: '/shops/$id'
+      path: '/shops/$id'
+      fullPath: '/shops/$id'
+      preLoaderRoute: typeof ShopsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/restaurants/$id': {
@@ -1494,6 +1514,7 @@ const rootRouteChildren: RootRouteChildren = {
   PostsIdRoute: PostsIdRoute,
   PropertyIdRoute: PropertyIdRoute,
   RestaurantsIdRoute: RestaurantsIdRoute,
+  ShopsIdRoute: ShopsIdRoute,
   TrackingRefRoute: TrackingRefRoute,
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
