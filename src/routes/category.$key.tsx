@@ -117,6 +117,9 @@ function CategoryPage() {
   const [query, setQuery] = useState("");
   const [sortByNearby, setSortByNearby] = useState(false);
   const { coords, status, request } = useUserLocation();
+  const { posts: livePosts } = useLivePosts(key as string);
+
+
 
   const items = useMemo(() => {
     let list = allItems;
