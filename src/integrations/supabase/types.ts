@@ -690,6 +690,14 @@ export type Database = {
         Args: { _application_id: string; _caller?: string }
         Returns: string
       }
+      get_vendor_payment_numbers: {
+        Args: { _vendor_id: string }
+        Returns: {
+          edahab_number: string
+          evc_number: string
+          zaad_number: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
