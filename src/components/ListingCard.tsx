@@ -1,17 +1,23 @@
-import { BadgeCheck, MapPin, Phone, MessageCircle, Star, Navigation } from "lucide-react";
+import { BadgeCheck, MapPin, Phone, MessageCircle, Star, Navigation, ShoppingBag } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Listing } from "@/data/listings";
 import { whatsappLink, telLink } from "@/lib/contact";
 import { coordsFor, distanceKm, formatDistance } from "@/lib/geo";
 import { useUserLocation } from "@/hooks/use-user-location";
+import { getShop } from "@/data/shops";
 
 export function ListingCard({ l }: { l: Listing }) {
   const { coords } = useUserLocation();
   const place = coordsFor(l.city, l.district);
   const km = coords && place ? distanceKm(coords, place) : null;
+  const shop = l.category === "shops" ? getShop(l.id) : undefined;
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
-      <Link to="/listing/$id" params={{ id: l.id }} className="flex gap-3 p-3 active:scale-[0.99]">
+      <Link
+        to={shop ? "/shops/$id" : "/listing/$id"}
+        params={{ id: l.id }}
+        className="flex gap-3 p-3 active:scale-[0.99]"
+      >
         <img
           src={l.image}
           alt={l.title}
@@ -26,6 +32,11 @@ export function ListingCard({ l }: { l: Listing }) {
             )}
           </div>
           <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{l.subtitle}</div>
+          {shop && (
+            <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+              <ShoppingBag className="h-3 w-3" /> {shop.products.length} items · shop now
+            </div>
+          )}
           <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
             <MapPin className="h-3 w-3" />
             <span className="line-clamp-1">{l.district ? `${l.district}, ` : ""}{l.city}</span>
