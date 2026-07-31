@@ -16,8 +16,6 @@ interface VP {
   phone: string;
   avatar_url: string | null;
   is_active: boolean;
-  evc_number: string | null;
-  edahab_number: string | null;
 }
 interface Post {
   id: string;
@@ -120,7 +118,11 @@ function VendorPublic() {
   useEffect(() => {
     (async () => {
       const [{ data: v }, { data: p }] = await Promise.all([
-        supabase.from("vendor_profiles").select("*").eq("id", id).maybeSingle(),
+        supabase
+          .from("vendor_profiles")
+          .select("id,user_id,business_name,category_key,description,location,phone,whatsapp,avatar_url,is_active,created_at,updated_at")
+          .eq("id", id)
+          .maybeSingle(),
         supabase.from("vendor_posts").select("*").eq("vendor_id", id).eq("is_published", true).order("created_at", { ascending: false }),
       ]);
       setVendor((v as VP | null) ?? null);
