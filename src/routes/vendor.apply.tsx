@@ -420,39 +420,38 @@ function ApplicationStatus({
   ] as const;
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-8">
       {/* Main Status Card */}
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
+      <div className="relative rounded-3xl border border-border bg-card p-6 shadow-card">
         <div className="mb-6 flex items-start gap-4">
-          <div className={`relative rounded-2xl p-3 ${tone.iconBg}`}>
+          <div className={`relative flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl ${tone.iconBg}`}>
             <Icon className={`h-7 w-7 ${tone.iconColor}`} />
             {!isApproved && !isRejected && (
-              <span className="absolute -right-1 -top-1 flex h-3 w-3">
-                <span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${tone.ping} opacity-75`} />
-                <span className={`relative inline-flex h-3 w-3 rounded-full ${tone.dot}`} />
-              </span>
+              <span className={`absolute -right-1 -top-1 h-4 w-4 animate-pulse rounded-full border-4 border-card ${tone.dot}`} />
             )}
           </div>
-          <div>
-            <h2 className="text-lg font-bold text-foreground">{title}</h2>
-            <p className="text-sm font-medium text-muted-foreground">
+          <div className="flex flex-col">
+            <h2 className="text-xl font-bold leading-tight text-foreground">{title}</h2>
+            <span className="mt-1 text-sm font-medium text-muted-foreground">
               {app.business_name} · {category}
-            </p>
+            </span>
           </div>
         </div>
 
-        <p className="mb-6 text-sm leading-relaxed text-muted-foreground">{text}</p>
+        <p className="mb-8 text-[15px] leading-relaxed text-muted-foreground">{text}</p>
 
         {app.admin_notes && (
-          <p className="mb-6 rounded-xl border border-border bg-secondary p-3 text-xs text-foreground">
+          <p className="mb-6 rounded-2xl border border-border bg-secondary p-3 text-xs text-foreground">
             <span className="font-semibold">Admin notes: </span>{app.admin_notes}
           </p>
         )}
 
-        <div className="flex items-center gap-3 rounded-xl border border-border bg-secondary/50 px-4 py-3">
-          <div className={`h-2 w-2 rounded-full ${tone.dot}`} />
-          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Status</span>
-          <span className={`ml-auto text-sm font-semibold ${tone.labelColor}`}>{tone.label}</span>
+        <div className="flex items-center justify-between rounded-2xl border border-border bg-background/60 p-4">
+          <div className="flex items-center gap-2">
+            <span className={`h-2 w-2 rounded-full ${tone.dot} ${!isApproved && !isRejected ? "animate-pulse" : ""}`} />
+            <span className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Status</span>
+          </div>
+          <span className={`text-sm font-semibold ${tone.labelColor}`}>{tone.label}</span>
         </div>
 
         {isApproved && (
@@ -469,30 +468,34 @@ function ApplicationStatus({
 
       {/* Timeline */}
       {!isRejected && (
-        <div className="space-y-4">
-          <h3 className="px-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">What happens next?</h3>
-          <div className="relative">
-            <div className="absolute bottom-6 left-[19px] top-6 w-[2px] bg-border" />
+        <div className="flex flex-col gap-6 px-2">
+          <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">What happens next?</h3>
+          <div className="flex flex-col">
             {steps.map((s, i) => {
               const active = s.state === "active";
               const done = s.state === "done";
-              const dim = s.state === "upcoming";
+              const last = i === steps.length - 1;
               return (
-                <div key={s.n} className={`relative flex items-start gap-4 ${i < steps.length - 1 ? "pb-8" : ""}`}>
+                <div key={s.n} className={`relative flex gap-5 ${last ? "pb-2" : "pb-10"}`}>
+                  {!last && <div className="absolute bottom-0 left-[17px] top-10 w-[2px] bg-border" />}
                   <div
-                    className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-full border-4 border-background shadow-sm ${
-                      done ? "bg-green-50" : active ? "bg-primary-soft" : "bg-secondary"
+                    className={`relative z-10 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border ${
+                      done
+                        ? "border-green-500/30 bg-green-500/15"
+                        : active
+                        ? "border-primary/30 bg-primary/15"
+                        : "border-border bg-secondary/50"
                     }`}
                   >
                     {done ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-600" />
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
                     ) : (
-                      <span className={`text-sm font-bold ${active ? "text-primary" : "text-muted-foreground"}`}>{s.n}</span>
+                      <span className={`text-xs font-bold ${active ? "text-primary" : "text-muted-foreground"}`}>{s.n}</span>
                     )}
                   </div>
-                  <div className="pt-2">
-                    <p className={`text-[15px] font-semibold ${dim ? "text-muted-foreground" : "text-foreground"}`}>{s.title}</p>
-                    <p className={`text-sm ${dim ? "text-muted-foreground/70" : "text-muted-foreground"}`}>{s.desc}</p>
+                  <div className="flex flex-col pt-1">
+                    <h4 className={`text-base font-semibold ${done || active ? "text-foreground" : "text-muted-foreground"}`}>{s.title}</h4>
+                    <p className={`mt-1 text-sm leading-relaxed ${done || active ? "text-muted-foreground" : "text-muted-foreground/60"}`}>{s.desc}</p>
                   </div>
                 </div>
               );
