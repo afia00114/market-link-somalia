@@ -84,6 +84,8 @@ function ShopDetail() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [cartOpen, setCartOpen] = useState(false);
   const [activeDept, setActiveDept] = useState<string | null>(null);
+  const [address, setAddress] = useState<DeliveryAddress>(EMPTY_ADDRESS);
+  const addressReady = isAddressComplete(address);
 
   const shown = useMemo(
     () => (activeDept ? shop.products.filter((p) => p.category === activeDept) : shop.products),
