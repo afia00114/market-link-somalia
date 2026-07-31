@@ -277,6 +277,20 @@ function CategoryPage() {
           </button>
         )}
 
+        {livePosts.length > 0 && (
+          <div className="mb-5">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-sm font-bold text-foreground">From our vendors</h2>
+              <span className="text-[11px] font-semibold text-primary">{livePosts.length} live</span>
+            </div>
+            <div className="space-y-3">
+              {livePosts.map((p) => <LivePostCard key={p.id} p={p} />)}
+            </div>
+          </div>
+        )}
+
+
+
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-bold text-foreground">
             {items.length} {items.length === 1 ? "listing" : "listings"}
