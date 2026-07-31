@@ -302,6 +302,9 @@ function Profile() {
               <Row label="Language">
                 <LanguageSwitcher variant="dark" />
               </Row>
+              <div className="rounded-xl bg-card p-3">
+                <ThemePicker />
+              </div>
               <Link
                 to="/messages"
                 onClick={() => setSheet(null)}
