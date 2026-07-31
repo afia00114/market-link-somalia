@@ -71,7 +71,8 @@ export const Route = createFileRoute("/shops/$id")({
 });
 
 function ShopDetail() {
-  const { shop } = Route.useLoaderData();
+  const { id } = Route.useParams();
+  const shop = SHOPS.find((s) => s.id === id)!;
   const [cart, setCart] = useState<Record<string, number>>({});
   const [cartOpen, setCartOpen] = useState(false);
   const [activeDept, setActiveDept] = useState<string | null>(null);
