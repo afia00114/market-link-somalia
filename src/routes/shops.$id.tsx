@@ -117,8 +117,13 @@ function ShopDetail() {
       `Delivery: $${shop.deliveryFee.toFixed(2)}`,
       `Total: $${total.toFixed(2)}`,
       ``,
+      `Deliver to: ${formatAddress(address)}`,
+      `Phone: ${address.phone}`,
+      ...(address.notes ? [`Notes: ${address.notes}`] : []),
+      ``,
       `Please confirm availability and delivery time.`,
     ].join("\n");
+
 
   return (
     <AppShell>
