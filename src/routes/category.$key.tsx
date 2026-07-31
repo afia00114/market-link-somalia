@@ -12,6 +12,8 @@ import { ListingCard } from "@/components/ListingCard";
 import { listingsByCategory } from "@/data/listings";
 import { useUserLocation } from "@/hooks/use-user-location";
 import { coordsFor, distanceKm } from "@/lib/geo";
+import { useLivePosts } from "@/hooks/use-live-posts";
+import { LivePostCard } from "@/components/LivePostCard";
 
 type PopularItem = { label: string; icon: LucideIcon; tone: string };
 
@@ -115,6 +117,9 @@ function CategoryPage() {
   const [query, setQuery] = useState("");
   const [sortByNearby, setSortByNearby] = useState(false);
   const { coords, status, request } = useUserLocation();
+  const { posts: livePosts } = useLivePosts(key as string);
+
+
 
   const items = useMemo(() => {
     let list = allItems;
@@ -271,6 +276,20 @@ function CategoryPage() {
             {sortByNearby ? "Sorted by nearest" : "Sort by nearest"}
           </button>
         )}
+
+        {livePosts.length > 0 && (
+          <div className="mb-5">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-sm font-bold text-foreground">From our vendors</h2>
+              <span className="text-[11px] font-semibold text-primary">{livePosts.length} live</span>
+            </div>
+            <div className="space-y-3">
+              {livePosts.map((p) => <LivePostCard key={p.id} p={p} />)}
+            </div>
+          </div>
+        )}
+
+
 
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-bold text-foreground">
