@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemePicker } from "@/components/ThemePicker";
 import { listBookings, type Booking } from "@/lib/bookings";
 import {
   listFavorites,
