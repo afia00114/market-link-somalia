@@ -179,7 +179,13 @@ function ShopDetail() {
                 key={p.id}
                 className="flex items-center gap-3 rounded-2xl border border-border bg-card p-2.5 shadow-soft"
               >
-                <img src={p.image} alt={p.name} loading="lazy" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
+                <ImageZoom
+                  src={p.image}
+                  alt={p.name}
+                  caption={`${p.name} — $${p.price.toFixed(2)} / ${p.unit}`}
+                  wrapperClassName="h-16 w-16 shrink-0 rounded-xl"
+                  className="h-16 w-16 rounded-xl object-cover"
+                />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
                     <span className="truncate text-sm font-bold">{p.name}</span>
