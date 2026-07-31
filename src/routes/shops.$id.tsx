@@ -297,25 +297,38 @@ function ShopDetail() {
               </div>
             </div>
 
+            <DeliveryAddressPicker
+              defaultCity={shop.city}
+              value={address}
+              onChange={setAddress}
+            />
+
             {belowMin && (
               <p className="mt-2 rounded-xl bg-destructive/10 p-2 text-[12px] font-medium text-destructive">
                 Minimum order is ${shop.minOrder.toFixed(2)}. Add ${(shop.minOrder - subtotal).toFixed(2)} more.
               </p>
             )}
 
+            {!addressReady && (
+              <p className="mt-2 rounded-xl bg-secondary p-2 text-[12px] font-medium text-muted-foreground">
+                Add and save your delivery address to place the order.
+              </p>
+            )}
+
             <div className="mt-3 grid grid-cols-2 gap-2 pb-2">
               <a
-                href={belowMin ? undefined : whatsappLink(shop.whatsapp, orderMessage())}
+                href={belowMin || !addressReady ? undefined : whatsappLink(shop.whatsapp, orderMessage())}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-disabled={belowMin}
+                aria-disabled={belowMin || !addressReady}
                 className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white ${
-                  belowMin ? "pointer-events-none bg-muted-foreground/40" : "bg-[#25D366]"
+                  belowMin || !addressReady ? "pointer-events-none bg-muted-foreground/40" : "bg-[#25D366]"
                 }`}
               >
                 <MessageCircle className="h-4 w-4" />
                 Order on WhatsApp
               </a>
+
               <a
                 href={telLink(shop.phone)}
                 className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-bold"
