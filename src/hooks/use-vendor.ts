@@ -47,7 +47,11 @@ export function useVendor() {
     setLoading(true);
     const [{ data: rolesData }, { data: profileData }, { data: appData }] = await Promise.all([
       supabase.from("user_roles").select("role").eq("user_id", user.id),
-      supabase.from("vendor_profiles").select("*").eq("user_id", user.id).maybeSingle(),
+      supabase
+        .from("vendor_profiles")
+        .select("id,user_id,business_name,category_key,description,location,phone,whatsapp,avatar_url,is_active")
+        .eq("user_id", user.id)
+        .maybeSingle(),
       supabase
         .from("vendor_applications")
         .select("id,status,business_name,category_key,admin_notes,created_at")
@@ -57,8 +61,22 @@ export function useVendor() {
         .maybeSingle(),
     ]);
     setRoles((rolesData ?? []).map((r) => r.role as string));
-    setVendorProfile((profileData as VendorProfile | null) ?? null);
+    let profile = (profileData as Omit<VendorProfile, "evc_number" | "edahab_number" | "zaad_number"> | null) ?? null;
+    let full: VendorProfile | null = null;
+    if (profile) {
+      // Mobile-money numbers are column-protected; read them via the secure RPC.
+      const { data: nums } = await supabase.rpc("get_vendor_payment_numbers", { _vendor_id: profile.id });
+      const n = (nums as { evc_number: string | null; edahab_number: string | null; zaad_number: string | null }[] | null)?.[0];
+      full = {
+        ...profile,
+        evc_number: n?.evc_number ?? null,
+        edahab_number: n?.edahab_number ?? null,
+        zaad_number: n?.zaad_number ?? null,
+      };
+    }
+    setVendorProfile(full);
     setApplication((appData as VendorApplication | null) ?? null);
+
     setLoading(false);
   };
 
