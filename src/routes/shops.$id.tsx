@@ -5,6 +5,7 @@ import {
   MessageCircle, Phone, ShoppingBag, X,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { ImageZoom } from "@/components/ImageZoom";
 import { SHOPS, type Shop, type ShopProduct } from "@/data/shops";
 import { whatsappLink, telLink } from "@/lib/contact";
 
