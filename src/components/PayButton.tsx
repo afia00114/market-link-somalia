@@ -26,13 +26,29 @@ export function PayButton({ vendorId, postId, bookingRef, defaultAmount, default
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    supabase
-      .from("vendor_profiles")
-      .select("id,business_name,evc_number,edahab_number,zaad_number")
-      .eq("id", vendorId)
-      .maybeSingle()
-      .then(({ data }) => setVendor((data as VendorRow | null) ?? null));
+    let cancelled = false;
+    (async () => {
+      // Mobile-money numbers are not publicly readable; they come from a
+      // signed-in-only security definer function scoped to this vendor.
+      const [{ data: base }, { data: nums }] = await Promise.all([
+        supabase.from("vendor_profiles").select("id,business_name").eq("id", vendorId).maybeSingle(),
+        supabase.rpc("get_vendor_payment_numbers", { _vendor_id: vendorId }),
+      ]);
+      if (cancelled || !base) return;
+      const n = (nums as { evc_number: string | null; edahab_number: string | null; zaad_number: string | null }[] | null)?.[0];
+      setVendor({
+        id: base.id,
+        business_name: base.business_name,
+        evc_number: n?.evc_number ?? null,
+        edahab_number: n?.edahab_number ?? null,
+        zaad_number: n?.zaad_number ?? null,
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [vendorId]);
+
 
   if (!vendor) return null;
   const hasAny = vendor.evc_number || vendor.edahab_number || vendor.zaad_number;
