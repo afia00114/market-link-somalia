@@ -8,6 +8,13 @@ import { AppShell } from "@/components/AppShell";
 import { ImageZoom } from "@/components/ImageZoom";
 import { SHOPS, type Shop, type ShopProduct } from "@/data/shops";
 import { whatsappLink, telLink } from "@/lib/contact";
+import { DeliveryAddressPicker } from "@/components/DeliveryAddressPicker";
+import {
+  EMPTY_ADDRESS,
+  formatAddress,
+  isAddressComplete,
+  type DeliveryAddress,
+} from "@/lib/delivery-address";
 
 export const Route = createFileRoute("/shops/$id")({
   loader: ({ params }): { shop: Shop } => {
