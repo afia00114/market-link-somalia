@@ -172,11 +172,12 @@ function RestaurantDetail() {
               key={m.id}
               className="flex items-center gap-3 rounded-2xl border border-border bg-card p-2.5 shadow-soft"
             >
-              <img
+              <ImageZoom
                 src={m.image}
                 alt={m.name}
-                loading="lazy"
-                className="h-16 w-16 shrink-0 rounded-xl object-cover"
+                caption={m.name}
+                wrapperClassName="h-16 w-16 shrink-0 rounded-xl"
+                className="h-16 w-16 rounded-xl object-cover"
               />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
