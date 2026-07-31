@@ -1,12 +1,13 @@
 import {
   Home, Wrench, Plane, HeartPulse, BedDouble, Beef, Briefcase, UtensilsCrossed,
+  Store,
   type LucideIcon,
 } from "lucide-react";
 
 
 export type CategoryKey =
   | "real-estate" | "services" | "travel" | "hotels" | "health"
-  | "food" | "vehicles" | "livestock" | "jobs" | "banking";
+  | "food" | "vehicles" | "livestock" | "jobs" | "banking" | "shops";
 
 export interface Category {
   key: CategoryKey;
@@ -27,5 +28,6 @@ export const CATEGORIES: Category[] = [
   { key: "livestock", label: "Animal Market", short: "Buy & sell livestock", count: 370, icon: Beef, gradient: "grad-livestock", href: "/livestock" },
   { key: "jobs", label: "Jobs & Careers", short: "NGO · Government · Private", count: 240, icon: Briefcase, gradient: "grad-jobs", href: "/jobs" },
   { key: "food", label: "Restaurants", short: "Order food & delivery", count: 420, icon: UtensilsCrossed, gradient: "grad-food", href: "/restaurants" },
+  { key: "shops", label: "Shops", short: "Retail stores & groceries", count: 530, icon: Store, gradient: "grad-shops", href: "/category/shops" },
 ];
 
