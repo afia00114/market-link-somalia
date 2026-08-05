@@ -3,8 +3,10 @@ import { useMemo, useState } from "react";
 import {
   ArrowLeft, Star, BadgeCheck, MapPin, Phone, MessageCircle, Mail,
   CalendarCheck, Clock, ShieldCheck, Share2, Copy, Check, X, Stethoscope,
-  ChevronRight, Sparkles,
+  ChevronRight, Sparkles, User, Users, Sunrise, Sun, Moon, Wallet,
+  CreditCard, HeartPulse, RefreshCw, AlertTriangle,
 } from "lucide-react";
+
 import { AppShell } from "@/components/AppShell";
 import { getHospital, DEPARTMENTS } from "@/data/health";
 import { whatsappLink, telLink } from "@/lib/contact";
