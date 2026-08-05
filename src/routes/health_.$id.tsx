@@ -3,8 +3,10 @@ import { useMemo, useState } from "react";
 import {
   ArrowLeft, Star, BadgeCheck, MapPin, Phone, MessageCircle, Mail,
   CalendarCheck, Clock, ShieldCheck, Share2, Copy, Check, X, Stethoscope,
-  ChevronRight, Sparkles,
+  ChevronRight, Sparkles, User, Users, Sunrise, Sun, Moon, Wallet,
+  CreditCard, HeartPulse, RefreshCw, AlertTriangle,
 } from "lucide-react";
+
 import { AppShell } from "@/components/AppShell";
 import { getHospital, DEPARTMENTS } from "@/data/health";
 import { whatsappLink, telLink } from "@/lib/contact";
@@ -354,11 +356,18 @@ function ContactRow({
 function BookingSheet({
   hospital: h, onClose,
 }: { hospital: ReturnType<typeof getHospital> extends infer T ? NonNullable<T> : never; onClose: () => void }) {
+  const [forSelf, setForSelf] = useState(true);
   const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState<"male" | "female" | "">("");
   const [phone, setPhone] = useState("");
+  const [visit, setVisit] = useState<"first" | "followup" | "urgent">("first");
   const [dept, setDept] = useState<string>(h.departments[0] ?? "");
   const [date, setDate] = useState("");
+  const [slot, setSlot] = useState<"morning" | "afternoon" | "evening">("morning");
+  const [payment, setPayment] = useState<"cash" | "mobile" | "insurance">("cash");
   const [notes, setNotes] = useState("");
+  const [touched, setTouched] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const deptLabel = DEPARTMENTS.find((d) => d.key === dept)?.label ?? dept;
@@ -367,22 +376,38 @@ function BookingSheet({
     [],
   );
 
+  const errors = {
+    name: name.trim().length < 2 ? "Enter the patient's full name" : "",
+    phone: phone.replace(/\D/g, "").length < 7 ? "Enter a reachable phone number" : "",
+    age: age !== "" && (Number(age) < 0 || Number(age) > 120) ? "Enter an age between 0 and 120" : "",
+    gender: gender === "" ? "Select the patient's gender" : "",
+  };
+  const valid = !errors.name && !errors.phone && !errors.age && !errors.gender;
+
+  const visitLabel = visit === "first" ? "First visit" : visit === "followup" ? "Follow-up" : "Urgent";
+  const slotLabel = slot === "morning" ? "Morning (8am–12pm)" : slot === "afternoon" ? "Afternoon (12pm–4pm)" : "Evening (4pm–8pm)";
+  const payLabel = payment === "cash" ? "Cash" : payment === "mobile" ? "Mobile money" : "Insurance";
+
   const message = [
     `Hello ${h.name},`,
     ``,
     `I'd like to request an appointment via MaalsoorHub.`,
     `• Department: ${deptLabel}`,
+    `• Visit type: ${visitLabel}`,
     date ? `• Preferred date: ${date}` : "",
+    `• Preferred time: ${slotLabel}`,
+    `• Payment: ${payLabel}`,
     ``,
-    `Name: ${name || "—"}`,
+    `Patient: ${name || "—"}${forSelf ? "" : " (booked by a relative)"}`,
+    age ? `Age: ${age}` : "",
+    gender ? `Gender: ${gender === "male" ? "Male" : "Female"}` : "",
     `Phone: ${phone || "—"}`,
-    notes ? `Notes: ${notes}` : "",
+    notes ? `Reason / symptoms: ${notes}` : "",
     ``,
     `Booking ref: ${ref}`,
   ].filter(Boolean).join("\n");
 
   const subject = `Appointment Request — ${ref}`;
-  const valid = name.trim().length >= 2 && phone.replace(/\D/g, "").length >= 7;
 
   function copy() {
     navigator.clipboard?.writeText(message).then(() => {
@@ -390,6 +415,8 @@ function BookingSheet({
       setTimeout(() => setCopied(false), 1500);
     });
   }
+
+  const showErr = (msg: string) => (touched && msg ? msg : "");
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
@@ -408,25 +435,72 @@ function BookingSheet({
           </button>
         </div>
 
-        <div className="mt-4 space-y-3">
-          <Field label="Full name">
+        {/* Who is this for */}
+        <SectionTitle icon={Users} title="Who is this appointment for?" step={1} />
+        <div className="grid grid-cols-2 gap-2">
+          <PickTile icon={User} label="Myself" active={forSelf} onClick={() => setForSelf(true)} />
+          <PickTile icon={Users} label="Someone else" active={!forSelf} onClick={() => setForSelf(false)} />
+        </div>
+
+        {/* Patient details */}
+        <SectionTitle icon={HeartPulse} title="Patient details" step={2} />
+        <div className="space-y-3">
+          <Field label="Full name" required error={showErr(errors.name)}>
             <input
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value.slice(0, 80))}
               placeholder="e.g. Ahmed Hassan"
-              className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-primary"
+              autoComplete="name"
+              className={`h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none focus:border-primary ${
+                showErr(errors.name) ? "border-destructive" : "border-border"
+              }`}
             />
           </Field>
-          <Field label="Phone number">
-            <input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+252 ..."
-              inputMode="tel"
-              className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-primary"
-            />
+
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Age" error={showErr(errors.age)}>
+              <input
+                value={age}
+                onChange={(e) => setAge(e.target.value.replace(/\D/g, "").slice(0, 3))}
+                placeholder="e.g. 34"
+                inputMode="numeric"
+                className={`h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none focus:border-primary ${
+                  showErr(errors.age) ? "border-destructive" : "border-border"
+                }`}
+              />
+            </Field>
+            <Field label="Phone number" required error={showErr(errors.phone)}>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.slice(0, 20))}
+                placeholder="+252 ..."
+                inputMode="tel"
+                autoComplete="tel"
+                className={`h-11 w-full rounded-xl border bg-background px-3 text-sm outline-none focus:border-primary ${
+                  showErr(errors.phone) ? "border-destructive" : "border-border"
+                }`}
+              />
+            </Field>
+          </div>
+
+          <Field label="Gender" required error={showErr(errors.gender)}>
+            <div className="grid grid-cols-2 gap-2">
+              <PickTile icon={User} label="Male" active={gender === "male"} onClick={() => setGender("male")} />
+              <PickTile icon={User} label="Female" active={gender === "female"} onClick={() => setGender("female")} />
+            </div>
           </Field>
-          <Field label="Choose department — tap a picture">
+        </div>
+
+        {/* Visit */}
+        <SectionTitle icon={Stethoscope} title="Reason for the visit" step={3} />
+        <div className="grid grid-cols-3 gap-2">
+          <PickTile icon={Sparkles} label="First visit" active={visit === "first"} onClick={() => setVisit("first")} />
+          <PickTile icon={RefreshCw} label="Follow-up" active={visit === "followup"} onClick={() => setVisit("followup")} />
+          <PickTile icon={AlertTriangle} label="Urgent" active={visit === "urgent"} onClick={() => setVisit("urgent")} tone="text-amber-500" />
+        </div>
+
+        <div className="mt-3">
+          <Field label="Choose department — tap a picture" required>
             <div className="grid grid-cols-3 gap-2">
               {h.departments.map((k) => {
                 const d = DEPARTMENTS.find((x) => x.key === k);
@@ -456,23 +530,48 @@ function BookingSheet({
               })}
             </div>
           </Field>
+        </div>
+
+        <div className="mt-3">
+          <Field label="Reason / symptoms (optional)">
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value.slice(0, 500))}
+              rows={2}
+              placeholder="Symptoms, allergies, current medication, or anything the hospital should know..."
+              className="w-full rounded-xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
+            />
+            <div className="mt-1 text-right text-[10px] text-muted-foreground">{notes.length}/500</div>
+          </Field>
+        </div>
+
+        {/* When */}
+        <SectionTitle icon={CalendarCheck} title="When would you like to come?" step={4} />
+        <div className="space-y-3">
           <Field label="Preferred date">
             <input
               type="date"
               value={date}
+              min={new Date().toISOString().slice(0, 10)}
               onChange={(e) => setDate(e.target.value)}
               className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-primary"
             />
           </Field>
-          <Field label="Notes (optional)">
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={2}
-              placeholder="Symptoms or anything the hospital should know..."
-              className="w-full rounded-xl border border-border bg-background p-3 text-sm outline-none focus:border-primary"
-            />
+          <Field label="Preferred time">
+            <div className="grid grid-cols-3 gap-2">
+              <PickTile icon={Sunrise} label="Morning" active={slot === "morning"} onClick={() => setSlot("morning")} />
+              <PickTile icon={Sun} label="Afternoon" active={slot === "afternoon"} onClick={() => setSlot("afternoon")} />
+              <PickTile icon={Moon} label="Evening" active={slot === "evening"} onClick={() => setSlot("evening")} />
+            </div>
           </Field>
+        </div>
+
+        {/* Payment */}
+        <SectionTitle icon={Wallet} title="How will you pay?" step={5} />
+        <div className="grid grid-cols-3 gap-2">
+          <PickTile icon={Wallet} label="Cash" active={payment === "cash"} onClick={() => setPayment("cash")} />
+          <PickTile icon={Phone} label="Mobile money" active={payment === "mobile"} onClick={() => setPayment("mobile")} />
+          <PickTile icon={CreditCard} label="Insurance" active={payment === "insurance"} onClick={() => setPayment("insurance")} />
         </div>
 
         <div className="mt-4 rounded-xl bg-secondary/60 px-3 py-2 text-[11px] text-muted-foreground">
@@ -480,7 +579,7 @@ function BookingSheet({
         </div>
 
         <h4 className="mt-4 text-xs font-bold">Send request via</h4>
-        <div className="mt-2 grid grid-cols-2 gap-2">
+        <div className="mt-2 grid grid-cols-2 gap-2" onClickCapture={() => setTouched(true)}>
           <a
             href={valid ? whatsappLink(h.whatsapp, message) : undefined}
             target="_blank"
@@ -523,20 +622,63 @@ function BookingSheet({
         </div>
 
         {!valid && (
-          <p className="mt-2 text-center text-[11px] text-muted-foreground">
-            Add your name and phone to enable sending.
-          </p>
+          <button
+            onClick={() => setTouched(true)}
+            className="mt-2 w-full text-center text-[11px] text-muted-foreground"
+          >
+            Add the patient's name, phone and gender to enable sending.
+          </button>
         )}
       </div>
     </div>
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function SectionTitle({
+  icon: Ic, title, step,
+}: { icon: typeof Phone; title: string; step: number }) {
+  return (
+    <div className="mb-2 mt-5 flex items-center gap-2">
+      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-soft text-[10px] font-extrabold text-primary">
+        {step}
+      </span>
+      <Ic className="h-4 w-4 text-primary" />
+      <h4 className="text-xs font-bold">{title}</h4>
+    </div>
+  );
+}
+
+function PickTile({
+  icon: Ic, label, active, onClick, tone,
+}: { icon: typeof Phone; label: string; active: boolean; onClick: () => void; tone?: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex flex-col items-center gap-1 rounded-2xl border p-2.5 transition active:scale-[0.97] ${
+        active ? "border-primary bg-primary/10 ring-2 ring-primary" : "border-border bg-card hover:bg-secondary"
+      }`}
+    >
+      <span className={`flex h-9 w-9 items-center justify-center rounded-full ${active ? "bg-primary/15" : "bg-secondary"}`}>
+        <Ic className={`h-4.5 w-4.5 ${tone ?? "text-primary"}`} />
+      </span>
+      <span className="text-center text-[11px] font-semibold leading-tight">{label}</span>
+    </button>
+  );
+}
+
+function Field({
+  label, children, required, error,
+}: { label: string; children: React.ReactNode; required?: boolean; error?: string }) {
   return (
     <label className="block">
-      <div className="mb-1 text-[11px] font-semibold text-muted-foreground">{label}</div>
+      <div className="mb-1 text-[11px] font-semibold text-muted-foreground">
+        {label} {required && <span className="text-destructive">*</span>}
+      </div>
       {children}
+      {error && <div className="mt-1 text-[11px] font-medium text-destructive">{error}</div>}
     </label>
   );
 }
+
