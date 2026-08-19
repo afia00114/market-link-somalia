@@ -4,7 +4,7 @@ import {
   ArrowLeft, Search, PackageOpen, Wrench, Zap, Sparkles, Snowflake,
   PaintBucket, Hammer, Brush, Truck, Car as CarIcon, Wheat, Briefcase,
   Landmark, UtensilsCrossed, Stethoscope, Plane, Home as HomeIcon, MoreHorizontal,
-  X, Navigation, type LucideIcon,
+  X, Navigation, type LucideIcon, Clapperboard, Music, PartyPopper, Camera, Trophy,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { CATEGORIES, type CategoryKey } from "@/data/categories";
@@ -66,6 +66,14 @@ const POPULAR: Record<string, PopularItem[]> = {
     { label: "Banks", icon: Landmark, tone: "text-blue-700 bg-blue-50" },
     { label: "Forex", icon: Landmark, tone: "text-emerald-700 bg-emerald-50" },
     { label: "Insurance", icon: Stethoscope, tone: "text-rose-600 bg-rose-50" },
+    { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
+  ],
+  entertainment: [
+    { label: "Event halls", icon: PartyPopper, tone: "text-fuchsia-600 bg-fuchsia-50" },
+    { label: "DJs & Sound", icon: Music, tone: "text-violet-600 bg-violet-50" },
+    { label: "Cinema & Games", icon: Clapperboard, tone: "text-rose-600 bg-rose-50" },
+    { label: "Photo & Video", icon: Camera, tone: "text-sky-600 bg-sky-50" },
+    { label: "Sports venues", icon: Trophy, tone: "text-emerald-600 bg-emerald-50" },
     { label: "More", icon: MoreHorizontal, tone: "text-slate-600 bg-slate-100" },
   ],
 };
