@@ -57,6 +57,7 @@ import { Route as JobsIdRouteImport } from './routes/jobs.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health_.$id'
 import { Route as HealthDirectoryRouteImport } from './routes/health.directory'
+import { Route as EntertainmentBookingsRouteImport } from './routes/entertainment.bookings'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
 import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -318,6 +319,11 @@ const HealthDirectoryRoute = HealthDirectoryRouteImport.update({
   path: '/directory',
   getParentRoute: () => HealthRoute,
 } as any)
+const EntertainmentBookingsRoute = EntertainmentBookingsRouteImport.update({
+  id: '/entertainment/bookings',
+  path: '/entertainment/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoryKeyRoute = CategoryKeyRouteImport.update({
   id: '/category/$key',
   path: '/category/$key',
@@ -446,6 +452,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/entertainment/bookings': typeof EntertainmentBookingsRoute
   '/health/directory': typeof HealthDirectoryRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -514,6 +521,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/entertainment/bookings': typeof EntertainmentBookingsRoute
   '/health/directory': typeof HealthDirectoryRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -585,6 +593,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/entertainment/bookings': typeof EntertainmentBookingsRoute
   '/health/directory': typeof HealthDirectoryRoute
   '/health_/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -657,6 +666,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
+    | '/entertainment/bookings'
     | '/health/directory'
     | '/health/$id'
     | '/hotels/$id'
@@ -725,6 +735,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
+    | '/entertainment/bookings'
     | '/health/directory'
     | '/health/$id'
     | '/hotels/$id'
@@ -795,6 +806,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
+    | '/entertainment/bookings'
     | '/health/directory'
     | '/health_/$id'
     | '/hotels/$id'
@@ -866,6 +878,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminVendorsRoute: typeof AdminVendorsRoute
   CategoryKeyRoute: typeof CategoryKeyRoute
+  EntertainmentBookingsRoute: typeof EntertainmentBookingsRoute
   HealthIdRoute: typeof HealthIdRoute
   JobsIdRoute: typeof JobsIdRoute
   PostsIdRoute: typeof PostsIdRoute
@@ -1227,6 +1240,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HealthDirectoryRouteImport
       parentRoute: typeof HealthRoute
     }
+    '/entertainment/bookings': {
+      id: '/entertainment/bookings'
+      path: '/entertainment/bookings'
+      fullPath: '/entertainment/bookings'
+      preLoaderRoute: typeof EntertainmentBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$key': {
       id: '/category/$key'
       path: '/category/$key'
@@ -1569,6 +1589,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminVendorsRoute: AdminVendorsRoute,
   CategoryKeyRoute: CategoryKeyRoute,
+  EntertainmentBookingsRoute: EntertainmentBookingsRoute,
   HealthIdRoute: HealthIdRoute,
   JobsIdRoute: JobsIdRoute,
   PostsIdRoute: PostsIdRoute,
