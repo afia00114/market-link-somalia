@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { ImageZoom } from "@/components/ImageZoom";
-import { getVenue } from "@/data/entertainment";
+import { getVenue, type EntVenue } from "@/data/entertainment";
 import { whatsappLink, telLink } from "@/lib/contact";
 import {
   PAY_METHODS, bookedHours, formatDateLong, formatHour, makeRef, saveRecord, todayISO, useFavorites,
@@ -43,29 +43,6 @@ type Step = "browse" | "slots" | "summary" | "details" | "payment";
 function VenuePage() {
   const { id } = useParams({ from: "/entertainment/venues/$id" });
   const venue = getVenue(id);
-  const navigate = useNavigate();
-  const { isFav, toggle } = useFavorites();
-
-  const [step, setStep] = useState<Step>("browse");
-  const [fieldId, setFieldId] = useState<string | null>(venue?.fields[0]?.id ?? null);
-  const [date, setDate] = useState(todayISO());
-  const [hours, setHours] = useState<number[]>([]);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [team, setTeam] = useState("");
-  const [notes, setNotes] = useState("");
-  const [errors, setErrors] = useState<string[]>([]);
-  const [payMethod, setPayMethod] = useState<PayMethod>("evc");
-  const [payStatus, setPayStatus] = useState<PayStatus>("unpaid");
-
-  const field = venue?.fields.find((f) => f.id === fieldId) ?? null;
-
-  const weekday = useMemo(() => new Date(`${date}T00:00:00`).getDay(), [date]);
-  const seedBusy = field?.busy[weekday] ?? [];
-  const localBusy = venue && field ? bookedHours(venue.id, field.id, date) : [];
-  const nowHour = new Date().getHours();
-  const isToday = date === todayISO();
-
   if (!venue) {
     return (
       <AppShell>
@@ -78,6 +55,32 @@ function VenuePage() {
       </AppShell>
     );
   }
+  return <VenueDetail venue={venue} />;
+}
+
+function VenueDetail({ venue }: { venue: EntVenue }) {
+  const navigate = useNavigate();
+  const { isFav, toggle } = useFavorites();
+
+  const [step, setStep] = useState<Step>("browse");
+  const [fieldId, setFieldId] = useState<string | null>(venue.fields[0]?.id ?? null);
+  const [date, setDate] = useState(todayISO());
+  const [hours, setHours] = useState<number[]>([]);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [team, setTeam] = useState("");
+  const [notes, setNotes] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
+  const [payMethod, setPayMethod] = useState<PayMethod>("evc");
+  const [payStatus, setPayStatus] = useState<PayStatus>("unpaid");
+
+  const field = venue.fields.find((f) => f.id === fieldId) ?? null;
+
+  const weekday = useMemo(() => new Date(`${date}T00:00:00`).getDay(), [date]);
+  const seedBusy = field?.busy[weekday] ?? [];
+  const localBusy = field ? bookedHours(venue.id, field.id, date) : [];
+  const nowHour = new Date().getHours();
+  const isToday = date === todayISO();
 
   const slotHours = Array.from({ length: venue.closeHour - venue.openHour }, (_, i) => venue.openHour + i);
   const slotState = (h: number): "available" | "selected" | "booked" | "unavailable" => {
@@ -137,7 +140,7 @@ function VenuePage() {
 
   async function share() {
     try {
-      if (navigator.share) await navigator.share({ title: venue!.name, url: shareUrl });
+      if (navigator.share) await navigator.share({ title: venue.name, url: shareUrl });
       else await navigator.clipboard.writeText(shareUrl);
     } catch {
       /* user cancelled */
