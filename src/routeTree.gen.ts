@@ -32,6 +32,7 @@ import { Route as TravelIndexRouteImport } from './routes/travel.index'
 import { Route as RestaurantsIndexRouteImport } from './routes/restaurants.index'
 import { Route as JobsIndexRouteImport } from './routes/jobs.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
+import { Route as EntertainmentIndexRouteImport } from './routes/entertainment.index'
 import { Route as VendorsIdRouteImport } from './routes/vendors.$id'
 import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
 import { Route as VendorApplyRouteImport } from './routes/vendor.apply'
@@ -189,6 +190,11 @@ const HotelsIndexRoute = HotelsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => HotelsRoute,
+} as any)
+const EntertainmentIndexRoute = EntertainmentIndexRouteImport.update({
+  id: '/entertainment/',
+  path: '/entertainment/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const VendorsIdRoute = VendorsIdRouteImport.update({
   id: '/vendors/$id',
@@ -452,6 +458,7 @@ export interface FileRoutesByFullPath {
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
+  '/entertainment/': typeof EntertainmentIndexRoute
   '/hotels/': typeof HotelsIndexRoute
   '/jobs/': typeof JobsIndexRoute
   '/restaurants/': typeof RestaurantsIndexRoute
@@ -517,6 +524,7 @@ export interface FileRoutesByTo {
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
+  '/entertainment': typeof EntertainmentIndexRoute
   '/hotels': typeof HotelsIndexRoute
   '/jobs': typeof JobsIndexRoute
   '/restaurants': typeof RestaurantsIndexRoute
@@ -585,6 +593,7 @@ export interface FileRoutesById {
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
+  '/entertainment/': typeof EntertainmentIndexRoute
   '/hotels/': typeof HotelsIndexRoute
   '/jobs/': typeof JobsIndexRoute
   '/restaurants/': typeof RestaurantsIndexRoute
@@ -654,6 +663,7 @@ export interface FileRouteTypes {
     | '/vendor/apply'
     | '/vendor/dashboard'
     | '/vendors/$id'
+    | '/entertainment/'
     | '/hotels/'
     | '/jobs/'
     | '/restaurants/'
@@ -719,6 +729,7 @@ export interface FileRouteTypes {
     | '/vendor/apply'
     | '/vendor/dashboard'
     | '/vendors/$id'
+    | '/entertainment'
     | '/hotels'
     | '/jobs'
     | '/restaurants'
@@ -786,6 +797,7 @@ export interface FileRouteTypes {
     | '/vendor/apply'
     | '/vendor/dashboard'
     | '/vendors/$id'
+    | '/entertainment/'
     | '/hotels/'
     | '/jobs/'
     | '/restaurants/'
@@ -840,6 +852,7 @@ export interface RootRouteChildren {
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
   VendorsIdRoute: typeof VendorsIdRoute
+  EntertainmentIndexRoute: typeof EntertainmentIndexRoute
   JobsIndexRoute: typeof JobsIndexRoute
   RestaurantsIndexRoute: typeof RestaurantsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -1012,6 +1025,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/hotels/'
       preLoaderRoute: typeof HotelsIndexRouteImport
       parentRoute: typeof HotelsRoute
+    }
+    '/entertainment/': {
+      id: '/entertainment/'
+      path: '/entertainment'
+      fullPath: '/entertainment/'
+      preLoaderRoute: typeof EntertainmentIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/vendors/$id': {
       id: '/vendors/$id'
@@ -1519,6 +1539,7 @@ const rootRouteChildren: RootRouteChildren = {
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
   VendorsIdRoute: VendorsIdRoute,
+  EntertainmentIndexRoute: EntertainmentIndexRoute,
   JobsIndexRoute: JobsIndexRoute,
   RestaurantsIndexRoute: RestaurantsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
