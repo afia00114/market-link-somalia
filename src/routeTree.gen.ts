@@ -73,6 +73,7 @@ import { Route as ListingIdBookedRouteImport } from './routes/listing.$id.booked
 import { Route as ListingIdBookRouteImport } from './routes/listing.$id.book'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 import { Route as EntertainmentVenuesIdRouteImport } from './routes/entertainment.venues.$id'
+import { Route as EntertainmentBookingRefRouteImport } from './routes/entertainment.booking.$ref'
 import { Route as ApiPublicGeocodeRouteImport } from './routes/api/public/geocode'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -399,6 +400,11 @@ const EntertainmentVenuesIdRoute = EntertainmentVenuesIdRouteImport.update({
   path: '/entertainment/venues/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EntertainmentBookingRefRoute = EntertainmentBookingRefRouteImport.update({
+  id: '/entertainment/booking/$ref',
+  path: '/entertainment/booking/$ref',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicGeocodeRoute = ApiPublicGeocodeRouteImport.update({
   id: '/api/public/geocode',
   path: '/api/public/geocode',
@@ -472,6 +478,7 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
+  '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
   '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -539,6 +546,7 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
+  '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
   '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -609,6 +617,7 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
+  '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
   '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -680,6 +689,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
+    | '/entertainment/booking/$ref'
     | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -747,6 +757,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
+    | '/entertainment/booking/$ref'
     | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -816,6 +827,7 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
+    | '/entertainment/booking/$ref'
     | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -870,6 +882,7 @@ export interface RootRouteChildren {
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicGeocodeRoute: typeof ApiPublicGeocodeRoute
+  EntertainmentBookingRefRoute: typeof EntertainmentBookingRefRoute
   EntertainmentVenuesIdRoute: typeof EntertainmentVenuesIdRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
@@ -1326,6 +1339,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EntertainmentVenuesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/entertainment/booking/$ref': {
+      id: '/entertainment/booking/$ref'
+      path: '/entertainment/booking/$ref'
+      fullPath: '/entertainment/booking/$ref'
+      preLoaderRoute: typeof EntertainmentBookingRefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/geocode': {
       id: '/api/public/geocode'
       path: '/api/public/geocode'
@@ -1565,6 +1585,7 @@ const rootRouteChildren: RootRouteChildren = {
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicGeocodeRoute: ApiPublicGeocodeRoute,
+  EntertainmentBookingRefRoute: EntertainmentBookingRefRoute,
   EntertainmentVenuesIdRoute: EntertainmentVenuesIdRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
