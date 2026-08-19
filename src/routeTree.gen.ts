@@ -32,6 +32,7 @@ import { Route as TravelIndexRouteImport } from './routes/travel.index'
 import { Route as RestaurantsIndexRouteImport } from './routes/restaurants.index'
 import { Route as JobsIndexRouteImport } from './routes/jobs.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
+import { Route as EntertainmentIndexRouteImport } from './routes/entertainment.index'
 import { Route as VendorsIdRouteImport } from './routes/vendors.$id'
 import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
 import { Route as VendorApplyRouteImport } from './routes/vendor.apply'
@@ -56,11 +57,13 @@ import { Route as JobsIdRouteImport } from './routes/jobs.$id'
 import { Route as HotelsIdRouteImport } from './routes/hotels.$id'
 import { Route as HealthIdRouteImport } from './routes/health_.$id'
 import { Route as HealthDirectoryRouteImport } from './routes/health.directory'
+import { Route as EntertainmentBookingsRouteImport } from './routes/entertainment.bookings'
 import { Route as CategoryKeyRouteImport } from './routes/category.$key'
 import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ListingIdIndexRouteImport } from './routes/listing.$id.index'
+import { Route as EntertainmentTournamentsIndexRouteImport } from './routes/entertainment.tournaments.index'
 import { Route as TravelVisaIdRouteImport } from './routes/travel.visa.$id'
 import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
 import { Route as TravelHajjUmrahIdRouteImport } from './routes/travel.hajj-umrah.$id'
@@ -71,6 +74,10 @@ import { Route as TravelAgenciesIdRouteImport } from './routes/travel.agencies.$
 import { Route as ListingIdBookedRouteImport } from './routes/listing.$id.booked'
 import { Route as ListingIdBookRouteImport } from './routes/listing.$id.book'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
+import { Route as EntertainmentVenuesIdRouteImport } from './routes/entertainment.venues.$id'
+import { Route as EntertainmentTournamentsIdRouteImport } from './routes/entertainment.tournaments.$id'
+import { Route as EntertainmentEventsIdRouteImport } from './routes/entertainment.events.$id'
+import { Route as EntertainmentBookingRefRouteImport } from './routes/entertainment.booking.$ref'
 import { Route as ApiPublicGeocodeRouteImport } from './routes/api/public/geocode'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
@@ -189,6 +196,11 @@ const HotelsIndexRoute = HotelsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => HotelsRoute,
+} as any)
+const EntertainmentIndexRoute = EntertainmentIndexRouteImport.update({
+  id: '/entertainment/',
+  path: '/entertainment/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const VendorsIdRoute = VendorsIdRouteImport.update({
   id: '/vendors/$id',
@@ -310,6 +322,11 @@ const HealthDirectoryRoute = HealthDirectoryRouteImport.update({
   path: '/directory',
   getParentRoute: () => HealthRoute,
 } as any)
+const EntertainmentBookingsRoute = EntertainmentBookingsRouteImport.update({
+  id: '/entertainment/bookings',
+  path: '/entertainment/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CategoryKeyRoute = CategoryKeyRouteImport.update({
   id: '/category/$key',
   path: '/category/$key',
@@ -337,6 +354,12 @@ const ListingIdIndexRoute = ListingIdIndexRouteImport.update({
   path: '/listing/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EntertainmentTournamentsIndexRoute =
+  EntertainmentTournamentsIndexRouteImport.update({
+    id: '/entertainment/tournaments/',
+    path: '/entertainment/tournaments/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TravelVisaIdRoute = TravelVisaIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -387,6 +410,27 @@ const HotelsIdBookRoute = HotelsIdBookRouteImport.update({
   path: '/book',
   getParentRoute: () => HotelsIdRoute,
 } as any)
+const EntertainmentVenuesIdRoute = EntertainmentVenuesIdRouteImport.update({
+  id: '/entertainment/venues/$id',
+  path: '/entertainment/venues/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EntertainmentTournamentsIdRoute =
+  EntertainmentTournamentsIdRouteImport.update({
+    id: '/entertainment/tournaments/$id',
+    path: '/entertainment/tournaments/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const EntertainmentEventsIdRoute = EntertainmentEventsIdRouteImport.update({
+  id: '/entertainment/events/$id',
+  path: '/entertainment/events/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EntertainmentBookingRefRoute = EntertainmentBookingRefRouteImport.update({
+  id: '/entertainment/booking/$ref',
+  path: '/entertainment/booking/$ref',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicGeocodeRoute = ApiPublicGeocodeRouteImport.update({
   id: '/api/public/geocode',
   path: '/api/public/geocode',
@@ -428,6 +472,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/entertainment/bookings': typeof EntertainmentBookingsRoute
   '/health/directory': typeof HealthDirectoryRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -452,6 +497,7 @@ export interface FileRoutesByFullPath {
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
+  '/entertainment/': typeof EntertainmentIndexRoute
   '/hotels/': typeof HotelsIndexRoute
   '/jobs/': typeof JobsIndexRoute
   '/restaurants/': typeof RestaurantsIndexRoute
@@ -459,6 +505,10 @@ export interface FileRoutesByFullPath {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
+  '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
+  '/entertainment/events/$id': typeof EntertainmentEventsIdRoute
+  '/entertainment/tournaments/$id': typeof EntertainmentTournamentsIdRoute
+  '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -469,6 +519,7 @@ export interface FileRoutesByFullPath {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/entertainment/tournaments/': typeof EntertainmentTournamentsIndexRoute
   '/listing/$id/': typeof ListingIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -493,6 +544,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/entertainment/bookings': typeof EntertainmentBookingsRoute
   '/health/directory': typeof HealthDirectoryRoute
   '/health/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -517,6 +569,7 @@ export interface FileRoutesByTo {
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
+  '/entertainment': typeof EntertainmentIndexRoute
   '/hotels': typeof HotelsIndexRoute
   '/jobs': typeof JobsIndexRoute
   '/restaurants': typeof RestaurantsIndexRoute
@@ -524,6 +577,10 @@ export interface FileRoutesByTo {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
+  '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
+  '/entertainment/events/$id': typeof EntertainmentEventsIdRoute
+  '/entertainment/tournaments/$id': typeof EntertainmentTournamentsIdRoute
+  '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -534,6 +591,7 @@ export interface FileRoutesByTo {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/entertainment/tournaments': typeof EntertainmentTournamentsIndexRoute
   '/listing/$id': typeof ListingIdIndexRoute
 }
 export interface FileRoutesById {
@@ -561,6 +619,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/vendors': typeof AdminVendorsRoute
   '/category/$key': typeof CategoryKeyRoute
+  '/entertainment/bookings': typeof EntertainmentBookingsRoute
   '/health/directory': typeof HealthDirectoryRoute
   '/health_/$id': typeof HealthIdRoute
   '/hotels/$id': typeof HotelsIdRouteWithChildren
@@ -585,6 +644,7 @@ export interface FileRoutesById {
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendors/$id': typeof VendorsIdRoute
+  '/entertainment/': typeof EntertainmentIndexRoute
   '/hotels/': typeof HotelsIndexRoute
   '/jobs/': typeof JobsIndexRoute
   '/restaurants/': typeof RestaurantsIndexRoute
@@ -592,6 +652,10 @@ export interface FileRoutesById {
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
+  '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
+  '/entertainment/events/$id': typeof EntertainmentEventsIdRoute
+  '/entertainment/tournaments/$id': typeof EntertainmentTournamentsIdRoute
+  '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
   '/listing/$id/booked': typeof ListingIdBookedRoute
@@ -602,6 +666,7 @@ export interface FileRoutesById {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/entertainment/tournaments/': typeof EntertainmentTournamentsIndexRoute
   '/listing/$id/': typeof ListingIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -630,6 +695,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
+    | '/entertainment/bookings'
     | '/health/directory'
     | '/health/$id'
     | '/hotels/$id'
@@ -654,6 +720,7 @@ export interface FileRouteTypes {
     | '/vendor/apply'
     | '/vendor/dashboard'
     | '/vendors/$id'
+    | '/entertainment/'
     | '/hotels/'
     | '/jobs/'
     | '/restaurants/'
@@ -661,6 +728,10 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
+    | '/entertainment/booking/$ref'
+    | '/entertainment/events/$id'
+    | '/entertainment/tournaments/$id'
+    | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -671,6 +742,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/entertainment/tournaments/'
     | '/listing/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -695,6 +767,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
+    | '/entertainment/bookings'
     | '/health/directory'
     | '/health/$id'
     | '/hotels/$id'
@@ -719,6 +792,7 @@ export interface FileRouteTypes {
     | '/vendor/apply'
     | '/vendor/dashboard'
     | '/vendors/$id'
+    | '/entertainment'
     | '/hotels'
     | '/jobs'
     | '/restaurants'
@@ -726,6 +800,10 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
+    | '/entertainment/booking/$ref'
+    | '/entertainment/events/$id'
+    | '/entertainment/tournaments/$id'
+    | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -736,6 +814,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/entertainment/tournaments'
     | '/listing/$id'
   id:
     | '__root__'
@@ -762,6 +841,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/vendors'
     | '/category/$key'
+    | '/entertainment/bookings'
     | '/health/directory'
     | '/health_/$id'
     | '/hotels/$id'
@@ -786,6 +866,7 @@ export interface FileRouteTypes {
     | '/vendor/apply'
     | '/vendor/dashboard'
     | '/vendors/$id'
+    | '/entertainment/'
     | '/hotels/'
     | '/jobs/'
     | '/restaurants/'
@@ -793,6 +874,10 @@ export interface FileRouteTypes {
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
+    | '/entertainment/booking/$ref'
+    | '/entertainment/events/$id'
+    | '/entertainment/tournaments/$id'
+    | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
     | '/listing/$id/booked'
@@ -803,6 +888,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/entertainment/tournaments/'
     | '/listing/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -830,6 +916,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminVendorsRoute: typeof AdminVendorsRoute
   CategoryKeyRoute: typeof CategoryKeyRoute
+  EntertainmentBookingsRoute: typeof EntertainmentBookingsRoute
   HealthIdRoute: typeof HealthIdRoute
   JobsIdRoute: typeof JobsIdRoute
   PostsIdRoute: typeof PostsIdRoute
@@ -840,13 +927,19 @@ export interface RootRouteChildren {
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
   VendorsIdRoute: typeof VendorsIdRoute
+  EntertainmentIndexRoute: typeof EntertainmentIndexRoute
   JobsIndexRoute: typeof JobsIndexRoute
   RestaurantsIndexRoute: typeof RestaurantsIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicGeocodeRoute: typeof ApiPublicGeocodeRoute
+  EntertainmentBookingRefRoute: typeof EntertainmentBookingRefRoute
+  EntertainmentEventsIdRoute: typeof EntertainmentEventsIdRoute
+  EntertainmentTournamentsIdRoute: typeof EntertainmentTournamentsIdRoute
+  EntertainmentVenuesIdRoute: typeof EntertainmentVenuesIdRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
+  EntertainmentTournamentsIndexRoute: typeof EntertainmentTournamentsIndexRoute
   ListingIdIndexRoute: typeof ListingIdIndexRoute
 }
 
@@ -1012,6 +1105,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/hotels/'
       preLoaderRoute: typeof HotelsIndexRouteImport
       parentRoute: typeof HotelsRoute
+    }
+    '/entertainment/': {
+      id: '/entertainment/'
+      path: '/entertainment'
+      fullPath: '/entertainment/'
+      preLoaderRoute: typeof EntertainmentIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/vendors/$id': {
       id: '/vendors/$id'
@@ -1181,6 +1281,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HealthDirectoryRouteImport
       parentRoute: typeof HealthRoute
     }
+    '/entertainment/bookings': {
+      id: '/entertainment/bookings'
+      path: '/entertainment/bookings'
+      fullPath: '/entertainment/bookings'
+      preLoaderRoute: typeof EntertainmentBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/category/$key': {
       id: '/category/$key'
       path: '/category/$key'
@@ -1214,6 +1321,13 @@ declare module '@tanstack/react-router' {
       path: '/listing/$id'
       fullPath: '/listing/$id/'
       preLoaderRoute: typeof ListingIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entertainment/tournaments/': {
+      id: '/entertainment/tournaments/'
+      path: '/entertainment/tournaments'
+      fullPath: '/entertainment/tournaments/'
+      preLoaderRoute: typeof EntertainmentTournamentsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/travel/visa/$id': {
@@ -1285,6 +1399,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/hotels/$id/book'
       preLoaderRoute: typeof HotelsIdBookRouteImport
       parentRoute: typeof HotelsIdRoute
+    }
+    '/entertainment/venues/$id': {
+      id: '/entertainment/venues/$id'
+      path: '/entertainment/venues/$id'
+      fullPath: '/entertainment/venues/$id'
+      preLoaderRoute: typeof EntertainmentVenuesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entertainment/tournaments/$id': {
+      id: '/entertainment/tournaments/$id'
+      path: '/entertainment/tournaments/$id'
+      fullPath: '/entertainment/tournaments/$id'
+      preLoaderRoute: typeof EntertainmentTournamentsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entertainment/events/$id': {
+      id: '/entertainment/events/$id'
+      path: '/entertainment/events/$id'
+      fullPath: '/entertainment/events/$id'
+      preLoaderRoute: typeof EntertainmentEventsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/entertainment/booking/$ref': {
+      id: '/entertainment/booking/$ref'
+      path: '/entertainment/booking/$ref'
+      fullPath: '/entertainment/booking/$ref'
+      preLoaderRoute: typeof EntertainmentBookingRefRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/geocode': {
       id: '/api/public/geocode'
@@ -1509,6 +1651,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminVendorsRoute: AdminVendorsRoute,
   CategoryKeyRoute: CategoryKeyRoute,
+  EntertainmentBookingsRoute: EntertainmentBookingsRoute,
   HealthIdRoute: HealthIdRoute,
   JobsIdRoute: JobsIdRoute,
   PostsIdRoute: PostsIdRoute,
@@ -1519,13 +1662,19 @@ const rootRouteChildren: RootRouteChildren = {
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
   VendorsIdRoute: VendorsIdRoute,
+  EntertainmentIndexRoute: EntertainmentIndexRoute,
   JobsIndexRoute: JobsIndexRoute,
   RestaurantsIndexRoute: RestaurantsIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicGeocodeRoute: ApiPublicGeocodeRoute,
+  EntertainmentBookingRefRoute: EntertainmentBookingRefRoute,
+  EntertainmentEventsIdRoute: EntertainmentEventsIdRoute,
+  EntertainmentTournamentsIdRoute: EntertainmentTournamentsIdRoute,
+  EntertainmentVenuesIdRoute: EntertainmentVenuesIdRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
+  EntertainmentTournamentsIndexRoute: EntertainmentTournamentsIndexRoute,
   ListingIdIndexRoute: ListingIdIndexRoute,
 }
 export const routeTree = rootRouteImport
