@@ -63,6 +63,7 @@ import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ListingIdIndexRouteImport } from './routes/listing.$id.index'
+import { Route as EntertainmentTournamentsIndexRouteImport } from './routes/entertainment.tournaments.index'
 import { Route as TravelVisaIdRouteImport } from './routes/travel.visa.$id'
 import { Route as TravelToursIdRouteImport } from './routes/travel.tours.$id'
 import { Route as TravelHajjUmrahIdRouteImport } from './routes/travel.hajj-umrah.$id'
@@ -351,6 +352,12 @@ const ListingIdIndexRoute = ListingIdIndexRouteImport.update({
   path: '/listing/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EntertainmentTournamentsIndexRoute =
+  EntertainmentTournamentsIndexRouteImport.update({
+    id: '/entertainment/tournaments/',
+    path: '/entertainment/tournaments/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TravelVisaIdRoute = TravelVisaIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -497,6 +504,7 @@ export interface FileRoutesByFullPath {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/entertainment/tournaments/': typeof EntertainmentTournamentsIndexRoute
   '/listing/$id/': typeof ListingIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -566,6 +574,7 @@ export interface FileRoutesByTo {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/entertainment/tournaments': typeof EntertainmentTournamentsIndexRoute
   '/listing/$id': typeof ListingIdIndexRoute
 }
 export interface FileRoutesById {
@@ -638,6 +647,7 @@ export interface FileRoutesById {
   '/travel/hajj-umrah/$id': typeof TravelHajjUmrahIdRoute
   '/travel/tours/$id': typeof TravelToursIdRoute
   '/travel/visa/$id': typeof TravelVisaIdRoute
+  '/entertainment/tournaments/': typeof EntertainmentTournamentsIndexRoute
   '/listing/$id/': typeof ListingIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -711,6 +721,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/entertainment/tournaments/'
     | '/listing/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -780,6 +791,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/entertainment/tournaments'
     | '/listing/$id'
   id:
     | '__root__'
@@ -851,6 +863,7 @@ export interface FileRouteTypes {
     | '/travel/hajj-umrah/$id'
     | '/travel/tours/$id'
     | '/travel/visa/$id'
+    | '/entertainment/tournaments/'
     | '/listing/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -899,6 +912,7 @@ export interface RootRouteChildren {
   EntertainmentVenuesIdRoute: typeof EntertainmentVenuesIdRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
+  EntertainmentTournamentsIndexRoute: typeof EntertainmentTournamentsIndexRoute
   ListingIdIndexRoute: typeof ListingIdIndexRoute
 }
 
@@ -1282,6 +1296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/entertainment/tournaments/': {
+      id: '/entertainment/tournaments/'
+      path: '/entertainment/tournaments'
+      fullPath: '/entertainment/tournaments/'
+      preLoaderRoute: typeof EntertainmentTournamentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/travel/visa/$id': {
       id: '/travel/visa/$id'
       path: '/$id'
@@ -1610,6 +1631,7 @@ const rootRouteChildren: RootRouteChildren = {
   EntertainmentVenuesIdRoute: EntertainmentVenuesIdRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
+  EntertainmentTournamentsIndexRoute: EntertainmentTournamentsIndexRoute,
   ListingIdIndexRoute: ListingIdIndexRoute,
 }
 export const routeTree = rootRouteImport
