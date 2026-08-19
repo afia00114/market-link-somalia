@@ -75,6 +75,7 @@ import { Route as ListingIdBookedRouteImport } from './routes/listing.$id.booked
 import { Route as ListingIdBookRouteImport } from './routes/listing.$id.book'
 import { Route as HotelsIdBookRouteImport } from './routes/hotels.$id.book'
 import { Route as EntertainmentVenuesIdRouteImport } from './routes/entertainment.venues.$id'
+import { Route as EntertainmentTournamentsIdRouteImport } from './routes/entertainment.tournaments.$id'
 import { Route as EntertainmentBookingRefRouteImport } from './routes/entertainment.booking.$ref'
 import { Route as ApiPublicGeocodeRouteImport } from './routes/api/public/geocode'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
@@ -413,6 +414,12 @@ const EntertainmentVenuesIdRoute = EntertainmentVenuesIdRouteImport.update({
   path: '/entertainment/venues/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EntertainmentTournamentsIdRoute =
+  EntertainmentTournamentsIdRouteImport.update({
+    id: '/entertainment/tournaments/$id',
+    path: '/entertainment/tournaments/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EntertainmentBookingRefRoute = EntertainmentBookingRefRouteImport.update({
   id: '/entertainment/booking/$ref',
   path: '/entertainment/booking/$ref',
@@ -493,6 +500,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
+  '/entertainment/tournaments/$id': typeof EntertainmentTournamentsIdRoute
   '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -563,6 +571,7 @@ export interface FileRoutesByTo {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
+  '/entertainment/tournaments/$id': typeof EntertainmentTournamentsIdRoute
   '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -636,6 +645,7 @@ export interface FileRoutesById {
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/api/public/geocode': typeof ApiPublicGeocodeRoute
   '/entertainment/booking/$ref': typeof EntertainmentBookingRefRoute
+  '/entertainment/tournaments/$id': typeof EntertainmentTournamentsIdRoute
   '/entertainment/venues/$id': typeof EntertainmentVenuesIdRoute
   '/hotels/$id/book': typeof HotelsIdBookRoute
   '/listing/$id/book': typeof ListingIdBookRoute
@@ -710,6 +720,7 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
     | '/entertainment/booking/$ref'
+    | '/entertainment/tournaments/$id'
     | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -780,6 +791,7 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
     | '/entertainment/booking/$ref'
+    | '/entertainment/tournaments/$id'
     | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -852,6 +864,7 @@ export interface FileRouteTypes {
     | '/.mcp/invoke-tool/$tool'
     | '/api/public/geocode'
     | '/entertainment/booking/$ref'
+    | '/entertainment/tournaments/$id'
     | '/entertainment/venues/$id'
     | '/hotels/$id/book'
     | '/listing/$id/book'
@@ -909,6 +922,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicGeocodeRoute: typeof ApiPublicGeocodeRoute
   EntertainmentBookingRefRoute: typeof EntertainmentBookingRefRoute
+  EntertainmentTournamentsIdRoute: typeof EntertainmentTournamentsIdRoute
   EntertainmentVenuesIdRoute: typeof EntertainmentVenuesIdRoute
   ListingIdBookRoute: typeof ListingIdBookRoute
   ListingIdBookedRoute: typeof ListingIdBookedRoute
@@ -1380,6 +1394,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EntertainmentVenuesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/entertainment/tournaments/$id': {
+      id: '/entertainment/tournaments/$id'
+      path: '/entertainment/tournaments/$id'
+      fullPath: '/entertainment/tournaments/$id'
+      preLoaderRoute: typeof EntertainmentTournamentsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/entertainment/booking/$ref': {
       id: '/entertainment/booking/$ref'
       path: '/entertainment/booking/$ref'
@@ -1628,6 +1649,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicGeocodeRoute: ApiPublicGeocodeRoute,
   EntertainmentBookingRefRoute: EntertainmentBookingRefRoute,
+  EntertainmentTournamentsIdRoute: EntertainmentTournamentsIdRoute,
   EntertainmentVenuesIdRoute: EntertainmentVenuesIdRoute,
   ListingIdBookRoute: ListingIdBookRoute,
   ListingIdBookedRoute: ListingIdBookedRoute,
