@@ -85,6 +85,7 @@
   --grad-hotels: linear-gradient(135deg, oklch(0.5 0.13 160), oklch(0.62 0.13 150));
   --grad-shops: linear-gradient(135deg, oklch(0.58 0.15 330), oklch(0.7 0.14 350));
   --grad-cargo: linear-gradient(135deg, oklch(0.55 0.13 265), oklch(0.68 0.13 240));
+  --grad-entertainment: linear-gradient(135deg, oklch(0.55 0.18 320), oklch(0.7 0.16 340));
   --grad-hero: linear-gradient(135deg, oklch(0.5 0.16 252), oklch(0.62 0.16 235));
 }
 
@@ -138,6 +139,7 @@
   .grad-hotels { background-image: var(--grad-hotels); }
   .grad-shops { background-image: var(--grad-shops); }
   .grad-cargo { background-image: var(--grad-cargo); }
+  .grad-entertainment { background-image: var(--grad-entertainment); }
   .grad-hero { background-image: var(--grad-hero); }
   .shadow-soft { box-shadow: var(--shadow-soft); }
   .shadow-card { box-shadow: var(--shadow-card); }
