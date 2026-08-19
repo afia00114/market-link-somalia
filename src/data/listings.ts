@@ -314,6 +314,64 @@ export const LISTINGS: Listing[] = [
     description: "One-stop shop for food, drinks, cleaning products and stationery.",
     provider: { name: "Kismayo Mini Mart", badge: "Verified Business", rating: 4.4, reviews: 87, whatsapp: "252615550108", phone: "+252 61 555 0108" },
   },
+
+  // ENTERTAINMENT
+  {
+    id: "e1", category: "entertainment", title: "Lido Beach Events Hall", subtitle: "Event hall · Weddings & parties",
+    price: "From $300/event", city: "Mogadishu", district: "Lido",
+    image: u("1519167751-922ba4152d07"),
+    description: "Spacious beachfront hall with sound, lighting and catering for up to 300 guests.",
+    provider: { name: "Lido Events", badge: "Verified Business", rating: 4.8, reviews: 124, whatsapp: "252616660101", phone: "+252 61 666 0101" },
+  },
+  {
+    id: "e2", category: "entertainment", title: "DJ Culus & Sound System", subtitle: "DJ · Sound & lighting",
+    price: "From $150/event", city: "Mogadishu", district: "Hodan",
+    image: u("1470225620780-dba8ba36d745"),
+    description: "Professional DJ, PA system and stage lights for weddings, corporate events and concerts.",
+    provider: { name: "DJ Culus", badge: "Verified Provider", rating: 4.9, reviews: 210, whatsapp: "252616660102", phone: "+252 61 666 0102" },
+  },
+  {
+    id: "e3", category: "entertainment", title: "Mogadishu Cinema & Arcade", subtitle: "Cinema · Games & movies",
+    price: "$3–8/ticket", city: "Mogadishu", district: "Hamarweyne",
+    image: u("1489599849920-9a4f27231b49"),
+    description: "Latest movies, gaming consoles and VR experiences. Group bookings available.",
+    provider: { name: "Mog Cinema", badge: "Verified Business", rating: 4.5, reviews: 340, whatsapp: "252616660103", phone: "+252 61 666 0103" },
+  },
+  {
+    id: "e4", category: "entertainment", title: "Hargeisa Wedding Planner", subtitle: "Wedding planning · Decor",
+    price: "From $500", city: "Hargeisa", district: "Ahmed Dhagah",
+    image: u("1511795406394-1bf7cfa19070"),
+    description: "Full wedding planning: venue, decor, photography, catering and transport.",
+    provider: { name: "Royal Events Hargeisa", badge: "Verified Business", rating: 4.7, reviews: 89, whatsapp: "252634440201", phone: "+252 63 444 0201" },
+  },
+  {
+    id: "e5", category: "entertainment", title: "Bosaso Kids Party Center", subtitle: "Kids parties · Play zone",
+    price: "From $80/party", city: "Bosaso",
+    image: u("1535572290543-960a4606d5b5"),
+    description: "Indoor play area, party hosts, cakes and themed decorations for children.",
+    provider: { name: "Bosaso Fun Zone", badge: "Verified Business", rating: 4.6, reviews: 76, whatsapp: "252905550301", phone: "+252 90 555 0301" },
+  },
+  {
+    id: "e6", category: "entertainment", title: "Live Band — Somali Nights", subtitle: "Live music · Concerts",
+    price: "From $400/show", city: "Mogadishu", district: "Wadajir",
+    image: u("1501619745755-1b2733f417c2"),
+    description: "Traditional and modern Somali live band for weddings, festivals and corporate events.",
+    provider: { name: "Somali Nights Band", badge: "Verified Business", rating: 4.8, reviews: 55, whatsapp: "252616660104", phone: "+252 61 666 0104" },
+  },
+  {
+    id: "e7", category: "entertainment", title: "Kismayo Football Pitch Rental", subtitle: "Sports venue · 5-a-side",
+    price: "$20/hour", city: "Kismayo",
+    image: u("1574629810560-7cb172d4da34"),
+    description: "Floodlit 5-a-side football pitch with changing rooms and refreshments.",
+    provider: { name: "Kismayo Sports Arena", badge: "Verified Business", rating: 4.4, reviews: 112, whatsapp: "252616660105", phone: "+252 61 666 0105" },
+  },
+  {
+    id: "e8", category: "entertainment", title: "Photo & Video Studio", subtitle: "Studio · Photography",
+    price: "From $50/session", city: "Mogadishu", district: "Karaan",
+    image: u("1542038783-4af6e8113e23"),
+    description: "Professional portraits, event coverage and short-form video production.",
+    provider: { name: "Lens Studio", badge: "Verified Business", rating: 4.7, reviews: 143, whatsapp: "252616660106", phone: "+252 61 666 0106" },
+  },
 ];
 
 export function listingsByCategory(key: CategoryKey): Listing[] {

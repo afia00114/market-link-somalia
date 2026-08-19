@@ -115,6 +115,18 @@ export const CONTACT_FIELDS: Partial<Record<CategoryKey, FieldSpec[]>> = {
     },
     { key: "license_no", label: "License #", type: "text", required: true },
   ],
+  entertainment: [
+    {
+      key: "entertainment_type",
+      label: "Entertainment type",
+      type: "multiselect-chip",
+      options: ["Event hall", "DJ & sound", "Live band", "Cinema", "Arcade", "Sports venue", "Wedding planning", "Photo & video", "Kids parties", "Other"],
+      required: true,
+    },
+    { key: "capacity", label: "Capacity / audience size", type: "text", placeholder: "e.g. 200 guests" },
+    { key: "equipment", label: "Equipment available", type: "multiselect-chip", options: ["Sound system", "Lighting", "Projector", "Stage", "Screens", "Games consoles", "VR", "None"] },
+    { key: "available_hours", label: "Available hours", type: "text", placeholder: "Mon–Sun, 9am–midnight" },
+  ],
 };
 
 /** Extra qualitative field(s) shown on the About step (step 4). */
@@ -127,6 +139,9 @@ export const ABOUT_FIELDS: Partial<Record<CategoryKey, FieldSpec[]>> = {
   ],
   health: [
     { key: "departments_note", label: "Notable departments / equipment", type: "textarea", placeholder: "ICU, MRI, ambulance…" },
+  ],
+  entertainment: [
+    { key: "past_clients", label: "Notable past events / clients", type: "textarea", placeholder: "Weddings, corporate events, concerts…" },
   ],
 };
 
