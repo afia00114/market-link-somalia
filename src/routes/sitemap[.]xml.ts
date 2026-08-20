@@ -9,6 +9,7 @@ import { LISTINGS } from "@/data/listings";
 import { ANIMAL_LISTINGS } from "@/data/livestock";
 import { JOB_LISTINGS } from "@/data/jobs";
 import { RESTAURANTS } from "@/data/restaurants";
+import { ENT_VENUES, ENT_EVENTS, TOURNAMENTS } from "@/data/entertainment";
 import { SHOPS } from "@/data/shops";
 import { AGENCIES, FLIGHT_OFFERS, PILGRIM_PACKAGES, TOUR_PACKAGES, CAR_OFFERS, VISA_SERVICES } from "@/data/travel";
 
@@ -68,7 +69,12 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/livestock", changefreq: "weekly", priority: "0.8" },
           { path: "/jobs", changefreq: "daily", priority: "0.8" },
           { path: "/restaurants", changefreq: "daily", priority: "0.8" },
+          { path: "/entertainment", changefreq: "daily", priority: "0.8" },
+          { path: "/entertainment/tournaments", changefreq: "weekly", priority: "0.7" },
           ...RESTAURANTS.map((r) => ({ path: `/restaurants/${r.id}`, changefreq: "daily" as const, priority: "0.6" })),
+          ...ENT_VENUES.map((v) => ({ path: `/entertainment/venues/${v.id}`, changefreq: "weekly" as const, priority: "0.6" })),
+          ...ENT_EVENTS.map((e) => ({ path: `/entertainment/events/${e.id}`, changefreq: "daily" as const, priority: "0.6" })),
+          ...TOURNAMENTS.map((t) => ({ path: `/entertainment/tournaments/${t.id}`, changefreq: "weekly" as const, priority: "0.6" })),
           ...SHOPS.map((s) => ({ path: `/shops/${s.id}`, changefreq: "daily" as const, priority: "0.6" })),
           ...JOB_LISTINGS.map((j) => ({ path: `/jobs/${j.id}`, changefreq: "daily" as const, priority: "0.6" })),
           ...ANIMAL_LISTINGS.map((a) => ({ path: `/livestock/${a.id}`, changefreq: "weekly" as const, priority: "0.6" })),
