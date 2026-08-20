@@ -31,6 +31,6 @@ export const CATEGORIES: Category[] = [
   { key: "food", label: "Restaurants", short: "Order food & delivery", count: 420, icon: UtensilsCrossed, gradient: "grad-food", href: "/restaurants" },
   { key: "cargo", label: "Cargo & Shipping", short: "Air · Sea · Road freight", count: 145, icon: Truck, gradient: "grad-cargo", href: "/travel/cargo" },
   { key: "shops", label: "Shops", short: "Retail stores & groceries", count: 530, icon: Store, gradient: "grad-shops", href: "/category/shops" },
-  { key: "entertainment", label: "Entertainment", short: "Events, DJs & venues", count: 215, icon: Clapperboard, gradient: "grad-entertainment", href: "/category/entertainment" },
+  { key: "entertainment", label: "Entertainment & Sports", short: "Futsal, stadiums, events & cinema", count: 215, icon: Clapperboard, gradient: "grad-entertainment", href: "/entertainment" },
 ];
 
