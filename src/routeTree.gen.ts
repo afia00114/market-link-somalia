@@ -34,6 +34,7 @@ import { Route as JobsIndexRouteImport } from './routes/jobs.index'
 import { Route as HotelsIndexRouteImport } from './routes/hotels.index'
 import { Route as EntertainmentIndexRouteImport } from './routes/entertainment.index'
 import { Route as VendorsIdRouteImport } from './routes/vendors.$id'
+import { Route as VendorEntertainmentRouteImport } from './routes/vendor.entertainment'
 import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
 import { Route as VendorApplyRouteImport } from './routes/vendor.apply'
 import { Route as TravelVisaRouteImport } from './routes/travel.visa'
@@ -205,6 +206,11 @@ const EntertainmentIndexRoute = EntertainmentIndexRouteImport.update({
 const VendorsIdRoute = VendorsIdRouteImport.update({
   id: '/vendors/$id',
   path: '/vendors/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VendorEntertainmentRoute = VendorEntertainmentRouteImport.update({
+  id: '/vendor/entertainment',
+  path: '/vendor/entertainment',
   getParentRoute: () => rootRouteImport,
 } as any)
 const VendorDashboardRoute = VendorDashboardRouteImport.update({
@@ -496,6 +502,7 @@ export interface FileRoutesByFullPath {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/entertainment': typeof VendorEntertainmentRoute
   '/vendors/$id': typeof VendorsIdRoute
   '/entertainment/': typeof EntertainmentIndexRoute
   '/hotels/': typeof HotelsIndexRoute
@@ -568,6 +575,7 @@ export interface FileRoutesByTo {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/entertainment': typeof VendorEntertainmentRoute
   '/vendors/$id': typeof VendorsIdRoute
   '/entertainment': typeof EntertainmentIndexRoute
   '/hotels': typeof HotelsIndexRoute
@@ -643,6 +651,7 @@ export interface FileRoutesById {
   '/travel/visa': typeof TravelVisaRouteWithChildren
   '/vendor/apply': typeof VendorApplyRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/entertainment': typeof VendorEntertainmentRoute
   '/vendors/$id': typeof VendorsIdRoute
   '/entertainment/': typeof EntertainmentIndexRoute
   '/hotels/': typeof HotelsIndexRoute
@@ -719,6 +728,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendor/entertainment'
     | '/vendors/$id'
     | '/entertainment/'
     | '/hotels/'
@@ -791,6 +801,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendor/entertainment'
     | '/vendors/$id'
     | '/entertainment'
     | '/hotels'
@@ -865,6 +876,7 @@ export interface FileRouteTypes {
     | '/travel/visa'
     | '/vendor/apply'
     | '/vendor/dashboard'
+    | '/vendor/entertainment'
     | '/vendors/$id'
     | '/entertainment/'
     | '/hotels/'
@@ -926,6 +938,7 @@ export interface RootRouteChildren {
   TrackingRefRoute: typeof TrackingRefRoute
   VendorApplyRoute: typeof VendorApplyRoute
   VendorDashboardRoute: typeof VendorDashboardRoute
+  VendorEntertainmentRoute: typeof VendorEntertainmentRoute
   VendorsIdRoute: typeof VendorsIdRoute
   EntertainmentIndexRoute: typeof EntertainmentIndexRoute
   JobsIndexRoute: typeof JobsIndexRoute
@@ -1118,6 +1131,13 @@ declare module '@tanstack/react-router' {
       path: '/vendors/$id'
       fullPath: '/vendors/$id'
       preLoaderRoute: typeof VendorsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vendor/entertainment': {
+      id: '/vendor/entertainment'
+      path: '/vendor/entertainment'
+      fullPath: '/vendor/entertainment'
+      preLoaderRoute: typeof VendorEntertainmentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/vendor/dashboard': {
@@ -1661,6 +1681,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrackingRefRoute: TrackingRefRoute,
   VendorApplyRoute: VendorApplyRoute,
   VendorDashboardRoute: VendorDashboardRoute,
+  VendorEntertainmentRoute: VendorEntertainmentRoute,
   VendorsIdRoute: VendorsIdRoute,
   EntertainmentIndexRoute: EntertainmentIndexRoute,
   JobsIndexRoute: JobsIndexRoute,
